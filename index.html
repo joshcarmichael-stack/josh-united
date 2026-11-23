@@ -384,10 +384,11 @@
   .chest-card { text-align: center; animation: popin .35s ease; }
   .chest-card .nm { font-size: 22px; font-weight: 800; margin: 4px 0; }
   .sil {
-    min-height: 96px; border-radius: 12px; background: #2a3144; color: #8b93a0;
+    min-height: 96px; border-radius: 12px; background: #2a3144; color: #c5cad6;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-    font-weight: 800; letter-spacing: .08em; padding: 8px;
+    font-weight: 800; letter-spacing: .04em; padding: 8px;
   }
+  .sil .who { font-size: 12px; }
   .goldcard { position: relative; overflow: hidden; background: linear-gradient(#fff, #fff6d4); }
   .goldcard::after {
     content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -422,20 +423,25 @@
     min-height: 0; -webkit-overflow-scrolling: touch;
   }
   .mini {
-    flex: 0 0 auto;
+    flex: 0 0 54px;
     box-sizing: border-box;
+    height: 54px;
     border: 2px solid transparent; border-radius: 10px; background: #1c2436; color: white;
-    padding: 3px 3px 4px; text-align: center; min-height: 46px;
-    display: flex; flex-direction: column; justify-content: center; gap: 3px;
-    overflow: visible;
+    padding: 3px; text-align: left; min-height: 54px; max-height: 54px;
+    display: flex; flex-direction: column; justify-content: center; gap: 2px;
+    overflow: hidden;
   }
   .mini.star { border-color: #f2c14b; box-shadow: 0 0 0 1px #f2c14b; }
-  .mini-top { display: flex; align-items: center; justify-content: center; gap: 2px; min-height: 22px; }
-  .mini .lv { font-size: 9px; font-weight: 800; line-height: 1.1; white-space: nowrap; letter-spacing: -0.03em; }
+  .mini-top { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 2px; align-items: center; min-height: 22px; }
+  .mini .nm { font-size: 10px; font-weight: 800; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .mini .lv { font-size: 10px; font-weight: 800; line-height: 1.1; white-space: nowrap; }
   .mini .xp { display: block; height: 5px; width: 100%; margin: 0; background: #5c677c; flex: 0 0 5px; border-radius: 99px; overflow: hidden; }
   .mini .xp i { background: #3ddc84; display: block; height: 4px; }
   .sprite { display: block; flex: none; }
-  .slot .sprite, .sticker .sprite { margin: 0 auto 4px; }
+  .slot .sprite, .sticker .sprite { margin: 0 auto 2px; }
+  .slot .pname, .sticker .who { display: block; font-size: 10px; font-weight: 800; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+  .name-field { width: 100%; box-sizing: border-box; font-size: 16px; padding: 10px 12px; border-radius: 12px; border: 2px solid #32384c; margin: 8px 0; background: #fff; color: #142033; }
+  .signings .pill { display: inline-flex; align-items: center; gap: 6px; }
   .scene { position: relative; min-height: 100%; background:
     radial-gradient(circle at 50% 42%, transparent 36px, rgba(255,255,255,.45) 37px, transparent 39px),
     linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,.55) 49.5% 50.5%, transparent 50.5%),
@@ -1083,7 +1089,34 @@ let oddsCache = { key: "", win: 0, draw: 0 };
 const clock = { t: null, fn: null, gameMs: 0, started: 0, speed: 1, real: false, pending: null };
 
 function playerByKey(k) { return BY_KEY[k]; }
-function nameOf(k) { return NAME_BY_KEY[k] || k; }
+function cleanClubName(s) {
+  return String(s || "").replace(/\s+/g, " ").trim().slice(0, 20);
+}
+function clubTitle() {
+  const n = state && cleanClubName(state.clubName);
+  return n || "Josh United";
+}
+function clubInitials() {
+  const parts = clubTitle().split(" ").filter(Boolean);
+  if (!parts.length) return "JU";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+}
+function nameOf(k) {
+  if (k === "club_josh") return clubTitle();
+  return NAME_BY_KEY[k] || k;
+}
+function surnameOf(key) {
+  const parts = nameOf(key).split(/\s+/).filter(Boolean);
+  return parts.length ? parts[parts.length - 1] : "?";
+}
+function shortName(key) {
+  const parts = nameOf(key).split(/\s+/).filter(Boolean);
+  if (parts.length < 2) return parts[0] || "?";
+  const sur = parts[parts.length - 1];
+  if (sur.length <= 9) return sur;
+  return parts[0].charAt(0) + ". " + sur;
+}
 function league() { return LEAGUES[state.league]; }
 function esc(s) {
   return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
@@ -1111,7 +1144,7 @@ function formatRemain(ms) {
   if (m > 0) return m + "m " + String(ss).padStart(2, "0") + "s";
   return ss + "s";
 }
-function sideName(id) { return id === "user" ? NAME_BY_KEY.club_josh : (NAME_BY_KEY[id] || id); }
+function sideName(id) { return id === "user" ? clubTitle() : (NAME_BY_KEY[id] || id); }
 function shortOf(id) {
   if (id === "user") return "JUT";
   const c = state && state.season && state.season.clubs.find(x => x.id === id);
@@ -1598,7 +1631,7 @@ function beginMatch(fx, knockout) {
   const sim = resolveUserMatch(fx, knockout, rnd);
   const events = buildEvents({
     us: sim.us, them: sim.them, us90: sim.us90, them90: sim.them90, et: sim.et,
-    home: sim.userHome, usName: NAME_BY_KEY.club_josh, oppName: sideName(sim.oppId), rnd
+    home: sim.userHome, usName: clubTitle(), oppName: sideName(sim.oppId), rnd
   });
   if (events._goals[0] !== sim.us || events._goals[1] !== sim.them) {
     console.error("Ticker score drifted", events._goals, sim.us, sim.them);
@@ -1728,6 +1761,7 @@ function afterMatchFlow() {
   queueNext();
 }
 function queueNext() {
+  if (ui.askName) return;
   if (state.paused || state.modal) return;
   if (chain === "live" || chain === "gap" || chain === "chest") return;
   if (state.season.phase === "league") {
@@ -1929,7 +1963,7 @@ function pullTeammate(deck, rnd) {
   return { key: p.name_key };
 }
 function simulateLegend(rnd) {
-  const teams = [{ id: "user", name: NAME_BY_KEY.club_josh, rating: xiRating() }]
+  const teams = [{ id: "user", name: clubTitle(), rating: xiRating() }]
     .concat(LEGEND_TEAMS.map(t => ({ id: t.id, name: nameOf(t.name_key), rating: legendRating(t) })));
   const table = {};
   teams.forEach(t => { table[t.id] = { id: t.id, name: t.name, rating: t.rating, w:0, d:0, l:0, gf:0, ga:0 }; });
@@ -1961,7 +1995,7 @@ function applyPrize(prize, rnd) {
   if (prize.kind === "sign") {
     ownPlayer(playerByKey(prize.legendKey), false);
     state.pity = 0;
-    pushFeed(nameOf(prize.legendKey) + " signs for Josh United.");
+    pushFeed(nameOf(prize.legendKey) + " signs for " + clubTitle() + ".");
   } else if (prize.kind === "miss") {
     state.pity += 40;
     const mate = pullTeammate(prize.deck, rnd);
@@ -2257,7 +2291,9 @@ function freshState() {
     stats: { catches: 0, golds: 0, contracts: 0, throws: 0 },
     fresh: [],
     signings: [],
-    restStops: []
+    restStops: [],
+    clubName: "Josh United",
+    clubNamed: false
   };
 }
 function save() {
@@ -2282,6 +2318,9 @@ function sanitise() {
   state.fresh = state.fresh || [];
   state.signings = state.signings || [];
   state.restStops = state.restStops || [];
+  if (state.clubNamed === false) ui.askName = true;
+  else state.clubNamed = true;
+  state.clubName = cleanClubName(state.clubName) || "Josh United";
   if (!state.season) startSeason();
 }
 function load() {
@@ -2297,6 +2336,7 @@ function load() {
     state = freshState();
     startSeason();
     if (String(err.message) !== "empty") ui.note = "The old save could not be read, so this is a new club.";
+    sanitise();
     save();
   }
   if (state.tab === "gold") { state.tab = "collection"; ui.dexMode = "gold"; }
@@ -2309,13 +2349,12 @@ function doReset() {
   live = null;
   chain = "idle";
   debugOverride = null;
-  ui = { tab: "match", sheet: null, filter: "all", result: null, lock: false, note: "" };
+  ui = { tab: "match", sheet: null, filter: "all", result: null, lock: false, note: "", askName: true, dexMode: "normal" };
   try { localStorage.removeItem(SAVE_KEY); } catch (err) {}
   state = freshState();
   startSeason();
   save();
   render();
-  queueNext();
 }
 
 function oddsFor(my, opp, home) {
@@ -2342,7 +2381,7 @@ function headerHtml() {
   const playedGames = state.season && state.season.table.user ? (state.season.table.user.w + state.season.table.user.d + state.season.table.user.l) : 0;
   const pos = playedGames > 0 ? ordinal(userPos()) : "Pre";
   return `<header class="top"><div class="topbar">
-      <div class="crest" aria-hidden="true">JU</div>
+      <div class="crest" aria-hidden="true">${esc(clubInitials())}</div>
       <span class="stat">${money(state.cash)}</span>
       <span class="stat">Rep ${state.rep}</span>
       <span class="stat">${esc(pos)}</span>
@@ -2580,11 +2619,9 @@ function partyHtml(star) {
     const gain = ui.partyAnim && ui.partyAnim[key];
     const fresh = isFresh(key);
     return `<div class="mini${star === key ? " star" : ""}" data-key="${esc(key)}" title="${esc(nameOf(key))}">
-      <div class="mini-top">${spriteHtml(p, { size: 16, gold: !!(state.owned[key] && state.owned[key].gold) })}<span class="lv">Lv.${bits.eff == null ? p.base : bits.eff}</span></div>
+      <div class="mini-top">${spriteHtml(p, { size: 14, gold: !!(state.owned[key] && state.owned[key].gold) })}<span class="nm">${esc(surnameOf(key))}</span></div>
+      <span class="lv">Lv.${bits.eff == null ? p.base : bits.eff}${isCapped(key) ? " cap" : ""}${gain > 0 ? " +" + gain : ""}</span>
       <span class="xp"><i style="width:${Math.round(xpFrac(key) * 100)}%"></i></span>
-      ${isCapped(key) ? '<span class="cap-badge">Capped</span>' : ""}
-      ${gain > 0 ? `<span class="lvl">+${gain}</span>` : ""}
-      ${fresh ? '<span class="new-dot">NEW</span>' : ""}
     </div>`;
   }).join("");
 }
@@ -2604,7 +2641,7 @@ function chestSpeech(c) {
   const tag = c.gold ? "GOLD" : (c.dup ? "duplicate, +XP to " + nameOf(c.name_key) : "NEW");
   return `<button type="button" class="speech chest-card${c.gold ? " goldcard" : ""}" data-act="dismiss-chest" id="ticker" style="border:3px solid ${RARITY[p.rarity].color}">
     <div class="${c.dup ? "" : "new-dot"}">${esc(tag)}</div>
-    <div class="nm">${esc(nameOf(c.name_key))}</div>
+    <div class="mini-top" style="justify-content:center;margin-top:4px">${spriteHtml(p, { size: 36, gold: !!c.gold })}<div class="nm" style="font-size:18px">${esc(nameOf(c.name_key))}</div></div>
     <div>${esc(p.pos)} · ${esc(RARITY[p.rarity].label)}${p.club ? " · " + esc(nameOf(p.club)) : ""}</div>
     <div>Lv.${bits.eff} · ceiling ${bits.ceil}</div>
   </button>`;
@@ -2622,7 +2659,7 @@ function sceneState() {
     return { home: m.home, kicker: "Full time", us: m.us, them: m.them, opp: sideName(m.oppId), lines: m.lines, live: false, star: null, win };
   }
   const fx = nextFixture();
-  if (!fx) return { home: true, kicker: "Pre-season", us: 0, them: 0, opp: "Josh United", lines: [], live: false, star: null };
+  if (!fx) return { home: true, kicker: "Pre-season", us: 0, them: 0, opp: clubTitle(), lines: [], live: false, star: null };
   const home = fx.home === "user";
   const opp = home ? fx.away : fx.home;
   return { home, kicker: home ? "Home" : "Away", us: 0, them: 0, opp: sideName(opp), lines: [{ text: "The whistle is close.", side: "" }], live: false, star: null };
@@ -2632,9 +2669,12 @@ function viewMatch() {
   const chesting = state.pendingChest && chain === "chest";
   const speech = chesting ? chestSpeech(state.pendingChest) : (chain === "rest" ? `<div class="speech" id="ticker">Treatment room. Back in <b data-live-clock>${formatRemain(state.restUntil - Date.now())}</b>.</div>` : speechHtml(s.lines, !!s.live));
   const ft = !s.live && s.win && chain === "gap" ? `<div class="ft-pop">Full time. You win.</div>` : "";
-  const signings = (state.signings || []).length ? `<div class="signings-wrap"><div class="muted">Latest signings</div><div class="signings">${state.signings.map(g => `<span class="pill">${g.gold ? "Gold " : ""}${esc(nameOf(g.key))}${g.oppId ? " · " + esc(sideName(g.oppId)) : ""}</span>`).join("")}</div></div>` : "";
+  const signings = (state.signings || []).length ? `<div class="signings-wrap"><div class="muted">Latest signings</div><div class="signings">${state.signings.map(g => {
+    const gp = playerByKey(g.key);
+    return `<span class="pill">${gp ? spriteHtml(gp, { size: 16, gold: !!g.gold }) : ""}${esc(nameOf(g.key))}${g.oppId ? " · " + esc(sideName(g.oppId)) : ""}</span>`;
+  }).join("")}</div></div>` : "";
   const target = state.league === 3 ? "The title" : "Promotion";
-  const goal = `<div class="goal-card"><div class="goal-ico">🏆</div><div><b>${esc(league().name)}</b><div class="muted">Season ${state.seasonNum}</div></div><div style="text-align:right"><b>Target: ${target}</b><div class="muted">Cap ${league().cap}</div></div></div>`;
+  const goal = `<div class="goal-card"><div class="goal-ico">🏆</div><div><b>${esc(clubTitle())}</b><div class="muted">${esc(league().name)} · Season ${state.seasonNum}</div></div><div style="text-align:right"><b>Target: ${target}</b><div class="muted">Cap ${league().cap}</div></div></div>`;
   const rows = tableRows();
   const me = rows.findIndex(r => r.id === "user");
   let show = rows.slice(0, 6);
@@ -2691,9 +2731,9 @@ function viewSquad() {
       const o = state.owned[key];
       return `<button type="button" class="slot${o && o.gold ? " gold" : ""}" data-act="slot" data-i="${i}">
         ${spriteHtml(playerByKey(key), { size: 26, gold: !!(o && o.gold) })}
+        <span class="pname">${esc(shortName(key))}</span>
         <div class="pos">${slot.label}${isFresh(key) ? ' <span class="new-dot">NEW</span>' : ""}</div>
         <div class="rt" style="color:${RARITY[playerByKey(key).rarity].color}">${bits.eff}</div>
-        <div class="nm">${esc(nameOf(key))}</div>
       </button>`;
     }).join("")}</div>`;
   }).join("");
@@ -2703,8 +2743,8 @@ function viewSquad() {
     const bits = ratingBits(k);
     return `<span class="pill" style="background:#fff;color:${RARITY[playerByKey(k).rarity].color}">${esc(nameOf(k))} ${bits.eff}</span>`;
   }).join(" ");
-  return `<div class="card row"><div><h2 style="margin:0">4-4-2</h2><p class="muted" style="margin:4px 0 0">XI ${xiRating().toFixed(1)} · league cap ${league().cap}</p></div>
-    <button type="button" class="small secondary" data-act="best">Pick best XI</button></div>
+  return `<div class="card row"><div><h2 style="margin:0">${esc(clubTitle())}</h2><p class="muted" style="margin:4px 0 0">4-4-2 · XI ${xiRating().toFixed(1)} · cap ${league().cap}</p></div>
+    <div class="chips"><button type="button" class="small secondary" data-act="rename">Rename club</button><button type="button" class="small secondary" data-act="best">Pick best XI</button></div></div>
     <div class="pitch">${pitch}</div>
     <div class="card"><h2>Bench</h2><div class="pills">${bench || '<span class="muted">Catch or sign someone and they wait here.</span>'}</div></div>`;
 }
@@ -2747,20 +2787,17 @@ function viewTransfers() {
 function dexCard(p, goldMode) {
   const o = state.owned[p.name_key];
   const isGold = !!(o && o.gold);
-  if (goldMode) {
-    if (!isGold) return `<article class="sil">${spriteHtml(p, { size: 32, silhouette: true })}<div>${esc(p.pos)}</div></article>`;
-    const bits = ratingBits(p.name_key);
-    return `<article class="sticker goldcard" style="border-color:#e0b84a">${spriteHtml(p, { size: 32, gold: true })}<span class="goldtag">GOLD</span><b>${esc(nameOf(p.name_key))}</b><span class="muted">${p.pos} · Lv.${bits.eff}</span></article>`;
-  }
-  if (!o) return `<article class="sil">${spriteHtml(p, { size: 32, silhouette: true })}<div>${esc(p.pos)}</div></article>`;
+  const clubBit = p.club ? nameOf(p.club) : "";
+  if (goldMode && !isGold) return `<article class="sil">${spriteHtml(p, { size: 32, silhouette: true })}<div class="who">???</div></article>`;
+  if (!o) return `<article class="sil">${spriteHtml(p, { size: 32, silhouette: true })}<div class="who">???</div></article>`;
   const bits = ratingBits(p.name_key);
   const fresh = isFresh(p.name_key);
-  return `<article class="sticker${isGold ? " goldcard" : ""}" style="border-color:${RARITY[p.rarity].color}">
-    ${spriteHtml(p, { size: 32, gold: isGold })}
-    <span class="tag" style="color:${RARITY[p.rarity].color}">${esc(RARITY[p.rarity].label)}</span>
+  return `<article class="sticker${isGold ? " goldcard" : ""}" style="border-color:${isGold ? "#e0b84a" : RARITY[p.rarity].color}">
+    ${spriteHtml(p, { size: 32, gold: isGold || goldMode })}
+    ${isGold || goldMode ? '<span class="goldtag">GOLD</span>' : `<span class="tag" style="color:${RARITY[p.rarity].color}">${esc(RARITY[p.rarity].label)}</span>`}
     ${fresh ? '<span class="new-dot">NEW</span>' : ""}
-    <b>${esc(nameOf(p.name_key))}</b>
-    <span class="muted">${p.pos} · ${bits.note}</span>
+    <b class="who">${esc(nameOf(p.name_key))}</b>
+    <span class="muted">${esc(p.pos)}${clubBit ? " · " + esc(clubBit) : ""} · Lv.${bits.eff}</span>
   </article>`;
 }
 function viewCollection(goldMode) {
@@ -2925,12 +2962,24 @@ function confettiHtml() {
   }
   return s + "</div>";
 }
+function nameFormHtml(required) {
+  return `<div class="backdrop" ${required ? 'data-act="stop"' : 'data-act="close-sheet"'}><form class="sheet" data-act="stop" id="name-form">
+    <h2>${required ? "Name your club" : "Rename club"}</h2>
+    <p>${required ? "This is the name on the table, the fixtures and the commentary." : "Up to 20 characters. Empty names are not allowed."}</p>
+    <input class="name-field" id="club-name-input" maxlength="20" value="${esc(clubTitle())}" aria-label="Club name">
+    ${ui.nameError ? `<p class="exact">${esc(ui.nameError)}</p>` : ""}
+    <div class="chips"><button type="button" data-act="save-name">Save name</button>
+    ${required ? "" : '<button type="button" class="secondary" data-act="close-sheet">Cancel</button>'}</div>
+  </form></div>`;
+}
 function sheetHtml() {
+  if (ui.askName) return nameFormHtml(true);
   if (!ui.sheet) return "";
+  if (ui.sheet.type === "rename") return nameFormHtml(false);
   if (ui.sheet.type === "reset") {
     return `<div class="backdrop" data-act="close-sheet"><div class="sheet" data-act="stop">
       <h2>Wipe this save?</h2>
-      <p>Josh United goes back to a raw League Two squad. This cannot be undone.</p>
+      <p>${esc(clubTitle())} goes back to a raw League Two squad. This cannot be undone.</p>
       <div class="chips"><button type="button" class="danger" data-act="do-reset">Reset save</button>
       <button type="button" class="secondary" data-act="close-sheet">Keep playing</button></div>
     </div></div>`;
@@ -2942,7 +2991,8 @@ function sheetHtml() {
       <p>After every 8 to 10 matches the squad sits in the treatment room for 30 to 60 seconds. 10x shortens matches and that wait.</p>
       <p>Chests can drop a common (about a 60% catch). Throw contracts at rarer players. A miss comes back with the words "He's just not interested".</p>
       <p>Win the league or finish 2nd and you go up. 3rd to 6th is a one-leg semi-final and final. Win the Premier League and reach 25 reputation to open Legend League.</p>
-      <button type="button" data-act="close-sheet">Back to the club</button>
+      <div class="chips"><button type="button" data-act="rename">Rename club</button>
+      <button type="button" class="secondary" data-act="close-sheet">Back to the club</button></div>
     </div></div>`;
   }
   if (ui.sheet.type === "pick") {
@@ -3029,8 +3079,10 @@ function onClick(e) {
   if (act === "speed") { setSpeed(Number(el.dataset.speed)); return; }
   if (act === "ask-reset") { ui.sheet = { type: "reset" }; render(); return; }
   if (act === "do-reset") { doReset(); return; }
-  if (act === "help") { ui.sheet = { type: "help" }; render(); return; }
-  if (act === "close-sheet") { ui.sheet = null; render(); return; }
+  if (act === "help") { if (ui.askName) return; ui.sheet = { type: "help" }; render(); return; }
+  if (act === "rename") { ui.askName = false; ui.sheet = { type: "rename" }; render(); return; }
+  if (act === "save-name") { saveClubName(); return; }
+  if (act === "close-sheet") { if (ui.askName) return; ui.sheet = null; render(); return; }
   if (act === "modal-go") { onModalGo(); return; }
   if (act === "slot") { ui.sheet = { type: "pick", index: Number(el.dataset.i) }; render(); return; }
   if (act === "pick") { setSlot(ui.sheet.index, el.dataset.id); return; }
@@ -3055,6 +3107,7 @@ function boot() {
   load();
   render();
   setInterval(paintClocks, 250);
+  if (ui.askName) return;
   if (state.legend.run && Date.now() >= state.legend.run.endsAt) openReveal();
   else if (state.restUntil > Date.now() && state.season && state.season.phase === "league") armRest();
   else if (state.pendingChest) armChest();
@@ -3062,8 +3115,26 @@ function boot() {
 }
 
 document.addEventListener("click", onClick);
+function saveClubName() {
+  const input = document.getElementById("club-name-input");
+  const name = cleanClubName(input && input.value);
+  if (!name) {
+    ui.nameError = "Give the club a name.";
+    render();
+    return;
+  }
+  state.clubName = name;
+  state.clubNamed = true;
+  ui.askName = false;
+  ui.nameError = "";
+  ui.sheet = null;
+  save();
+  render();
+  if (!state.paused && !state.modal && chain === "idle") queueNext();
+}
 document.addEventListener("keydown", e => {
-  if (e.key === "Escape" && ui.sheet) { ui.sheet = null; render(); }
+  if (e.key === "Escape" && ui.sheet && !ui.askName) { ui.sheet = null; render(); }
+  if (e.key === "Enter" && (ui.askName || (ui.sheet && ui.sheet.type === "rename"))) saveClubName();
 });
 
 window.__FC = {
