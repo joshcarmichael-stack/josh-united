@@ -1,0 +1,2409 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123524">
+<title>Josh United</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 60 L4 44 V6 h56 v38z' fill='%23f2c14b'/%3E%3Ctext x='32' y='34' text-anchor='middle' font-family='sans-serif' font-size='16' font-weight='700' fill='%233a2502'%3EJU%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --ink: #142033;
+    --muted: #5c6b7a;
+    --cream: #f4f1e6;
+    --card: #fffdf8;
+    --line: #e4dece;
+    --green: #146c3a;
+    --green-d: #0e4a28;
+    --gold: #f2c14b;
+    --gold-ink: #3a2502;
+    --navy: #102033;
+    --bad: #9f2d2d;
+    --font: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
+    --mono: ui-monospace, "Cascadia Mono", "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    color: var(--ink);
+    background:
+      radial-gradient(900px 280px at 50% 0%, #c7ecff, transparent 70%),
+      linear-gradient(#8fd0ff, #d9f3ff 200px, #3e9a52 200px, #1d6b38);
+    min-height: 100dvh;
+  }
+  button, input { font: inherit; }
+  button {
+    border: 0;
+    cursor: pointer;
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: var(--green);
+    color: white;
+    font-weight: 750;
+    font-weight: 700;
+    min-height: 44px;
+  }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.secondary { background: #e7e1d4; color: var(--ink); }
+  button.ghost { background: transparent; color: inherit; min-height: 36px; padding: 6px 10px; }
+  button.danger { background: var(--bad); }
+  button.small { min-height: 36px; padding: 6px 10px; font-size: 13px; }
+  :focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  #app {
+    width: min(520px, 100%);
+    margin: 0 auto;
+    min-height: 100dvh;
+    background: var(--cream);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 18px 50px rgba(0,0,0,.18);
+    padding-bottom: calc(78px + env(safe-area-inset-bottom));
+  }
+  header.top {
+    background: linear-gradient(180deg, #123524, #1b5c38);
+    color: #f6f3ea;
+    padding: 12px 12px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 15;
+  }
+  .idrow { display: flex; gap: 10px; align-items: center; }
+  .crest {
+    width: 42px; height: 48px; flex: none;
+    background: linear-gradient(#ffe08a, #e0a31a);
+    clip-path: polygon(50% 100%, 0 74%, 0 0, 100% 0, 100% 74%);
+    display: grid; place-items: center;
+    color: var(--gold-ink); font-weight: 800; font-size: 13px;
+  }
+  header h1 { font-size: 20px; margin: 0; letter-spacing: -.3px; }
+  .sub { margin: 2px 0 0; font-size: 13px; color: #d5ecdc; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; align-items: center; }
+  .pill {
+    background: rgba(255,255,255,.14);
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .pill.hot { background: var(--gold); color: var(--gold-ink); }
+  .seg { display: inline-flex; background: rgba(0,0,0,.25); border-radius: 999px; padding: 2px; }
+  .seg button { min-height: 30px; padding: 4px 10px; background: transparent; color: #f6f3ea; font-size: 12px; }
+  .seg button.on { background: white; color: var(--green-d); }
+  main { padding: 12px; display: grid; gap: 12px; }
+  .card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 12px;
+    box-shadow: 0 8px 24px rgba(20,32,51,.06);
+  }
+  .card h2 { margin: 0 0 8px; font-size: 16px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .row { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .board {
+    background: var(--navy);
+    color: white;
+    border-radius: 18px;
+    padding: 14px;
+  }
+  .kicker { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #f2c14b; font-weight: 800; }
+  .score {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    align-items: center;
+    margin-top: 6px;
+  }
+  .score .n { font-size: 42px; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+  .score .who { font-size: 13px; font-weight: 700; margin-top: 2px; }
+  .side-r { text-align: right; }
+  .dash { color: #f2c14b; font-weight: 800; font-size: 34px; line-height: 1; }
+  .odds { margin-top: 8px; font-size: 12px; color: #c9d4e4; }
+  .printer {
+    margin-top: 10px;
+    background: #07140e;
+    color: #b7f7c8;
+    font-family: var(--mono);
+    border-radius: 12px;
+    min-height: 148px;
+    max-height: 210px;
+    overflow: auto;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    line-height: 1.45;
+  }
+  .printer .us { color: #8dffb0; font-weight: 700; }
+  .printer .them { color: #ffb4b4; font-weight: 700; }
+  .printer .ft { color: #ffe08a; }
+  .blink {
+    display: inline-block; width: 8px; height: 13px; background: #b7f7c8;
+    margin-left: 4px; vertical-align: text-bottom;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .form { display: flex; gap: 4px; margin-top: 8px; }
+  .form i {
+    width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center;
+    font-style: normal; font-size: 11px; font-weight: 800; color: white;
+  }
+  .form .W { background: #1f8a4c; }
+  .form .D { background: #c2880c; }
+  .form .L { background: #b42318; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 6px 4px; text-align: right; white-space: nowrap; }
+  th { color: var(--muted); font-size: 11px; font-weight: 700; }
+  td.club, th.club { text-align: left; white-space: normal; }
+  tr.us td { background: #e5f6ea; font-weight: 700; }
+  .gdpos { color: #1f8a4c; }
+  .gdneg { color: #b42318; }
+  .table-wrap { overflow-x: auto; }
+  .pitch {
+    background: repeating-linear-gradient(90deg, #1f8a45 0 26px, #18763b 26px 52px);
+    border-radius: 18px;
+    padding: 10px 8px 14px;
+    box-shadow: inset 0 0 0 3px rgba(255,255,255,.35);
+  }
+  .prow { display: flex; gap: 6px; justify-content: center; margin: 6px 0; }
+  .slot {
+    background: rgba(255,255,255,.95);
+    border: 0;
+    border-radius: 12px;
+    min-height: 62px;
+    padding: 4px;
+    color: var(--ink);
+    text-align: center;
+    position: relative;
+  }
+  .prow.fwd .slot { flex: 0 1 46%; }
+  .prow.mid .slot, .prow.def .slot { flex: 1 1 0; }
+  .prow.gk { justify-content: center; }
+  .prow.gk .slot { flex: 0 1 46%; }
+  .slot .pos { font-size: 9px; letter-spacing: .08em; color: var(--muted); font-weight: 800; }
+  .slot .rt { font-size: 16px; font-weight: 800; line-height: 1.1; }
+  .slot .nm { font-size: 10px; line-height: 1.15; font-weight: 700; overflow-wrap: anywhere; }
+  .slot.gold { box-shadow: inset 0 0 0 2px #e0a31a; background: linear-gradient(#fff, #fff6d8); }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    border-radius: 999px; padding: 6px 10px; min-height: 34px;
+    background: #e7e1d4; color: var(--ink); font-size: 12px; font-weight: 700;
+  }
+  .chip.on { background: var(--green); color: white; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  @media (min-width: 480px) {
+    .stickers { grid-template-columns: repeat(3, 1fr); }
+  }
+  .pcard {
+    background: white; border-radius: 14px; padding: 10px;
+    border: 2px solid var(--line); text-align: left; color: inherit; width: 100%;
+  }
+  .pcard .top { display: flex; justify-content: space-between; gap: 6px; align-items: baseline; }
+  .pcard .rt { font-size: 22px; font-weight: 800; }
+  .pcard .nm { font-weight: 800; font-size: 14px; }
+  .tag { font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+  .goldtag { color: #8a6508; }
+  .bar { height: 6px; background: #efe8d6; border-radius: 99px; overflow: hidden; margin-top: 6px; }
+  .bar span { display: block; height: 100%; background: var(--green); }
+  .uncaught { opacity: .55; filter: grayscale(.35); }
+  .stickers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .sticker {
+    background: white; border-radius: 12px; min-height: 92px; padding: 8px;
+    border: 2px solid var(--line); font-size: 12px;
+  }
+  .sticker b { display: block; font-size: 12px; line-height: 1.25; }
+  .banner {
+    border-radius: 14px; padding: 10px 12px; background: #e7f6ec; font-weight: 700;
+  }
+  .banner.bad { background: #fde8e8; }
+  .banner.gold { background: linear-gradient(#fff6d0, #ffe08a); }
+  .exact { font-size: 18px; margin: 0 0 4px; }
+  .tabs {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: min(520px, 100%);
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    background: #fffdf8; border-top: 1px solid var(--line);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    z-index: 20;
+  }
+  .tabs button {
+    background: transparent; color: var(--muted); border-radius: 12px;
+    padding: 6px 2px; font-size: 11px; min-height: 46px; line-height: 1.15;
+  }
+  .tabs button.on { background: var(--green); color: white; }
+  .backdrop, .modal-back {
+    position: fixed; inset: 0; z-index: 40;
+    background: rgba(10, 20, 16, .62);
+    display: grid; place-items: end center;
+    padding: 12px;
+  }
+  .modal-back { place-items: center; }
+  .sheet, .modal {
+    width: min(480px, 100%);
+    background: var(--card);
+    border-radius: 22px 22px 16px 16px;
+    padding: 16px;
+    max-height: min(78dvh, 640px);
+    overflow: auto;
+    position: relative;
+  }
+  .modal { text-align: center; border-radius: 22px; }
+  .modal.big { background: radial-gradient(circle at 50% 0%, #ffe7a3, #fffdf8 58%); }
+  .modal h2 { font-size: 32px; line-height: 1.05; margin: 0 0 8px; letter-spacing: -.4px; }
+  .list { display: grid; gap: 8px; }
+  .confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .confetti i {
+    position: absolute; top: -12px; width: 8px; height: 14px; border-radius: 2px;
+    animation: fall 1.6s linear infinite;
+  }
+  @keyframes fall { to { transform: translateY(70vh) rotate(180deg); } }
+  details { font-size: 13px; }
+  summary { cursor: pointer; font-weight: 700; }
+  .warn { background: #fff4d6; border-radius: 12px; padding: 8px 10px; font-size: 13px; }
+  .meter { height: 10px; background: #efe8d6; border-radius: 99px; overflow: hidden; }
+  .meter span { display: block; height: 100%; background: linear-gradient(90deg, #e0a31a, #f2c14b); }
+  @media (max-width: 380px) {
+    .hide-sm { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .blink, .confetti i { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+
+/* NAME_BY_KEY is the only place display names live.
+   Swap the strings later if they need to become fictional.
+   Leave the keys alone. Players, clubs and legend sides all use them. */
+const NAME_BY_KEY = {
+  club_josh: "Josh United",
+  club_northgate: "Northgate City",
+  club_redwater: "Redwater",
+  club_kingsport: "Kingsport Athletic",
+  club_dunwick: "Dunwick Town",
+  club_westmere: "Westmere United",
+  club_portselwyn: "Port Selwyn",
+  club_highmarsh: "Highmarsh",
+  club_thornfield: "Thornfield Rovers",
+  club_elmstead: "Elmstead City",
+  club_whiteharbour: "Whiteharbour Athletic",
+  club_moorland: "Moorland Rangers",
+  club_brackenford: "Brackenford",
+  club_southfen: "Southfen United",
+  club_rivermeet: "Rivermeet",
+  club_blackstrand: "Blackstrand",
+  club_oakhaven: "Oakhaven",
+  club_calderbrook: "Calderbrook Town",
+  club_queenswell: "Queenswell",
+  club_hartsbridge: "Hartsbridge United",
+  club_millcross: "Millcross",
+  club_yardley: "Yardley Athletic",
+  club_penrose: "Penrose United",
+  club_starkbridge: "Starkbridge",
+  club_lowfield: "Lowfield Town",
+  club_grandport: "Grandport",
+  club_coppice: "Coppice End",
+  club_fairhaven: "Fairhaven",
+  club_netherton: "Netherton",
+  club_saltmere: "Saltmere City",
+  club_brookmere: "Brookmere",
+  club_alden: "Alden Park",
+  club_doveton: "Doveton Rovers",
+  club_langmere: "Langmere United",
+  club_pitford: "Pitford",
+  club_rosewharf: "Rosewharf Town",
+  club_kestlebury: "Kestlebury",
+  club_foxhollow: "Foxhollow",
+  club_windle: "Windlethorpe",
+  club_marlowe: "Marlowe Athletic",
+  club_ambergate: "Ambergate",
+  club_redcliff: "Redcliff Borough",
+  club_holtvale: "Holt Vale",
+  club_penceford: "Penceford",
+  club_ashwick: "Ashwick Rangers",
+  club_belton: "Belton United",
+  club_cinder: "Cinderwell",
+  club_drayton: "Drayton Park",
+  club_eastwick: "Eastwick Town",
+  club_fernley: "Fernley",
+  club_greys: "Greys End",
+  club_hadley: "Hadley Comrades",
+  club_iven: "Ivenmouth",
+  club_kemble: "Kemble Road",
+  club_linacre: "Linacre",
+  club_marden: "Marden Hill",
+  club_newby: "Newby Athletic",
+  club_osbert: "Osberton",
+  club_pellam: "Pellam Town",
+  club_quarry: "Quarry Bank",
+  club_rosslyn: "Rosslyn Green",
+  club_saxon: "Saxonby",
+  club_thornby: "Thornby",
+  club_upton: "Upton Spire",
+  club_verney: "Verney Heath",
+  club_wendon: "Wendon Albion",
+  club_yarrow: "Yarrow Athletic",
+  club_chapel: "Chapel Gate",
+  club_abbey: "Abbeymead",
+  club_barley: "Barleyford",
+  club_cotter: "Cotterstock",
+  club_dean: "Deanwater",
+  club_elms: "Elmsley Town",
+  club_farrow: "Farrow United",
+  club_goss: "Gossington",
+  club_hewer: "Hewer Bridge",
+  club_ingram: "Ingram Athletic",
+  club_jessop: "Jessop Town",
+  club_keel: "Keelmouth",
+  club_lark: "Larkhill Rovers",
+  club_marston: "Marston Gate",
+  club_norbury: "Norbury Vale",
+  club_oxley: "Oxley Green",
+  club_prentice: "Prentice Park",
+  club_rudby: "Rudby",
+  club_silcox: "Silcox Town",
+  club_tansley: "Tansley Athletic",
+  club_umber: "Umberley",
+  club_wicks: "Wicksford",
+  club_yew: "Yewtree",
+  club_briar: "Briar Lane",
+  team_shearer: "Team Shearer",
+  team_henry: "Team Henry",
+  team_gerrard: "Team Gerrard",
+  team_lampard: "Team Lampard",
+  team_terry: "Team Terry",
+  team_ferdinand: "Team Ferdinand",
+  st_gk: "Sam Hargreaves",
+  st_lb: "Owen Briggs",
+  st_cb1: "Callum Ward",
+  st_cb2: "Nate Okonkwo",
+  st_rb: "Harry Pell",
+  st_lm: "Dylan Crowe",
+  st_cm1: "Jordan Hale",
+  st_cm2: "Ben Rowley",
+  st_rm: "Finlay Moss",
+  st_st1: "Marcus Adeyemi",
+  st_st2: "Luke Perrin",
+  c_gk_2: "Elliot Prowse",
+  c_gk_3: "Niall Brooks",
+  c_gk_4: "Chris Adebola",
+  c_gk_5: "Paul Mercier",
+  c_gk_6: "Tom Sheehan",
+  c_gk_7: "Yusuf Demir",
+  c_gk_8: "Ben Carter",
+  c_gk_9: "Owen Blake",
+  c_def_5: "Joe Mackie",
+  c_def_6: "Liam Hart",
+  c_def_7: "Andre Costa",
+  c_def_8: "Kyle Brennan",
+  c_def_9: "Seth Malik",
+  c_def_10: "Rhys Bowen",
+  c_def_11: "Danilo Ferreira",
+  c_def_12: "Connor Pike",
+  c_def_13: "Will Sutton",
+  c_def_14: "Jamal Reid",
+  c_def_15: "Euan Gallagher",
+  c_def_16: "Toby French",
+  c_mid_5: "Alexei Petrov",
+  c_mid_6: "Marcus Bell",
+  c_mid_7: "Harvey Quinn",
+  c_mid_8: "Sol Rahman",
+  c_mid_9: "Pete Nolan",
+  c_mid_10: "Isaac Green",
+  c_mid_11: "Mateo Ruiz",
+  c_mid_12: "Callum Burke",
+  c_mid_13: "Noah Kemp",
+  c_mid_14: "Freddie Walsh",
+  c_mid_15: "Tariq Osman",
+  c_mid_16: "Lewis Grant",
+  c_fwd_3: "Danny Sharpe",
+  c_fwd_4: "Kai Bennett",
+  c_fwd_5: "Ollie Marsh",
+  c_fwd_6: "Reece Dalton",
+  c_fwd_7: "Samir Haddad",
+  c_fwd_8: "Jack Doyle",
+  c_fwd_9: "Leon Price",
+  c_fwd_10: "Evan Croft",
+  c_fwd_11: "Dominic Shaw",
+  c_fwd_12: "Billy Ng",
+  u_gk_1: "Idris Palmer",
+  u_gk_2: "Hugo Lang",
+  u_gk_3: "Martin Foley",
+  u_gk_4: "Kenji Sato",
+  u_def_1: "Patrick Almeida",
+  u_def_2: "George Harlow",
+  u_def_3: "Musa Diallo",
+  u_def_4: "Edward Crook",
+  u_def_5: "Viktor Holm",
+  u_def_6: "Charlie Mbeki",
+  u_mid_1: "Roman Varga",
+  u_mid_2: "Ellis Parker",
+  u_mid_3: "Youssef Bennani",
+  u_mid_4: "Scott Rennie",
+  u_mid_5: "Luca Moretti",
+  u_mid_6: "Jamal Wright",
+  u_fwd_1: "Darius Okeke",
+  u_fwd_2: "Finn Archer",
+  u_fwd_3: "Pablo Herrera",
+  u_fwd_4: "Ryan Cotter",
+  r_gk_1: "Alfie Drummond",
+  r_gk_2: "Sergei Volkov",
+  r_gk_3: "Thomas Nygaard",
+  r_def_1: "Ibrahim Sarr",
+  r_def_2: "Joel Mathews",
+  r_def_3: "Oscar Lind",
+  r_def_4: "Devonte Clarke",
+  r_def_5: "Henrik Dahl",
+  r_mid_1: "Emre Sahin",
+  r_mid_2: "Louis Ferrer",
+  r_mid_3: "Kwame Boateng",
+  r_mid_4: "Andrea Russo",
+  r_mid_5: "Felix Hartmann",
+  r_fwd_1: "Mateo Ibarra",
+  r_fwd_2: "Callum Ogden",
+  r_fwd_3: "Sven Larsson",
+  p_gk_1: "Nicolas Faber",
+  p_gk_2: "Owen Marshall",
+  p_def_1: "Thiago Albuquerque",
+  p_def_2: "Benjamin Okoro",
+  p_def_3: "Lars Vogt",
+  p_def_4: "Jack Ellison",
+  p_mid_1: "Rafael Duarte",
+  p_mid_2: "Adam Kowalczyk",
+  p_mid_3: "Sami Traore",
+  p_mid_4: "Elliot Granger",
+  p_fwd_1: "Ivan Petrovic",
+  p_fwd_2: "Mason Kerr",
+  l_gk_1: "Arthur Pendleton",
+  l_def_1: "Caleb Okoye",
+  l_def_2: "Stefan Kruk",
+  l_mid_1: "Leo Marchand",
+  l_mid_2: "Jonah Adewale",
+  l_mid_3: "Pavel Horvat",
+  l_fwd_1: "Enzo Silveira",
+  l_fwd_2: "Rory Quill",
+  sh_given: "Shay Given",
+  sh_barton: "Warren Barton",
+  sh_hendry: "Colin Hendry",
+  sh_albert: "Philippe Albert",
+  sh_lesaux: "Graeme Le Saux",
+  sh_solano: "Nolberto Solano",
+  sh_sherwood: "Tim Sherwood",
+  sh_lee: "Robert Lee",
+  sh_ginola: "David Ginola",
+  sh_sutton: "Chris Sutton",
+  myth_shearer: "Alan Shearer",
+  he_lehmann: "Jens Lehmann",
+  he_lauren: "Lauren",
+  he_campbell: "Sol Campbell",
+  he_toure: "Kolo Toure",
+  he_cole: "Ashley Cole",
+  he_ljungberg: "Freddie Ljungberg",
+  he_vieira: "Patrick Vieira",
+  he_gilberto: "Gilberto Silva",
+  he_pires: "Robert Pires",
+  he_bergkamp: "Dennis Bergkamp",
+  myth_henry: "Thierry Henry",
+  ge_reina: "Pepe Reina",
+  ge_finnan: "Steve Finnan",
+  ge_carragher: "Jamie Carragher",
+  ge_hyypia: "Sami Hyypia",
+  ge_riise: "John Arne Riise",
+  ge_mascherano: "Javier Mascherano",
+  ge_alonso: "Xabi Alonso",
+  ge_kuyt: "Dirk Kuyt",
+  ge_garcia: "Luis Garcia",
+  myth_gerrard: "Steven Gerrard",
+  ge_torres: "Fernando Torres",
+  la_cech: "Petr Cech",
+  la_ferreira: "Paulo Ferreira",
+  la_carvalho: "Ricardo Carvalho",
+  la_terry: "John Terry",
+  la_cole: "Ashley Cole",
+  la_makelele: "Claude Makelele",
+  la_essien: "Michael Essien",
+  myth_lampard: "Frank Lampard",
+  la_jcole: "Joe Cole",
+  la_duff: "Damien Duff",
+  la_drogba: "Didier Drogba",
+  te_courtois: "Thibaut Courtois",
+  te_ivanovic: "Branislav Ivanovic",
+  myth_terry: "John Terry",
+  te_cahill: "Gary Cahill",
+  te_azpi: "Cesar Azpilicueta",
+  te_kante: "N'Golo Kante",
+  te_matic: "Nemanja Matic",
+  te_fabregas: "Cesc Fabregas",
+  te_willian: "Willian",
+  te_hazard: "Eden Hazard",
+  te_costa: "Diego Costa",
+  fe_vds: "Edwin van der Sar",
+  fe_neville: "Gary Neville",
+  myth_ferdinand: "Rio Ferdinand",
+  fe_vidic: "Nemanja Vidic",
+  fe_evra: "Patrice Evra",
+  fe_ronaldo: "Cristiano Ronaldo",
+  fe_scholes: "Paul Scholes",
+  fe_carrick: "Michael Carrick",
+  fe_giggs: "Ryan Giggs",
+  fe_rooney: "Wayne Rooney",
+  fe_tevez: "Carlos Tevez"
+};
+
+const LEAGUES = [
+  { id: "l2", name: "League Two", teams: 24, games: 46, cap: 58, minR: 35, maxR: 55 },
+  { id: "l1", name: "League One", teams: 24, games: 46, cap: 68, minR: 45, maxR: 65 },
+  { id: "ch", name: "Championship", teams: 24, games: 46, cap: 78, minR: 55, maxR: 75 },
+  { id: "pl", name: "Premier League", teams: 20, games: 38, cap: 99, minR: 65, maxR: 90 }
+];
+
+const CLUB_POOLS = [
+  [["club_abbey","ABY"],["club_barley","BLY"],["club_cotter","CTS"],["club_dean","DNW"],["club_elms","ELS"],["club_farrow","FRW"],["club_goss","GSS"],["club_hewer","HWB"],["club_ingram","IGA"],["club_jessop","JSP"],["club_keel","KLM"],["club_lark","LRK"],["club_marston","MST"],["club_norbury","NBV"],["club_oxley","OXL"],["club_prentice","PRC"],["club_rudby","RDB"],["club_silcox","SCX"],["club_tansley","TNS"],["club_umber","UMB"],["club_wicks","WKF"],["club_yew","YWT"],["club_briar","BRL"]],
+  [["club_ashwick","AWK"],["club_belton","BLT"],["club_cinder","CDW"],["club_drayton","DRY"],["club_eastwick","EWK"],["club_fernley","FNY"],["club_greys","GRY"],["club_hadley","HDL"],["club_iven","IVM"],["club_kemble","KMB"],["club_linacre","LNC"],["club_marden","MDH"],["club_newby","NBY"],["club_osbert","OSB"],["club_pellam","PLM"],["club_quarry","QRB"],["club_rosslyn","RLG"],["club_saxon","SXB"],["club_thornby","TNB"],["club_upton","UPN"],["club_verney","VNH"],["club_wendon","WDN"],["club_yarrow","YWA"],["club_chapel","CPG"]],
+  [["club_millcross","MLC"],["club_yardley","YRD"],["club_penrose","PNR"],["club_starkbridge","STB"],["club_lowfield","LWF"],["club_grandport","GRP"],["club_coppice","CPE"],["club_fairhaven","FRH"],["club_netherton","NTH"],["club_saltmere","SLT"],["club_brookmere","BRK"],["club_alden","ALD"],["club_doveton","DVT"],["club_langmere","LGM"],["club_pitford","PTF"],["club_rosewharf","RSW"],["club_kestlebury","KST"],["club_foxhollow","FXH"],["club_windle","WDL"],["club_marlowe","MRL"],["club_ambergate","AMB"],["club_redcliff","RDC"],["club_holtvale","HLV"],["club_penceford","PNF"]],
+  [["club_northgate","NGT"],["club_redwater","RDW"],["club_kingsport","KSP"],["club_dunwick","DNK"],["club_westmere","WSM"],["club_portselwyn","PSL"],["club_highmarsh","HGM"],["club_thornfield","THF"],["club_elmstead","ELM"],["club_whiteharbour","WHB"],["club_moorland","MLD"],["club_brackenford","BFD"],["club_southfen","SFN"],["club_rivermeet","RVM"],["club_blackstrand","BKS"],["club_oakhaven","OKH"],["club_calderbrook","CBK"],["club_queenswell","QNW"],["club_hartsbridge","HTB"]]
+].map(pool => pool.map(([id, short]) => ({ id, short })));
+
+const RARITY = {
+  common: { label: "Common", contract: 60, dup: 70, color: "#5c6b7a" },
+  uncommon: { label: "Uncommon", contract: 28, dup: 120, color: "#1f8a4c" },
+  rare: { label: "Rare", contract: 11, dup: 180, color: "#1d6fd6" },
+  prem: { label: "Prem-calibre", contract: 3.5, dup: 260, color: "#7a3ff0" },
+  legend: { label: "Legend", contract: 1.2, dup: 360, color: "#c2410c" },
+  teammate: { label: "Teammate", contract: 0, dup: 300, color: "#0f766e" },
+  mythic: { label: "Mythic", contract: 0, dup: 500, color: "#a16207" }
+};
+const BANDS = {
+  common: [50, 65], uncommon: [60, 75], rare: [70, 85], prem: [85, 95],
+  legend: [95, 99], teammate: [80, 92], mythic: [95, 99]
+};
+const BOARD_WEIGHTS = [
+  [0.50, 0.32, 0.14, 0.035, 0.005],
+  [0.30, 0.34, 0.24, 0.09, 0.03],
+  [0.12, 0.28, 0.32, 0.20, 0.08],
+  [0.05, 0.16, 0.30, 0.30, 0.19]
+];
+const BOARD_RARITIES = ["common", "uncommon", "rare", "prem", "legend"];
+
+function P(name_key, pos, rarity, base, ceiling) {
+  return { name_key, pos, rarity, base, ceiling };
+}
+const ROSTER = [
+  P("st_gk","GK","common",39,54), P("st_lb","DEF","common",36,51), P("st_cb1","DEF","common",42,60),
+  P("st_cb2","DEF","common",38,53), P("st_rb","DEF","common",37,52), P("st_lm","MID","common",40,56),
+  P("st_cm1","MID","common",48,63), P("st_cm2","MID","common",39,55), P("st_rm","MID","common",38,54),
+  P("st_st1","FWD","common",49,64), P("st_st2","FWD","common",36,50),
+  P("c_gk_2","GK","common",36,52), P("c_gk_3","GK","common",41,58), P("c_gk_4","GK","common",34,50),
+  P("c_gk_5","GK","common",44,61), P("c_gk_6","GK","common",38,55), P("c_gk_7","GK","common",42,63),
+  P("c_gk_8","GK","common",35,51), P("c_gk_9","GK","common",40,57),
+  P("c_def_5","DEF","common",35,50), P("c_def_6","DEF","common",44,62), P("c_def_7","DEF","common",41,59),
+  P("c_def_8","DEF","common",33,50), P("c_def_9","DEF","common",46,64), P("c_def_10","DEF","common",39,56),
+  P("c_def_11","DEF","common",37,54), P("c_def_12","DEF","common",43,61), P("c_def_13","DEF","common",36,52),
+  P("c_def_14","DEF","common",40,58), P("c_def_15","DEF","common",34,51), P("c_def_16","DEF","common",45,63),
+  P("c_mid_5","MID","common",36,53), P("c_mid_6","MID","common",44,62), P("c_mid_7","MID","common",41,59),
+  P("c_mid_8","MID","common",47,65), P("c_mid_9","MID","common",34,50), P("c_mid_10","MID","common",43,60),
+  P("c_mid_11","MID","common",38,55), P("c_mid_12","MID","common",35,52), P("c_mid_13","MID","common",46,64),
+  P("c_mid_14","MID","common",40,57), P("c_mid_15","MID","common",37,54), P("c_mid_16","MID","common",42,61),
+  P("c_fwd_3","FWD","common",44,62), P("c_fwd_4","FWD","common",41,58), P("c_fwd_5","FWD","common",38,55),
+  P("c_fwd_6","FWD","common",46,65), P("c_fwd_7","FWD","common",35,52), P("c_fwd_8","FWD","common",43,60),
+  P("c_fwd_9","FWD","common",39,56), P("c_fwd_10","FWD","common",37,53), P("c_fwd_11","FWD","common",45,63),
+  P("c_fwd_12","FWD","common",34,51),
+  P("u_gk_1","GK","uncommon",54,68), P("u_gk_2","GK","uncommon",51,64), P("u_gk_3","GK","uncommon",58,73), P("u_gk_4","GK","uncommon",49,62),
+  P("u_def_1","DEF","uncommon",56,70), P("u_def_2","DEF","uncommon",52,66), P("u_def_3","DEF","uncommon",60,74),
+  P("u_def_4","DEF","uncommon",50,63), P("u_def_5","DEF","uncommon",57,72), P("u_def_6","DEF","uncommon",54,69),
+  P("u_mid_1","MID","uncommon",61,75), P("u_mid_2","MID","uncommon",55,68), P("u_mid_3","MID","uncommon",58,73),
+  P("u_mid_4","MID","uncommon",51,64), P("u_mid_5","MID","uncommon",56,71), P("u_mid_6","MID","uncommon",53,67),
+  P("u_fwd_1","FWD","uncommon",62,75), P("u_fwd_2","FWD","uncommon",55,69), P("u_fwd_3","FWD","uncommon",58,72), P("u_fwd_4","FWD","uncommon",52,65),
+  P("r_gk_1","GK","rare",66,80), P("r_gk_2","GK","rare",63,76), P("r_gk_3","GK","rare",69,84),
+  P("r_def_1","DEF","rare",70,85), P("r_def_2","DEF","rare",64,78), P("r_def_3","DEF","rare",67,82),
+  P("r_def_4","DEF","rare",62,74), P("r_def_5","DEF","rare",71,85),
+  P("r_mid_1","MID","rare",72,85), P("r_mid_2","MID","rare",66,80), P("r_mid_3","MID","rare",69,83),
+  P("r_mid_4","MID","rare",63,76), P("r_mid_5","MID","rare",70,84),
+  P("r_fwd_1","FWD","rare",73,85), P("r_fwd_2","FWD","rare",65,79), P("r_fwd_3","FWD","rare",68,82),
+  P("p_gk_1","GK","prem",78,90), P("p_gk_2","GK","prem",74,86),
+  P("p_def_1","DEF","prem",82,94), P("p_def_2","DEF","prem",76,88), P("p_def_3","DEF","prem",80,93), P("p_def_4","DEF","prem",74,86),
+  P("p_mid_1","MID","prem",84,95), P("p_mid_2","MID","prem",78,90), P("p_mid_3","MID","prem",81,93), P("p_mid_4","MID","prem",75,87),
+  P("p_fwd_1","FWD","prem",83,95), P("p_fwd_2","FWD","prem",79,91),
+  P("l_gk_1","GK","legend",88,97), P("l_def_1","DEF","legend",90,98), P("l_def_2","DEF","legend",86,95),
+  P("l_mid_1","MID","legend",91,99), P("l_mid_2","MID","legend",88,96), P("l_mid_3","MID","legend",86,95),
+  P("l_fwd_1","FWD","legend",92,99), P("l_fwd_2","FWD","legend",87,96),
+  P("sh_given","GK","teammate",84,84), P("sh_barton","DEF","teammate",80,80), P("sh_hendry","DEF","teammate",84,84),
+  P("sh_albert","DEF","teammate",86,86), P("sh_lesaux","DEF","teammate",85,85), P("sh_solano","MID","teammate",86,86),
+  P("sh_sherwood","MID","teammate",84,84), P("sh_lee","MID","teammate",85,85), P("sh_ginola","MID","teammate",90,90),
+  P("sh_sutton","FWD","teammate",88,88), P("myth_shearer","FWD","mythic",96,96),
+  P("he_lehmann","GK","teammate",86,86), P("he_lauren","DEF","teammate",83,83), P("he_campbell","DEF","teammate",90,90),
+  P("he_toure","DEF","teammate",86,86), P("he_cole","DEF","teammate",89,89), P("he_ljungberg","MID","teammate",88,88),
+  P("he_vieira","MID","teammate",91,91), P("he_gilberto","MID","teammate",85,85), P("he_pires","MID","teammate",90,90),
+  P("he_bergkamp","FWD","teammate",92,92), P("myth_henry","FWD","mythic",98,98),
+  P("ge_reina","GK","teammate",87,87), P("ge_finnan","DEF","teammate",81,81), P("ge_carragher","DEF","teammate",86,86),
+  P("ge_hyypia","DEF","teammate",87,87), P("ge_riise","DEF","teammate",84,84), P("ge_mascherano","MID","teammate",88,88),
+  P("ge_alonso","MID","teammate",91,91), P("ge_kuyt","MID","teammate",84,84), P("ge_garcia","MID","teammate",83,83),
+  P("myth_gerrard","MID","mythic",99,99), P("ge_torres","FWD","teammate",91,91),
+  P("la_cech","GK","teammate",90,90), P("la_ferreira","DEF","teammate",81,81), P("la_carvalho","DEF","teammate",88,88),
+  P("la_terry","DEF","teammate",92,92), P("la_cole","DEF","teammate",89,89), P("la_makelele","MID","teammate",90,90),
+  P("la_essien","MID","teammate",89,89), P("myth_lampard","MID","mythic",98,98), P("la_jcole","FWD","teammate",86,86),
+  P("la_duff","FWD","teammate",83,83), P("la_drogba","FWD","teammate",91,91),
+  P("te_courtois","GK","teammate",89,89), P("te_ivanovic","DEF","teammate",86,86), P("myth_terry","DEF","mythic",97,97),
+  P("te_cahill","DEF","teammate",84,84), P("te_azpi","DEF","teammate",86,86), P("te_kante","MID","teammate",91,91),
+  P("te_matic","MID","teammate",85,85), P("te_fabregas","MID","teammate",90,90), P("te_willian","FWD","teammate",86,86),
+  P("te_hazard","FWD","teammate",92,92), P("te_costa","FWD","teammate",88,88),
+  P("fe_vds","GK","teammate",89,89), P("fe_neville","DEF","teammate",84,84), P("myth_ferdinand","DEF","mythic",96,96),
+  P("fe_vidic","DEF","teammate",91,91), P("fe_evra","DEF","teammate",87,87), P("fe_ronaldo","MID","teammate",92,92),
+  P("fe_scholes","MID","teammate",91,91), P("fe_carrick","MID","teammate",86,86), P("fe_giggs","MID","teammate",90,90),
+  P("fe_rooney","FWD","teammate",91,91), P("fe_tevez","FWD","teammate",87,87)
+];
+
+const LEGEND_TEAMS = [
+  { id:"shearer", name_key:"team_shearer", short:"SHR", formation:"4-4-2", weight:10, headline:"myth_shearer",
+    xi:["sh_given","sh_barton","sh_hendry","sh_albert","sh_lesaux","sh_solano","sh_sherwood","sh_lee","sh_ginola","sh_sutton","myth_shearer"] },
+  { id:"henry", name_key:"team_henry", short:"HNY", formation:"4-4-2", weight:10, headline:"myth_henry",
+    xi:["he_lehmann","he_lauren","he_campbell","he_toure","he_cole","he_ljungberg","he_vieira","he_gilberto","he_pires","he_bergkamp","myth_henry"] },
+  { id:"gerrard", name_key:"team_gerrard", short:"GER", formation:"4-2-3-1", weight:30, headline:"myth_gerrard",
+    xi:["ge_reina","ge_finnan","ge_carragher","ge_hyypia","ge_riise","ge_mascherano","ge_alonso","ge_kuyt","myth_gerrard","ge_garcia","ge_torres"] },
+  { id:"lampard", name_key:"team_lampard", short:"LAM", formation:"4-3-3", weight:20, headline:"myth_lampard",
+    xi:["la_cech","la_ferreira","la_carvalho","la_terry","la_cole","la_makelele","la_essien","myth_lampard","la_jcole","la_duff","la_drogba"] },
+  { id:"terry", name_key:"team_terry", short:"TRY", formation:"4-3-3", weight:15, headline:"myth_terry",
+    xi:["te_courtois","te_ivanovic","myth_terry","te_cahill","te_azpi","te_kante","te_matic","te_fabregas","te_willian","te_hazard","te_costa"] },
+  { id:"ferdinand", name_key:"team_ferdinand", short:"FER", formation:"4-4-2", weight:15, headline:"myth_ferdinand",
+    xi:["fe_vds","fe_neville","myth_ferdinand","fe_vidic","fe_evra","fe_ronaldo","fe_scholes","fe_carrick","fe_giggs","fe_rooney","fe_tevez"] }
+];
+
+const FORMATION = [
+  { pos:"GK", label:"GK", line:"gk" },
+  { pos:"DEF", label:"LB", line:"def" },
+  { pos:"DEF", label:"CB", line:"def" },
+  { pos:"DEF", label:"CB", line:"def" },
+  { pos:"DEF", label:"RB", line:"def" },
+  { pos:"MID", label:"LM", line:"mid" },
+  { pos:"MID", label:"CM", line:"mid" },
+  { pos:"MID", label:"CM", line:"mid" },
+  { pos:"MID", label:"RM", line:"mid" },
+  { pos:"FWD", label:"ST", line:"fwd" },
+  { pos:"FWD", label:"ST", line:"fwd" }
+];
+const START_XI = ["st_gk","st_lb","st_cb1","st_cb2","st_rb","st_lm","st_cm1","st_cm2","st_rm","st_st1","st_st2"];
+const SAVE_KEY = "josh-united-idle-v1";
+const MATCH_S = 23;
+const MATCH_BASE = 1.22;
+const HOME_ADV = 1.4;
+const GOLD_ODDS = 2048;
+const LEGEND_HOURS = 8;
+
+const BY_KEY = {};
+ROSTER.forEach(p => { BY_KEY[p.name_key] = p; });
+
+let state;
+let ui = { tab: "match", sheet: null, filter: "all", result: null, lock: false, note: "" };
+let live = null;
+let chain = "idle";
+let debugOverride = null;
+let oddsCache = { key: "", win: 0, draw: 0 };
+const clock = { t: null, fn: null, gameMs: 0, started: 0, speed: 1, real: false, pending: null };
+
+function playerByKey(k) { return BY_KEY[k]; }
+function nameOf(k) { return NAME_BY_KEY[k] || k; }
+function league() { return LEAGUES[state.league]; }
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
+function money(n) {
+  const s = Math.round(n).toString();
+  return "£" + s.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function ordinal(n) {
+  const v = n % 100;
+  if (v >= 11 && v <= 13) return n + "th";
+  return n + ({ 1:"st", 2:"nd", 3:"rd" }[n % 10] || "th");
+}
+function formatPct(n) {
+  const r = Math.round(n * 10) / 10;
+  return (Math.abs(r - Math.round(r)) < 0.05 ? String(Math.round(r)) : r.toFixed(1)) + "%";
+}
+function formatRemain(ms) {
+  if (ms < 0) ms = 0;
+  const s = Math.ceil(ms / 1000);
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const ss = s % 60;
+  if (h > 0) return h + "h " + m + "m";
+  if (m > 0) return m + "m " + String(ss).padStart(2, "0") + "s";
+  return ss + "s";
+}
+function sideName(id) { return id === "user" ? NAME_BY_KEY.club_josh : (NAME_BY_KEY[id] || id); }
+function shortOf(id) {
+  if (id === "user") return "JUT";
+  const c = state && state.season && state.season.clubs.find(x => x.id === id);
+  if (c) return c.short;
+  const pool = CLUB_POOLS.flat().find(x => x.id === id);
+  if (pool) return pool.short;
+  const lg = LEGEND_TEAMS.find(t => t.id === id);
+  return lg ? lg.short : "FC";
+}
+function deckOf(p) {
+  if (!p) return null;
+  if (p.rarity === "mythic") return p.name_key.slice(5);
+  const map = { sh:"shearer", he:"henry", ge:"gerrard", la:"lampard", te:"terry", fe:"ferdinand" };
+  return map[p.name_key.slice(0, 2)] || null;
+}
+function teamById(id) { return LEGEND_TEAMS.find(t => t.id === id); }
+function legendRating(team) {
+  return team.xi.reduce((s, k) => s + playerByKey(k).base, 0) / team.xi.length;
+}
+
+function assertData() {
+  const seen = new Set();
+  ROSTER.forEach(p => {
+    if (seen.has(p.name_key)) throw new Error("Duplicate player " + p.name_key);
+    seen.add(p.name_key);
+    if (!NAME_BY_KEY[p.name_key]) throw new Error("Missing name " + p.name_key);
+    if (p.base > p.ceiling) throw new Error("Base over ceiling " + p.name_key);
+    const band = BANDS[p.rarity];
+    if (!band || p.ceiling < band[0] || p.ceiling > band[1]) throw new Error("Ceiling band " + p.name_key);
+  });
+  const shorts = new Set();
+  CLUB_POOLS.forEach((pool, i) => {
+    const expect = [23, 24, 24, 19][i];
+    if (pool.length !== expect) throw new Error("Pool size " + i);
+    pool.forEach(c => {
+      if (!NAME_BY_KEY[c.id]) throw new Error("Missing club " + c.id);
+      if (shorts.has(c.short)) throw new Error("Short " + c.short);
+      shorts.add(c.short);
+    });
+  });
+  const posCount = { GK:0, DEF:0, MID:0, FWD:0 };
+  START_XI.forEach(id => {
+    const p = playerByKey(id);
+    if (!p) throw new Error("Starter " + id);
+    posCount[p.pos]++;
+  });
+  if (posCount.GK !== 1 || posCount.DEF !== 4 || posCount.MID !== 4 || posCount.FWD !== 2) {
+    throw new Error("Formation");
+  }
+  const avg = START_XI.reduce((s, k) => s + playerByKey(k).base, 0) / 11;
+  if (avg < 39.5 || avg > 41) throw new Error("Starter avg " + avg.toFixed(2));
+  LEGEND_TEAMS.forEach(t => {
+    if (t.xi.length !== 11) throw new Error("XI " + t.id);
+    if (!NAME_BY_KEY[t.name_key]) throw new Error("team name " + t.id);
+    const weights = { gerrard:30, lampard:20, terry:15, ferdinand:15, henry:10, shearer:10 };
+    if (t.weight !== weights[t.id]) throw new Error("weight " + t.id);
+    t.xi.forEach(k => { if (!playerByKey(k)) throw new Error("legend player " + k); });
+  });
+}
+
+function effectiveOf(key) {
+  const p = playerByKey(key);
+  const o = state.owned[key];
+  if (!p || !o) return 30;
+  const cap = league().cap;
+  const grown = o.rating + (o.gold ? 2 : 0);
+  const ceil = p.ceiling + (o.gold ? 1 : 0);
+  return Math.min(grown, ceil, cap, 99);
+}
+function xiRating() {
+  if (debugOverride != null) return debugOverride;
+  let s = 0;
+  state.xi.forEach(k => { s += effectiveOf(k); });
+  return s / state.xi.length;
+}
+function xpToNext(rating) { return Math.round(90 + rating * 2.4); }
+function grantXp(key, amount) {
+  const o = state.owned[key];
+  const p = playerByKey(key);
+  if (!o || !p || amount <= 0) return;
+  const ceil = p.ceiling + (o.gold ? 1 : 0);
+  if (o.rating >= ceil) return;
+  o.xp += amount;
+  let guard = 0;
+  while (o.rating < ceil && o.xp >= xpToNext(o.rating) && guard < 40) {
+    o.xp -= xpToNext(o.rating);
+    o.rating += 1;
+    guard += 1;
+  }
+  if (o.rating >= ceil) o.xp = 0;
+}
+function checkUnlock() {
+  if (state.legend.unlocked) return false;
+  if (state.plTitles >= 1 && state.rep >= 25) {
+    state.legend.unlocked = true;
+    state.tokens += 1;
+    return true;
+  }
+  return false;
+}
+function ownPlayer(p, gold) {
+  const key = p.name_key;
+  const existing = state.owned[key];
+  if (existing) {
+    if (gold && !existing.gold) {
+      existing.gold = true;
+      state.stats.golds += 1;
+      return { dup: true, gold: true, upgraded: true };
+    }
+    grantXp(key, (RARITY[p.rarity].dup || 60) * (gold ? 2 : 1));
+    if (gold) state.stats.golds += 1;
+    return { dup: true, gold: !!gold, upgraded: false };
+  }
+  state.owned[key] = { rating: p.base, xp: 0, gold: !!gold };
+  if (gold) state.stats.golds += 1;
+  if (p.rarity === "mythic") {
+    if (!state.legend.signed.includes(key)) state.legend.signed.push(key);
+    state.rep += 1;
+  } else if (p.rarity === "teammate") {
+    state.rep += 1;
+  }
+  checkUnlock();
+  return { dup: false, gold: !!gold };
+}
+function repBonus() { return 2 * Math.floor(state.rep / 10); }
+function contractChance(rarity) {
+  const base = RARITY[rarity].contract;
+  return Math.min(99, base + repBonus() + (state.boosts.offer ? 15 : 0));
+}
+function catchChance() { return Math.min(80, 60 + (state.boosts.scout ? 10 : 0)); }
+function incomeMult() { return [1, 1.65, 2.5, 3.8][state.league]; }
+function costMult() { return [1, 1.25, 1.55, 1.9][state.league]; }
+function matchPurse(result) {
+  const base = { win: 640, draw: 300, loss: 150 }[result];
+  return Math.round(base * incomeMult());
+}
+function contractCost(rarity) {
+  const base = { common: 700, uncommon: 3800, rare: 15000, prem: 52000, legend: 150000 }[rarity];
+  return Math.round(base * costMult());
+}
+function boostCost(kind) {
+  return Math.round((kind === "scout" ? 2200 : 4800) * costMult());
+}
+function refreshCost() { return Math.round(1800 * costMult()); }
+function xpFor(result) { return { win: 22, draw: 16, loss: 12 }[result]; }
+
+function poisson(lambda, rnd) {
+  if (lambda < 0.0001) return 0;
+  const L = Math.exp(-Math.min(lambda, 12));
+  let k = 0, p = 1;
+  do { k += 1; p *= rnd(); } while (p > L && k < 18);
+  return Math.min(6, k - 1);
+}
+function sampleScore(rA, rB, aHome, rnd, opts) {
+  const o = opts || {};
+  const adv = o.neutral ? 0 : (aHome ? HOME_ADV : -HOME_ADV);
+  const base = o.base == null ? MATCH_BASE : o.base;
+  const diff = (rA - rB) + adv;
+  const la = base * Math.exp(diff / MATCH_S);
+  const lb = base * Math.exp(-diff / MATCH_S);
+  return [poisson(la, rnd), poisson(lb, rnd)];
+}
+function sampleWinRate(diff, n) {
+  const times = n || 2500;
+  let w = 0;
+  for (let i = 0; i < times; i++) {
+    const home = i % 2 === 0;
+    const pair = sampleScore(50 + diff, 50, home, Math.random);
+    if (pair[0] > pair[1]) w++;
+  }
+  return w / times;
+}
+function resolveUserMatch(fx, knockout, rnd) {
+  const userHome = fx.home === "user";
+  const oppId = userHome ? fx.away : fx.home;
+  const my = xiRating();
+  const op = ratingOf(oppId);
+  let pair = sampleScore(my, op, userHome, rnd);
+  let us = pair[0], them = pair[1];
+  const us90 = us, them90 = them;
+  let et = false;
+  if (knockout && us === them) {
+    et = true;
+    const extra = sampleScore(my, op, userHome, rnd, { base: 0.42 });
+    us += extra[0];
+    them += extra[1];
+    if (us === them) {
+      const pHome = 1 / (1 + Math.exp((op - my) / 8));
+      if (rnd() < pHome) us += 1;
+      else them += 1;
+    }
+  }
+  return { us, them, us90, them90, et, oppId, userHome, my, op };
+}
+function buildEvents(spec) {
+  const rnd = spec.rnd;
+  const goals = [];
+  for (let i = 0; i < spec.us90; i++) goals.push({ side: "us", min: 1 + Math.floor(rnd() * 88) });
+  for (let i = 0; i < spec.them90; i++) goals.push({ side: "them", min: 1 + Math.floor(rnd() * 88) });
+  goals.sort((a, b) => a.min - b.min || (a.side === "us" ? -1 : 1));
+  const flavours = [
+    ["us", "Chance for us. The keeper saves."],
+    ["us", "We hit the woodwork."],
+    ["us", "A cross flashes through the box."],
+    ["them", "They shoot. Our keeper holds it."],
+    ["them", "They head over from a corner."],
+    ["", "A quiet minute in midfield."],
+    ["us", "Shot from the edge of the box. Wide."],
+    ["them", "A scare at the back. Cleared."]
+  ];
+  const extras = [];
+  const nF = 2 + Math.floor(rnd() * 3);
+  for (let i = 0; i < nF; i++) {
+    const f = flavours[Math.floor(rnd() * flavours.length)];
+    extras.push({ min: 1 + Math.floor(rnd() * 89), text: f[1], side: f[0], flavour: true });
+  }
+  const timed = goals.map(g => ({ side: g.side, min: g.min, flavour: false })).concat(extras);
+  timed.sort((a, b) => a.min - b.min);
+  const lines = [{ text: "Kick-off.", side: "" }];
+  let uu = 0, tt = 0, htDone = false;
+  timed.forEach(item => {
+    if (!htDone && item.min >= 45) {
+      lines.push({ text: "Half-time, " + uu + "-" + tt + ".", side: "" });
+      htDone = true;
+    }
+    if (item.flavour) {
+      const label = item.min + "'  ";
+      lines.push({ text: label + item.text, side: item.side });
+    } else if (item.side === "us") {
+      uu += 1;
+      lines.push({ text: item.min + "'  We score! " + uu + "-" + tt, side: "us", goal: "us" });
+    } else {
+      tt += 1;
+      lines.push({ text: item.min + "'  They score " + uu + "-" + tt, side: "them", goal: "them" });
+    }
+  });
+  if (!htDone) lines.push({ text: "Half-time, " + uu + "-" + tt + ".", side: "" });
+  if (spec.et) {
+    lines.push({ text: "Extra time.", side: "" });
+    for (let i = 0; i < spec.us - spec.us90; i++) {
+      uu += 1;
+      lines.push({ text: "We score! " + uu + "-" + tt, side: "us", goal: "us" });
+    }
+    for (let i = 0; i < spec.them - spec.them90; i++) {
+      tt += 1;
+      lines.push({ text: "They score " + uu + "-" + tt, side: "them", goal: "them" });
+    }
+  }
+  lines.push({ text: "Full time. " + spec.usName + " " + uu + "-" + tt + " " + spec.oppName + ".", side: "ft" });
+  const duration = 5200 + rnd() * 4600;
+  const weights = lines.map(l => l.goal ? 1.45 : 1);
+  const sum = weights.reduce((a, b) => a + b, 0);
+  lines.forEach((l, i) => { l.delay = duration * weights[i] / sum; });
+  lines._goals = [uu, tt];
+  return lines;
+}
+
+function roundRobin(ids) {
+  const t = ids.slice();
+  const n = t.length;
+  const rounds = [];
+  for (let r = 0; r < n - 1; r++) {
+    const round = [];
+    for (let i = 0; i < n / 2; i++) {
+      const a = t[i];
+      const b = t[n - 1 - i];
+      if ((r + i) % 2 === 0) round.push({ home: a, away: b });
+      else round.push({ home: b, away: a });
+    }
+    rounds.push(round);
+    const tail = t.splice(1);
+    tail.unshift(tail.pop());
+    t.push.apply(t, tail);
+  }
+  return rounds;
+}
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr;
+}
+function blankRow() { return { w:0, d:0, l:0, gf:0, ga:0 }; }
+function ratingOf(id) {
+  if (id === "user") return xiRating();
+  const c = state.season.clubs.find(x => x.id === id);
+  return c ? c.rating : 50;
+}
+function addResult(home, away, hs, as) {
+  const H = state.season.table[home];
+  const A = state.season.table[away];
+  H.gf += hs; H.ga += as; A.gf += as; A.ga += hs;
+  if (hs > as) { H.w += 1; A.l += 1; }
+  else if (hs < as) { A.w += 1; H.l += 1; }
+  else { H.d += 1; A.d += 1; }
+}
+function tableRows() {
+  return Object.keys(state.season.table).map(id => {
+    const t = state.season.table[id];
+    return { id, w:t.w, d:t.d, l:t.l, gf:t.gf, ga:t.ga, pts: t.w * 3 + t.d, gd: t.gf - t.ga, p: t.w + t.d + t.l };
+  }).sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || sideName(a.id).localeCompare(sideName(b.id)));
+}
+function userPos() {
+  const rows = tableRows();
+  return rows.findIndex(r => r.id === "user") + 1;
+}
+function pushFeed(text) {
+  state.feed.unshift(text);
+  if (state.feed.length > 12) state.feed.length = 12;
+}
+function pushForm(result) {
+  const letter = result === "win" ? "W" : result === "draw" ? "D" : "L";
+  state.form.push(letter);
+  if (state.form.length > 5) state.form.shift();
+}
+function grantMatchXp(result) {
+  const gain = xpFor(result);
+  state.xi.forEach(k => grantXp(k, gain));
+}
+function rollChest() {
+  if (Math.random() > 0.46) return null;
+  const caught = Math.random() < catchChance() / 100;
+  const commons = ROSTER.filter(p => p.rarity === "common");
+  const unowned = commons.filter(p => !state.owned[p.name_key]);
+  let pool = commons;
+  if (unowned.length && Math.random() < 0.72) pool = unowned;
+  const p = pool[Math.floor(Math.random() * pool.length)];
+  const gold = caught && Math.random() < 1 / GOLD_ODDS;
+  if (caught) {
+    ownPlayer(p, gold);
+    state.stats.catches += 1;
+    pushFeed((gold ? "Gold catch: " : "Caught ") + nameOf(p.name_key) + ".");
+  } else {
+    const id = state.xi[Math.floor(Math.random() * state.xi.length)];
+    grantXp(id, 18);
+    pushFeed("A chest snapped shut. A bit of know-how for " + nameOf(id) + ".");
+  }
+  return { caught, gold, name_key: p.name_key };
+}
+function rollBoard() {
+  const weights = BOARD_WEIGHTS[state.league];
+  const picked = [];
+  const used = new Set();
+  let guard = 0;
+  while (picked.length < 6 && guard < 100) {
+    guard += 1;
+    let r = Math.random();
+    let rarity = BOARD_RARITIES[BOARD_RARITIES.length - 1];
+    for (let i = 0; i < weights.length; i++) {
+      r -= weights[i];
+      if (r <= 0) { rarity = BOARD_RARITIES[i]; break; }
+    }
+    const pool = ROSTER.filter(p => p.rarity === rarity && !state.owned[p.name_key] && !used.has(p.name_key));
+    if (!pool.length) continue;
+    const p = pool[Math.floor(Math.random() * pool.length)];
+    used.add(p.name_key);
+    picked.push(p.name_key);
+  }
+  if (picked.length < 6) {
+    const rest = ROSTER.filter(p => ["common","uncommon","rare","prem","legend"].includes(p.rarity) && !state.owned[p.name_key] && !used.has(p.name_key));
+    while (picked.length < 6 && rest.length) {
+      const i = Math.floor(Math.random() * rest.length);
+      picked.push(rest.splice(i, 1)[0].name_key);
+    }
+  }
+  state.board = picked;
+}
+function makeClubs() {
+  const pool = CLUB_POOLS[state.league].map(c => ({ id: c.id, short: c.short }));
+  const lg = league();
+  const n = pool.length;
+  pool.forEach((c, i) => {
+    const t = n === 1 ? 0.5 : i / (n - 1);
+    const jitter = (Math.random() - 0.5) * (lg.maxR - lg.minR) * 0.06;
+    let rating = Math.round(lg.minR + t * (lg.maxR - lg.minR) + jitter);
+    c.rating = Math.max(lg.minR, Math.min(lg.maxR, rating));
+  });
+  return shuffle(pool);
+}
+function startSeason() {
+  const clubs = makeClubs();
+  const ids = clubs.map(c => c.id).concat(["user"]);
+  const half = roundRobin(ids);
+  const back = half.map(round => round.map(m => ({ home: m.away, away: m.home })));
+  shuffle(half); shuffle(back);
+  const rounds = half.concat(back).map(matches => ({
+    matches: matches.map(m => ({ home: m.home, away: m.away, hs: null, as: null, played: false }))
+  }));
+  const table = { user: blankRow() };
+  clubs.forEach(c => { table[c.id] = blankRow(); });
+  state.season = { clubs, table, rounds, nextRound: 0, phase: "league", ko: null, closed: false };
+  state.form = [];
+  state.matchesSinceRest = 0;
+  state.restTarget = 8 + Math.floor(Math.random() * 3);
+  state.restUntil = 0;
+  state.boosts.scout = false;
+  state.pendingChest = null;
+  state.lastMatch = null;
+  rollBoard();
+  const expect = (league().teams - 1) * 2;
+  if (rounds.length !== expect) throw new Error("Fixture count " + rounds.length);
+  rounds.forEach(r => {
+    const seen = new Set();
+    let user = 0;
+    if (r.matches.length !== league().teams / 2) throw new Error("Round size");
+    r.matches.forEach(m => {
+      if (m.home === "user" || m.away === "user") user += 1;
+      if (seen.has(m.home) || seen.has(m.away)) throw new Error("Dup in round");
+      seen.add(m.home); seen.add(m.away);
+    });
+    if (user !== 1) throw new Error("User fixtures");
+  });
+  pushFeed("Season " + state.seasonNum + " in the " + league().name + ".");
+}
+
+function simRestOfRound() {
+  const round = state.season.rounds[state.season.nextRound];
+  if (!round) return;
+  round.matches.forEach(m => {
+    if (m.played) return;
+    const pair = sampleScore(ratingOf(m.home), ratingOf(m.away), true, Math.random);
+    m.hs = pair[0]; m.as = pair[1]; m.played = true;
+    addResult(m.home, m.away, m.hs, m.as);
+  });
+}
+function resultWord(us, them) { return us > them ? "win" : us < them ? "loss" : "draw"; }
+
+function clearClock() {
+  if (clock.t) clearTimeout(clock.t);
+  clock.t = null;
+  clock.fn = null;
+}
+function wait(gameMs, fn) {
+  clearClock();
+  clock.real = false;
+  clock.gameMs = gameMs;
+  clock.started = Date.now();
+  clock.speed = state.speed;
+  clock.fn = fn;
+  clock.t = setTimeout(() => {
+    const f = clock.fn;
+    clock.fn = null;
+    clock.t = null;
+    if (!f) return;
+    if (state.paused) { clock.pending = f; return; }
+    f();
+  }, Math.max(16, gameMs / state.speed));
+}
+function waitReal(ms, fn) {
+  clearClock();
+  clock.real = true;
+  clock.fn = fn;
+  clock.started = Date.now();
+  clock.t = setTimeout(() => {
+    const f = clock.fn;
+    clock.fn = null;
+    clock.t = null;
+    if (f) f();
+  }, Math.max(0, ms));
+}
+function respeed() {
+  if (clock.real) { scheduleRestEnd(); return; }
+  if (!clock.fn) return;
+  const elapsedGame = (Date.now() - clock.started) * clock.speed;
+  const remain = Math.max(16, clock.gameMs - elapsedGame);
+  const fn = clock.fn;
+  wait(remain, fn);
+}
+function beginMatch(fx, knockout) {
+  const rnd = Math.random;
+  const sim = resolveUserMatch(fx, knockout, rnd);
+  const events = buildEvents({
+    us: sim.us, them: sim.them, us90: sim.us90, them90: sim.them90, et: sim.et,
+    home: sim.userHome, usName: NAME_BY_KEY.club_josh, oppName: sideName(sim.oppId), rnd
+  });
+  if (events._goals[0] !== sim.us || events._goals[1] !== sim.them) {
+    console.error("Ticker score drifted", events._goals, sim.us, sim.them);
+  }
+  live = {
+    fx, sim, events, i: 0, us: 0, them: 0,
+    oppId: sim.oppId, oppName: sideName(sim.oppId), home: sim.userHome, knockout: !!knockout
+  };
+  chain = "live";
+  render();
+  step();
+}
+function step() {
+  if (!live) return;
+  if (state.paused) { clock.pending = step; return; }
+  if (live.i >= live.events.length) { finishLive(); return; }
+  const ev = live.events[live.i++];
+  if (ev.goal === "us") live.us += 1;
+  if (ev.goal === "them") live.them += 1;
+  paintLive();
+  if (live.i >= live.events.length) wait(ev.delay + 400, finishLive);
+  else wait(ev.delay, step);
+}
+function paintLive() {
+  const us = document.getElementById("usScore");
+  const them = document.getElementById("themScore");
+  const tick = document.getElementById("ticker");
+  if (!us || !them || !tick || ui.tab !== "match") { render(); return; }
+  us.textContent = String(live.us);
+  them.textContent = String(live.them);
+  tick.innerHTML = live.events.slice(0, live.i).map(ev =>
+    `<div class="${esc(ev.side || "")}">${esc(ev.text)}</div>`
+  ).join("") + '<span class="blink"></span>';
+  tick.scrollTop = tick.scrollHeight;
+}
+function finishLive() {
+  if (!live) return;
+  const sim = live.sim;
+  const fx = live.fx;
+  const us = live.us;
+  const them = live.them;
+  const knockout = live.knockout;
+  const oppId = live.oppId;
+  const home = live.home;
+  const lines = live.events.map(ev => ({ text: ev.text, side: ev.side || "" }));
+  if (!knockout) {
+    fx.hs = home ? us : them;
+    fx.as = home ? them : us;
+    fx.played = true;
+    addResult(fx.home, fx.away, fx.hs, fx.as);
+    simRestOfRound();
+    state.season.nextRound += 1;
+    state.matchesSinceRest += 1;
+  }
+  const result = resultWord(us, them);
+  grantMatchXp(result);
+  const purse = matchPurse(result);
+  state.cash += purse;
+  if (!knockout) pushForm(result);
+  const where = home ? "beat" : "won at";
+  if (result === "win") pushFeed("We " + (home ? "beat " : "won at ") + sideName(oppId) + " " + us + "-" + them + ".");
+  else if (result === "draw") pushFeed("Drew " + us + "-" + them + " with " + sideName(oppId) + ".");
+  else pushFeed("Lost " + us + "-" + them + " to " + sideName(oppId) + ".");
+  state.koLast = { us, them, oppId };
+  state.lastMatch = { oppId, home, us, them, lines, knockout };
+  const chest = rollChest();
+  state.pendingChest = chest;
+  live = null;
+  chain = "gap";
+  save();
+  render();
+  wait(1500, () => {
+    if (state.pendingChest) {
+      chain = "chest";
+      render();
+      wait(1700, () => {
+        state.pendingChest = null;
+        chain = "idle";
+        save();
+        render();
+        afterMatchFlow();
+      });
+    } else {
+      chain = "idle";
+      afterMatchFlow();
+    }
+  });
+}
+function afterMatchFlow() {
+  if (state.paused || state.modal) return;
+  if (state.season.phase === "semi") return resolveSemi();
+  if (state.season.phase === "final") return resolveFinal();
+  if (state.season.nextRound >= state.season.rounds.length) return endLeague();
+  queueNext();
+}
+function queueNext() {
+  if (state.paused || state.modal) return;
+  if (chain === "live" || chain === "gap" || chain === "chest") return;
+  if (state.season.phase === "league") {
+    if (state.restUntil > Date.now()) { armRest(); return; }
+    if (state.season.closed) return;
+    if (state.season.nextRound >= state.season.rounds.length) { endLeague(); return; }
+    if (state.matchesSinceRest >= state.restTarget) { beginRest(); return; }
+    const round = state.season.rounds[state.season.nextRound];
+    const fx = round.matches.find(m => m.home === "user" || m.away === "user");
+    beginMatch(fx, false);
+    return;
+  }
+  if ((state.season.phase === "semi" || state.season.phase === "final") && state.season.ko) {
+    beginMatch(state.season.ko.fx, true);
+  }
+}
+function beginRest() {
+  state.boosts.scout = false;
+  const gameMs = 30000 + Math.random() * 30000;
+  state.restUntil = Date.now() + gameMs / state.speed;
+  chain = "rest";
+  pushFeed("Treatment room for " + formatRemain(gameMs) + ".");
+  save();
+  render();
+  scheduleRestEnd();
+}
+function armRest() {
+  chain = "rest";
+  render();
+  scheduleRestEnd();
+}
+function scheduleRestEnd() {
+  if (!state.restUntil) return;
+  const real = state.restUntil - Date.now();
+  if (real <= 0) { finishRest(); return; }
+  waitReal(real, () => {
+    if (Date.now() + 40 < state.restUntil) { scheduleRestEnd(); return; }
+    finishRest();
+  });
+}
+function finishRest() {
+  clearClock();
+  state.restUntil = 0;
+  state.matchesSinceRest = 0;
+  state.restTarget = 8 + Math.floor(Math.random() * 3);
+  chain = "idle";
+  save();
+  render();
+  queueNext();
+}
+function simKo(homeId, awayId) {
+  const rnd = Math.random;
+  let pair = sampleScore(ratingOf(homeId), ratingOf(awayId), true, rnd);
+  let hs = pair[0], as = pair[1], et = false;
+  if (hs === as) {
+    et = true;
+    const extra = sampleScore(ratingOf(homeId), ratingOf(awayId), true, rnd, { base: 0.42 });
+    hs += extra[0]; as += extra[1];
+    if (hs === as) {
+      const pHome = 1 / (1 + Math.exp((ratingOf(awayId) - ratingOf(homeId)) / 8));
+      if (rnd() < pHome) hs += 1; else as += 1;
+    }
+  }
+  return { homeId, awayId, hs, as, et, winner: hs > as ? homeId : awayId };
+}
+function preparePlayoff(rows) {
+  const idAt = place => rows[place - 1].id;
+  const ties = [[idAt(3), idAt(6)], [idAt(4), idAt(5)]];
+  let userTie = null, otherTie = null;
+  ties.forEach(t => { if (t.indexOf("user") >= 0) userTie = t; else otherTie = t; });
+  const other = simKo(otherTie[0], otherTie[1]);
+  return {
+    fx: { home: userTie[0], away: userTie[1] },
+    opp: userTie[0] === "user" ? userTie[1] : userTie[0],
+    other,
+    round: "semi"
+  };
+}
+function finalFixture(otherId) {
+  const rows = tableRows();
+  const pu = rows.findIndex(r => r.id === "user");
+  const po = rows.findIndex(r => r.id === otherId);
+  if (pu < po) return { home: "user", away: otherId };
+  return { home: otherId, away: "user" };
+}
+function endLeague() {
+  if (state.season.closed) return;
+  state.season.closed = true;
+  clearClock();
+  chain = "idle";
+  const rows = tableRows();
+  const pos = rows.findIndex(r => r.id === "user") + 1;
+  const inPL = state.league === 3;
+  const wonTitle = inPL && pos === 1;
+  const unlockedBefore = state.legend.unlocked;
+  state.rep += 3;
+  if (wonTitle) {
+    state.rep += 10;
+    state.plTitles += 1;
+  }
+  state.seasonsFinished += 1;
+  let justUnlocked = false;
+  if (!state.legend.unlocked && state.plTitles >= 1 && state.rep >= 25) {
+    state.legend.unlocked = true;
+    state.tokens += 1;
+    justUnlocked = true;
+  } else if (unlockedBefore) {
+    state.tokens += 1;
+  }
+  if (pos === 1 && inPL) state.modal = { kind: "title", pos, justUnlocked };
+  else if (pos === 1) state.modal = { kind: "champion", pos };
+  else if (pos === 2 && !inPL) state.modal = { kind: "runners", pos };
+  else if (pos >= 3 && pos <= 6 && !inPL) {
+    state.season.ko = preparePlayoff(rows);
+    state.modal = { kind: "playoff-intro", pos };
+  } else state.modal = { kind: "stay", pos, runners: pos === 2 && inPL };
+  save();
+  render();
+}
+function resolveSemi() {
+  const won = state.koLast.us > state.koLast.them;
+  if (!won) {
+    state.modal = { kind: "playoff-out", round: "semi" };
+    save(); render();
+    return;
+  }
+  const otherId = state.season.ko.other.winner;
+  state.season.phase = "final";
+  state.season.ko.fx = finalFixture(otherId);
+  state.season.ko.opp = otherId;
+  state.season.ko.round = "final";
+  pushFeed("Semi-final won. The final is next.");
+  save();
+  render();
+  chain = "gap";
+  wait(900, () => { chain = "idle"; queueNext(); });
+}
+function resolveFinal() {
+  const won = state.koLast.us > state.koLast.them;
+  state.modal = { kind: won ? "playoff-win" : "playoff-out", round: "final" };
+  save();
+  render();
+}
+function goNextSeason(promote) {
+  if (promote && state.league < 3) state.league += 1;
+  state.seasonNum += 1;
+  startSeason();
+}
+function onModalGo() {
+  const m = state.modal;
+  if (!m) return;
+  state.modal = null;
+  if (m.kind === "playoff-intro") {
+    state.season.phase = "semi";
+    save(); render();
+    queueNext();
+    return;
+  }
+  const promote = m.kind === "champion" || m.kind === "runners" || m.kind === "playoff-win";
+  if (m.kind === "morning") { save(); render(); return; }
+  goNextSeason(promote);
+  save(); render();
+  queueNext();
+}
+
+function remainingMythics() {
+  return LEGEND_TEAMS.filter(t => !state.legend.signed.includes(t.headline) && !state.owned[t.headline])
+    .map(t => ({ key: t.headline, weight: t.weight, team: t.id }));
+}
+function adjustedPool(pity) {
+  const pool = remainingMythics();
+  if (pool.length <= 1) return pool.map(p => ({ ...p, w: p.weight, pct: pool.length ? 100 : 0 }));
+  const weighted = pool.map(p => ({ ...p, w: p.weight + (pity / 100) * (30 - p.weight) * 0.45 }));
+  const sum = weighted.reduce((s, p) => s + p.w, 0);
+  weighted.forEach(p => { p.pct = p.w / sum * 100; });
+  return weighted;
+}
+function drawMythic(rnd, pity) {
+  const pool = adjustedPool(pity);
+  if (!pool.length) return null;
+  if (pool.length === 1) return pool[0];
+  let x = rnd() * pool.reduce((s, p) => s + p.w, 0);
+  for (let i = 0; i < pool.length; i++) {
+    x -= pool[i].w;
+    if (x <= 0) return pool[i];
+  }
+  return pool[pool.length - 1];
+}
+function pullTeammate(deck, rnd) {
+  const options = ROSTER.filter(p => p.rarity === "teammate" && !state.owned[p.name_key] && (!deck || deckOf(p) === deck));
+  if (!options.length) {
+    state.xi.forEach(k => grantXp(k, 24));
+    return { empty: true };
+  }
+  const p = options[Math.floor(rnd() * options.length)];
+  ownPlayer(p, false);
+  return { key: p.name_key };
+}
+function simulateLegend(rnd) {
+  const teams = [{ id: "user", name: NAME_BY_KEY.club_josh, rating: xiRating() }]
+    .concat(LEGEND_TEAMS.map(t => ({ id: t.id, name: nameOf(t.name_key), rating: legendRating(t) })));
+  const table = {};
+  teams.forEach(t => { table[t.id] = { id: t.id, name: t.name, rating: t.rating, w:0, d:0, l:0, gf:0, ga:0 }; });
+  for (let i = 0; i < teams.length; i++) {
+    for (let j = i + 1; j < teams.length; j++) {
+      const pair = sampleScore(teams[i].rating, teams[j].rating, true, rnd);
+      const H = table[teams[i].id], A = table[teams[j].id];
+      H.gf += pair[0]; H.ga += pair[1]; A.gf += pair[1]; A.ga += pair[0];
+      if (pair[0] > pair[1]) { H.w++; A.l++; }
+      else if (pair[0] < pair[1]) { A.w++; H.l++; }
+      else { H.d++; A.d++; }
+    }
+  }
+  return Object.keys(table).map(id => {
+    const t = table[id];
+    return { ...t, pts: t.w * 3 + t.d, gd: t.gf - t.ga, p: t.w + t.d + t.l };
+  }).sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf || b.rating - a.rating || a.name.localeCompare(b.name));
+}
+function startLegend() {
+  if (!state.legend.unlocked || state.tokens < 1 || state.legend.run) return;
+  state.tokens -= 1;
+  const table = simulateLegend(Math.random);
+  state.legend.run = { endsAt: Date.now() + LEGEND_HOURS * 60 * 60 * 1000, table, revealed: false };
+  save();
+  render();
+}
+function applyPrize(prize, rnd) {
+  state.cash += prize.cash;
+  if (prize.kind === "sign") {
+    ownPlayer(playerByKey(prize.legendKey), false);
+    state.pity = 0;
+    pushFeed(nameOf(prize.legendKey) + " signs for Josh United.");
+  } else if (prize.kind === "miss") {
+    state.pity += 40;
+    const mate = pullTeammate(prize.deck, rnd);
+    prize.mateKey = mate.key || null;
+    prize.mateEmpty = !!mate.empty;
+    pushFeed("He's just not interested");
+  } else if (prize.kind === "gold") {
+    state.owned[prize.legendKey].gold = true;
+    state.stats.golds += 1;
+    pushFeed("A gold " + nameOf(prize.legendKey) + ".");
+  } else if (prize.kind === "second") {
+    state.pity += 15;
+    const mate = pullTeammate(null, rnd);
+    prize.mateKey = mate.key || null;
+    prize.mateEmpty = !!mate.empty;
+  }
+  if (state.boosts.offer && prize.usedOffer) state.boosts.offer = false;
+}
+function computePrize(table, rnd) {
+  const place = table.findIndex(r => r.id === "user") + 1;
+  const cash = [0, 8000, 4000, 3000, 2000, 1500, 1000, 800][place] || 800;
+  if (place === 1) {
+    const pool = remainingMythics();
+    if (!pool.length) {
+      const hit = rnd() < 1 / GOLD_ODDS;
+      if (!hit) return { place, cash, kind: "gold-miss" };
+      const myths = LEGEND_TEAMS.map(t => t.headline).filter(k => state.owned[k] && !state.owned[k].gold);
+      if (!myths.length) return { place, cash, kind: "gold-all" };
+      return { place, cash, kind: "gold", legendKey: myths[Math.floor(rnd() * myths.length)] };
+    }
+    const drawn = drawMythic(rnd, state.pity);
+    const guaranteed = state.pity >= 100;
+    const offer = state.boosts.offer ? 0.15 : 0;
+    const chance = guaranteed ? 1 : Math.min(0.99, 0.90 + offer);
+    const success = guaranteed || rnd() < chance;
+    if (!success) {
+      return { place, cash, kind: "miss", legendKey: drawn.key, deck: drawn.team, usedOffer: !guaranteed && !!state.boosts.offer };
+    }
+    return { place, cash, kind: "sign", legendKey: drawn.key, guaranteed, usedOffer: !guaranteed && !!state.boosts.offer };
+  }
+  if (place === 2) return { place, cash, kind: "second" };
+  return { place, cash, kind: "minor" };
+}
+function openReveal(rnd) {
+  const run = state.legend.run;
+  if (!run || run.revealed) return null;
+  const random = rnd || Math.random;
+  run.revealed = true;
+  const prize = computePrize(run.table, random);
+  applyPrize(prize, random);
+  state.legend.last = { table: run.table, prize, at: Date.now() };
+  state.modal = { kind: "morning" };
+  state.legend.run = null;
+  save();
+  render();
+  return prize;
+}
+function skipMorning() {
+  if (!state.legend.run) return;
+  state.legend.run.endsAt = Date.now() - 1;
+  openReveal();
+}
+
+function bestXI() {
+  const groups = { GK: [], DEF: [], MID: [], FWD: [] };
+  Object.keys(state.owned).forEach(k => {
+    const p = playerByKey(k);
+    if (p && groups[p.pos]) groups[p.pos].push(k);
+  });
+  Object.keys(groups).forEach(pos => {
+    groups[pos].sort((a, b) => effectiveOf(b) - effectiveOf(a));
+  });
+  const next = [];
+  FORMATION.forEach((slot, i) => {
+    const list = groups[slot.pos];
+    next.push(list && list.length ? list.shift() : state.xi[i]);
+  });
+  if (next.every(Boolean) && new Set(next).size === 11) state.xi = next;
+}
+function setSlot(index, key) {
+  const p = playerByKey(key);
+  if (!p || !state.owned[key] || p.pos !== FORMATION[index].pos) return;
+  const existing = state.xi.indexOf(key);
+  if (existing === index) { ui.sheet = null; render(); return; }
+  if (existing >= 0) {
+    const tmp = state.xi[index];
+    state.xi[index] = key;
+    state.xi[existing] = tmp;
+  } else state.xi[index] = key;
+  ui.sheet = null;
+  save();
+  render();
+}
+function throwContract(key) {
+  if (ui.lock) return;
+  const p = playerByKey(key);
+  if (!p) return;
+  if (state.owned[key]) {
+    ui.result = { bad: true, headline: "Already in the squad." };
+    render();
+    return;
+  }
+  const cost = contractCost(p.rarity);
+  if (state.cash < cost) return;
+  state.cash -= cost;
+  state.stats.throws += 1;
+  ui.lock = true;
+  ui.result = { pending: true, headline: "The contract is in the air..." };
+  save();
+  render();
+  setTimeout(() => {
+    ui.lock = false;
+    const ok = Math.random() < contractChance(p.rarity) / 100;
+    if (state.boosts.offer) state.boosts.offer = false;
+    if (ok) {
+      const gold = Math.random() < 1 / GOLD_ODDS;
+      ownPlayer(p, gold);
+      state.stats.contracts += 1;
+      state.board = state.board.filter(k => k !== key);
+      ui.result = { ok: true, gold, headline: gold ? "GOLD. " + nameOf(key) + " joins." : nameOf(key) + " signs." };
+      pushFeed(nameOf(key) + " signs.");
+    } else {
+      ui.result = { ok: false, exact: "He's just not interested", name: nameOf(key) };
+      pushFeed(nameOf(key) + " turns the contract down.");
+    }
+    save();
+    render();
+  }, Math.max(160, 800 / state.speed));
+}
+function buyBoost(kind) {
+  if (kind === "scout" && state.boosts.scout) return;
+  if (kind === "offer" && state.boosts.offer) return;
+  const cost = boostCost(kind);
+  if (state.cash < cost) return;
+  state.cash -= cost;
+  if (kind === "scout") {
+    state.boosts.scout = true;
+    pushFeed("Scout's Eye is on until the next treatment.");
+  } else {
+    state.boosts.offer = true;
+    pushFeed("Improved Offer armed for the next contract.");
+  }
+  save();
+  render();
+}
+function doRefresh() {
+  const cost = refreshCost();
+  if (state.cash < cost) return;
+  state.cash -= cost;
+  rollBoard();
+  save();
+  render();
+}
+function setSpeed(s) {
+  const old = state.speed;
+  const next = s === 10 ? 10 : 1;
+  if (state.restUntil > Date.now()) {
+    const remainGame = (state.restUntil - Date.now()) * old;
+    state.restUntil = Date.now() + remainGame / next;
+  }
+  state.speed = next;
+  respeed();
+  save();
+  render();
+}
+function togglePause() {
+  if (state.paused) {
+    state.paused = false;
+    save();
+    render();
+    if (clock.pending) {
+      const f = clock.pending;
+      clock.pending = null;
+      f();
+    } else if (chain === "idle" || chain === "rest") queueNext();
+    return;
+  }
+  state.paused = true;
+  if (clock.fn && !clock.real) {
+    const elapsedGame = (Date.now() - clock.started) * clock.speed;
+    const remain = Math.max(16, clock.gameMs - elapsedGame);
+    const fn = clock.fn;
+    clearClock();
+    clock.pending = () => wait(remain, fn);
+  }
+  save();
+  render();
+}
+function prepareLeague(index) {
+  clearClock();
+  clock.pending = null;
+  live = null;
+  chain = "idle";
+  state.paused = true;
+  state.modal = null;
+  state.pendingChest = null;
+  state.league = index;
+  startSeason();
+  save();
+  render();
+}
+function devFinishSeason() {
+  if (!state.season || state.season.phase !== "league" || state.season.closed) return;
+  clearClock();
+  clock.pending = null;
+  live = null;
+  chain = "idle";
+  let catches = 0;
+  while (state.season.nextRound < state.season.rounds.length) {
+    const round = state.season.rounds[state.season.nextRound];
+    round.matches.forEach(m => {
+      if (m.played) return;
+      const userIn = m.home === "user" || m.away === "user";
+      const pair = sampleScore(ratingOf(m.home), ratingOf(m.away), true, Math.random);
+      m.hs = pair[0]; m.as = pair[1]; m.played = true;
+      addResult(m.home, m.away, m.hs, m.as);
+      if (userIn) {
+        const us = m.home === "user" ? m.hs : m.as;
+        const them = m.home === "user" ? m.as : m.hs;
+        const result = resultWord(us, them);
+        grantMatchXp(result);
+        state.cash += matchPurse(result);
+        pushForm(result);
+        state.matchesSinceRest += 1;
+        const chest = rollChest();
+        if (chest && chest.caught) catches += 1;
+      }
+    });
+    state.season.nextRound += 1;
+  }
+  state.pendingChest = null;
+  pushFeed("Rest of the season simulated. New catches: " + catches + ".");
+  endLeague();
+}
+function devPlace(place) {
+  if (!state.season || state.season.closed || state.season.phase !== "league") return;
+  clearClock();
+  clock.pending = null;
+  live = null;
+  chain = "idle";
+  const ids = Object.keys(state.season.table);
+  const others = ids.filter(id => id !== "user");
+  const order = [];
+  let oi = 0;
+  for (let p = 1; p <= ids.length; p++) order.push(p === place ? "user" : others[oi++]);
+  ids.forEach(id => { state.season.table[id] = blankRow(); });
+  order.forEach((id, idx) => {
+    const row = state.season.table[id];
+    row.w = ids.length - idx;
+    row.gf = 50 - idx;
+    row.ga = idx;
+  });
+  state.season.rounds.forEach(r => r.matches.forEach(m => { m.played = true; if (m.hs == null) { m.hs = 1; m.as = 0; } }));
+  state.season.nextRound = state.season.rounds.length;
+  state.pendingChest = null;
+  endLeague();
+}
+
+function freshState() {
+  const owned = {};
+  START_XI.forEach(id => {
+    const p = playerByKey(id);
+    owned[id] = { rating: p.base, xp: 0, gold: false };
+  });
+  return {
+    v: 1,
+    league: 0,
+    seasonNum: 1,
+    rep: 0,
+    cash: 900,
+    tokens: 0,
+    pity: 0,
+    plTitles: 0,
+    seasonsFinished: 0,
+    speed: 1,
+    paused: false,
+    tab: "match",
+    owned,
+    xi: START_XI.slice(),
+    boosts: { scout: false, offer: false },
+    matchesSinceRest: 0,
+    restTarget: 9,
+    restUntil: 0,
+    form: [],
+    feed: [],
+    board: [],
+    pendingChest: null,
+    lastMatch: null,
+    koLast: null,
+    season: null,
+    modal: null,
+    legend: { unlocked: false, signed: [], run: null, last: null },
+    stats: { catches: 0, golds: 0, contracts: 0, throws: 0 }
+  };
+}
+function save() {
+  try {
+    state.tab = ui.tab;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  } catch (err) { /* ignore full storage */ }
+}
+function sanitise() {
+  state.xi = (state.xi || []).map(k => state.owned[k] ? k : null);
+  if (state.xi.some(k => !k) || new Set(state.xi).size < 11) bestXI();
+  state.legend = state.legend || { unlocked: false, signed: [], run: null, last: null };
+  state.legend.signed = state.legend.signed || [];
+  Object.keys(state.owned).forEach(k => {
+    const p = playerByKey(k);
+    if (p && p.rarity === "mythic" && state.legend.signed.indexOf(k) < 0) state.legend.signed.push(k);
+  });
+  state.boosts = state.boosts || { scout: false, offer: false };
+  state.feed = state.feed || [];
+  state.form = state.form || [];
+  state.stats = state.stats || { catches: 0, golds: 0, contracts: 0, throws: 0 };
+  if (!state.season) startSeason();
+}
+function load() {
+  assertData();
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) throw new Error("empty");
+    const parsed = JSON.parse(raw);
+    if (!parsed || parsed.v !== 1 || !parsed.owned) throw new Error("bad");
+    state = parsed;
+    sanitise();
+  } catch (err) {
+    state = freshState();
+    startSeason();
+    if (String(err.message) !== "empty") ui.note = "The old save could not be read, so this is a new club.";
+    save();
+  }
+  ui.tab = state.tab || "match";
+}
+function doReset() {
+  clearClock();
+  clock.pending = null;
+  live = null;
+  chain = "idle";
+  debugOverride = null;
+  ui = { tab: "match", sheet: null, filter: "all", result: null, lock: false, note: "" };
+  try { localStorage.removeItem(SAVE_KEY); } catch (err) {}
+  state = freshState();
+  startSeason();
+  save();
+  render();
+  queueNext();
+}
+
+function oddsFor(my, opp, home) {
+  const key = my.toFixed(1) + ":" + opp + ":" + (home ? "h" : "a");
+  if (oddsCache.key === key) return oddsCache;
+  let w = 0, d = 0;
+  const n = 220;
+  for (let i = 0; i < n; i++) {
+    const pair = sampleScore(my, opp, home, Math.random);
+    if (pair[0] > pair[1]) w++;
+    else if (pair[0] === pair[1]) d++;
+  }
+  oddsCache = { key, win: w / n, draw: d / n };
+  return oddsCache;
+}
+function nextFixture() {
+  if (!state.season || state.season.phase !== "league") return null;
+  const round = state.season.rounds[state.season.nextRound];
+  if (!round) return null;
+  return round.matches.find(m => m.home === "user" || m.away === "user");
+}
+
+function headerHtml() {
+  const playedGames = state.season && state.season.table.user ? (state.season.table.user.w + state.season.table.user.d + state.season.table.user.l) : 0;
+  const pos = playedGames > 0 ? ordinal(userPos()) : (live ? "Match " + ((state.season.nextRound || 0) + 1) : "Pre-season");
+  return `<header class="top">
+    <div class="idrow">
+      <div class="crest" aria-hidden="true">JU</div>
+      <div style="flex:1">
+        <h1>Josh United</h1>
+        <p class="sub">${esc(league().name)} · Season ${state.seasonNum}</p>
+      </div>
+      <button type="button" class="ghost" data-act="pause" style="color:#f6f3ea">${state.paused ? "Resume" : "Pause"}</button>
+    </div>
+    <div class="pills">
+      <span class="pill hot">${esc(pos)}</span>
+      <span class="pill">${money(state.cash)}</span>
+      <span class="pill">Rep ${state.rep}</span>
+      <span class="pill">XI ${xiRating().toFixed(1)}</span>
+      <span class="seg" role="group" aria-label="Speed">
+        <button type="button" data-act="speed" data-speed="1" class="${state.speed === 1 ? "on" : ""}">1x</button>
+        <button type="button" data-act="speed" data-speed="10" class="${state.speed === 10 ? "on" : ""}">10x</button>
+      </span>
+      <button type="button" class="ghost small" data-act="ask-reset" style="color:#f6f3ea">Reset</button>
+      <button type="button" class="ghost small" data-act="help" style="color:#f6f3ea">Help</button>
+    </div>
+  </header>`;
+}
+function tabsHtml() {
+  const tabs = [["match","Match"],["squad","Squad"],["transfers","Transfers"],["collection","Collection"],["legends","Legends"]];
+  return `<nav class="tabs">${tabs.map(([id, label]) =>
+    `<button type="button" data-act="tab" data-tab="${id}" class="${ui.tab === id ? "on" : ""}">${label}</button>`
+  ).join("")}</nav>`;
+}
+function formHtml() {
+  if (!state.form.length) return "";
+  return `<div class="form" aria-label="Last five">${state.form.map(f => `<i class="${f}">${f}</i>`).join("")}</div>`;
+}
+function printerHtml(lines, blinking) {
+  const body = (lines || []).map(ev => `<div class="${esc(ev.side || "")}">${esc(ev.text)}</div>`).join("");
+  return `<div class="printer" id="ticker" aria-live="polite">${body}${blinking ? '<span class="blink"></span>' : ""}</div>`;
+}
+function scoreBlock(leftName, leftShort, rightName, rightShort, us, them, kicker, home) {
+  return `<section class="board">
+    <div class="kicker">${esc(kicker)}</div>
+    <div class="score">
+      <div class="side-l"><div class="n" id="usScore">${us}</div><div class="who">${esc(leftShort)} · ${esc(leftName)}</div></div>
+      <div class="dash" aria-hidden="true">-</div>
+      <div class="side-r"><div class="n" id="themScore">${them}</div><div class="who">${esc(rightShort)} · ${esc(rightName)}</div></div>
+    </div>`;
+}
+function viewMatch() {
+  let top = "";
+  if (state.restUntil > Date.now() && chain === "rest") {
+    top = `<section class="board">
+      <div class="kicker">Treatment room</div>
+      <p style="font-size:28px;font-weight:800;margin:8px 0 4px" data-live-clock>${formatRemain(state.restUntil - Date.now())}</p>
+      <p class="odds">Boots off. The squad starts again when this hits zero. At 10x the wait is much shorter.</p>
+      <button type="button" class="small secondary" data-act="skip-rest" style="margin-top:8px">Dev: skip treatment</button>
+    </section>`;
+  } else if (live) {
+    const odds = oddsFor(live.sim.my, live.sim.op, live.home);
+    top = scoreBlock(NAME_BY_KEY.club_josh, "JUT", live.oppName, shortOf(live.oppId), live.us, live.them,
+      live.knockout ? (state.season.phase === "final" ? "Play-off final" : "Play-off semi-final") : (live.home ? "Home" : "Away"), live.home);
+    top += `<p class="odds">Win ${Math.round(odds.win * 100)}% · Draw ${Math.round(odds.draw * 100)}% · XI ${live.sim.my.toFixed(1)} against ${live.sim.op}</p>`;
+    top += printerHtml(live.events.slice(0, live.i), true);
+    top += `</section>`;
+  } else if (state.lastMatch) {
+    const m = state.lastMatch;
+    top = scoreBlock(NAME_BY_KEY.club_josh, "JUT", sideName(m.oppId), shortOf(m.oppId), m.us, m.them, "Last match", m.home);
+    top += printerHtml(m.lines, false) + `</section>`;
+  } else {
+    const fx = nextFixture();
+    if (fx) {
+      const home = fx.home === "user";
+      const opp = home ? fx.away : fx.home;
+      const odds = oddsFor(xiRating(), ratingOf(opp), home);
+      top = scoreBlock(NAME_BY_KEY.club_josh, "JUT", sideName(opp), shortOf(opp), 0, 0, home ? "Next, at home" : "Next, away", home);
+      top += `<p class="odds">Win ${Math.round(odds.win * 100)}% · Draw ${Math.round(odds.draw * 100)}%. A raw side will nick some and lose plenty.</p>`;
+      top += printerHtml([{ text: "The whistle is close.", side: "" }], false) + `</section>`;
+    }
+  }
+  let chest = "";
+  if (state.pendingChest && chain === "chest") {
+    const c = state.pendingChest;
+    if (c.caught && c.gold) chest = `<div class="banner gold">GOLD. ${esc(nameOf(c.name_key))} walks out of the chest. 1 in ${GOLD_ODDS.toLocaleString("en-GB")}.</div>`;
+    else if (c.caught) chest = `<div class="banner">Got him. ${esc(nameOf(c.name_key))} joins from a route chest.</div>`;
+    else chest = `<div class="banner bad">The player slips off. The squad still picks up a little know-how.</div>`;
+  }
+  const boosts = [];
+  if (state.boosts.scout) boosts.push("Scout's Eye: chest catch " + catchChance() + "%");
+  if (state.boosts.offer) boosts.push("Improved Offer armed");
+  const boostLine = boosts.length ? `<p class="muted">${esc(boosts.join(" · "))}</p>` : "";
+  const until = state.restTarget - state.matchesSinceRest;
+  const restLine = state.season.phase === "league"
+    ? `<p class="muted">${until <= 0 ? "Treatment room after this match." : "Treatment room in " + until + " match" + (until === 1 ? "" : "es") + "."}</p>`
+    : `<p class="muted">Play-offs. One leg, then the season is settled.</p>`;
+  const rows = tableRows();
+  const me = rows.findIndex(r => r.id === "user");
+  const anyPlayed = rows.some(r => r.p > 0);
+  let show = rows.slice(0, 8);
+  if (me >= 8) show = rows.slice(0, 6).concat([rows[me]]);
+  const table = !anyPlayed
+    ? `<div class="card"><h2>Table</h2><p class="muted">The rest of the round is settled when our match ends, and the table updates together.</p></div>`
+    : `<div class="card"><h2>Table</h2><div class="table-wrap"><table>
+    <thead><tr><th>#</th><th class="club">Club</th><th>P</th><th class="hide-sm">W</th><th class="hide-sm">D</th><th class="hide-sm">L</th><th>GD</th><th>Pts</th></tr></thead>
+    <tbody>${show.map((r, i) => {
+      const place = rows.indexOf(r) + 1;
+      const gdClass = r.gd > 0 ? "gdpos" : r.gd < 0 ? "gdneg" : "";
+      return `<tr class="${r.id === "user" ? "us" : ""}"><td>${place}</td><td class="club">${esc(sideName(r.id))}</td><td>${r.p}</td><td class="hide-sm">${r.w}</td><td class="hide-sm">${r.d}</td><td class="hide-sm">${r.l}</td><td class="${gdClass}">${r.gd > 0 ? "+" : ""}${r.gd}</td><td>${r.pts}</td></tr>`;
+    }).join("")}</tbody></table></div>${formHtml()}</div>`;
+  const feed = state.feed.length ? `<div class="card"><h2>Club notes</h2>${state.feed.slice(0, 6).map(f => `<p class="muted" style="margin:4px 0">${esc(f)}</p>`).join("")}</div>` : "";
+  const dev = `<details class="card"><summary>Testing tools</summary>
+    <p class="muted">These use the real table and the real match engine. 10x also shortens matches and treatment.</p>
+    <div class="chips" style="margin-top:8px">
+      <button type="button" class="small secondary" data-act="dev-finish">Dev: finish season</button>
+      <button type="button" class="small secondary" data-act="dev-place" data-place="1">Dev: finish 1st</button>
+      <button type="button" class="small secondary" data-act="dev-place" data-place="4">Dev: finish 4th</button>
+    </div></details>`;
+  const note = ui.note ? `<div class="warn">${esc(ui.note)}</div>` : "";
+  const tip = state.seasonNum === 1 && state.seasonsFinished === 0
+    ? `<p class="muted">Route chests can drop a common after a match. Rarer players want a contract. League cap here is ${league().cap}.</p>` : "";
+  return `${note}${top}${chest}${boostLine}${restLine}${tip}${table}${feed}${dev}<p class="muted">A private prototype for Josh.</p>`;
+}
+function ratingBits(key) {
+  const p = playerByKey(key);
+  const o = state.owned[key];
+  const cap = league().cap;
+  const ceil = p.ceiling + (o && o.gold ? 1 : 0);
+  if (!o) return { eff: null, ceil, note: "Ceiling " + p.ceiling, frac: 0 };
+  const grown = o.rating + (o.gold ? 2 : 0);
+  const eff = Math.min(grown, ceil, cap, 99);
+  let note = eff + " now · ceiling " + ceil;
+  if (grown > cap && cap <= ceil && eff === cap) note = eff + " capped · ceiling " + ceil;
+  const frac = o.rating >= ceil ? 1 : o.xp / xpToNext(o.rating);
+  return { eff, ceil, note, frac };
+}
+function viewSquad() {
+  const lines = ["fwd", "mid", "def", "gk"];
+  const pitch = lines.map(line => {
+    const slots = FORMATION.map((slot, i) => ({ slot, i })).filter(x => x.slot.line === line);
+    return `<div class="prow ${line}">${slots.map(({ slot, i }) => {
+      const key = state.xi[i];
+      const bits = ratingBits(key);
+      const o = state.owned[key];
+      return `<button type="button" class="slot${o && o.gold ? " gold" : ""}" data-act="slot" data-i="${i}">
+        <div class="pos">${slot.label}</div>
+        <div class="rt" style="color:${RARITY[playerByKey(key).rarity].color}">${bits.eff}</div>
+        <div class="nm">${esc(nameOf(key))}</div>
+      </button>`;
+    }).join("")}</div>`;
+  }).join("");
+  const ownedIds = Object.keys(state.owned).filter(k => state.xi.indexOf(k) < 0);
+  ownedIds.sort((a, b) => effectiveOf(b) - effectiveOf(a));
+  const bench = ownedIds.slice(0, 12).map(k => {
+    const bits = ratingBits(k);
+    return `<span class="pill" style="background:#fff;color:${RARITY[playerByKey(k).rarity].color}">${esc(nameOf(k))} ${bits.eff}</span>`;
+  }).join(" ");
+  return `<div class="card row"><div><h2 style="margin:0">4-4-2</h2><p class="muted" style="margin:4px 0 0">XI ${xiRating().toFixed(1)} · league cap ${league().cap}</p></div>
+    <button type="button" class="small secondary" data-act="best">Pick best XI</button></div>
+    <div class="pitch">${pitch}</div>
+    <div class="card"><h2>Bench</h2><div class="pills">${bench || '<span class="muted">Catch or sign someone and they wait here.</span>'}</div></div>`;
+}
+function viewTransfers() {
+  const scoutCost = boostCost("scout");
+  const offerCost = boostCost("offer");
+  let result = "";
+  if (ui.result) {
+    if (ui.result.exact) {
+      result = `<div class="banner bad" id="contract-result"><p class="exact">He's just not interested</p><p style="margin:0;font-weight:600">${esc(ui.result.name)} waves the offer away.</p></div>`;
+    } else if (ui.result.gold) result = `<div class="banner gold">${esc(ui.result.headline)}</div>`;
+    else if (ui.result.ok) result = `<div class="banner">${esc(ui.result.headline)}</div>`;
+    else result = `<div class="banner">${esc(ui.result.headline)}</div>`;
+  }
+  const cards = state.board.map(key => {
+    const p = playerByKey(key);
+    if (!p) return "";
+    const cost = contractCost(p.rarity);
+    const chance = contractChance(p.rarity);
+    const owned = !!state.owned[key];
+    return `<article class="pcard" style="border-color:${RARITY[p.rarity].color}">
+      <div class="top"><span class="tag" style="color:${RARITY[p.rarity].color}">${esc(RARITY[p.rarity].label)}</span><span class="rt">${p.base}</span></div>
+      <div class="nm">${esc(nameOf(key))}</div>
+      <p class="muted" style="margin:4px 0">${p.pos} · ceiling ${p.ceiling}${owned ? " · already ours" : ""}</p>
+      <button type="button" class="small" data-act="contract" data-id="${esc(key)}" ${owned || state.cash < cost || ui.lock ? "disabled" : ""}>Throw contract · ${money(cost)} · ${formatPct(chance)}</button>
+    </article>`;
+  }).join("");
+  return `${result}
+    <div class="card"><h2>Boosts</h2>
+      <p class="muted">Scout's Eye adds 10 points to the chest catch rate for this run of matches, capped at 80%. Improved Offer adds 15 points to the next contract, capped at 99%.</p>
+      <div class="chips">
+        <button type="button" class="small" data-act="boost" data-kind="scout" ${state.boosts.scout || state.cash < scoutCost ? "disabled" : ""}>Scout's Eye · ${money(scoutCost)}</button>
+        <button type="button" class="small" data-act="boost" data-kind="offer" ${state.boosts.offer || state.cash < offerCost ? "disabled" : ""}>Improved Offer · ${money(offerCost)}</button>
+      </div>
+      <p class="muted">Contract bonus from reputation: +${repBonus()}%. Every 10 rep adds 2%.</p>
+    </div>
+    <div class="grid">${cards || '<p class="muted">The market is bare.</p>'}</div>
+    <button type="button" class="secondary" data-act="refresh" ${state.cash < refreshCost() ? "disabled" : ""}>New list · ${money(refreshCost())}</button>`;
+}
+function viewCollection() {
+  const filters = [["all","All"],["common","Common"],["uncommon","Uncommon"],["rare","Rare"],["prem","Prem"],["legend","Legend"],["teammate","Teammates"],["mythic","Mythic"],["gold","Gold"]];
+  const list = ROSTER.filter(p => {
+    if (ui.filter === "all") return true;
+    if (ui.filter === "gold") return state.owned[p.name_key] && state.owned[p.name_key].gold;
+    return p.rarity === ui.filter;
+  });
+  const caught = Object.keys(state.owned).length;
+  const cards = list.map(p => {
+    const o = state.owned[p.name_key];
+    const bits = o ? ratingBits(p.name_key) : null;
+    return `<article class="sticker${o ? "" : " uncaught"}${o && o.gold ? " gold" : ""}" style="border-color:${RARITY[p.rarity].color}">
+      <span class="tag" style="color:${RARITY[p.rarity].color}">${esc(RARITY[p.rarity].label)}</span>
+      <b>${esc(nameOf(p.name_key))}</b>
+      <span class="muted">${p.pos}${o ? " · " + bits.note : " · not caught"}</span>
+      ${o && o.gold ? '<div class="goldtag">Gold</div>' : ""}
+    </article>`;
+  }).join("");
+  return `<div class="card"><h2>Album ${caught}/${ROSTER.length}</h2>
+    <p class="muted">Gold version: 1 in ${GOLD_ODDS.toLocaleString("en-GB")}. Duplicates become XP. ${state.stats.golds ? state.stats.golds + " gold find" + (state.stats.golds === 1 ? "" : "s") + "." : "No gold version in the album yet."}</p>
+    <div class="chips">${filters.map(([id, label]) => `<button type="button" class="chip${ui.filter === id ? " on" : ""}" data-act="filter" data-filter="${id}">${label}</button>`).join("")}</div>
+    </div>
+    <div class="stickers">${cards || '<p class="muted">Nothing in this filter yet.</p>'}</div>`;
+}
+function viewLegends() {
+  if (!state.legend.unlocked) {
+    const needRep = Math.max(0, 25 - state.rep);
+    return `<div class="card"><h2>Legend League is shut</h2>
+      <p>Win the Premier League. A lower league, a runners-up finish, or the play-offs will not open this. You also need 25 reputation.</p>
+      <p class="muted">Reputation now: ${state.rep}. Premier League titles: ${state.plTitles}. ${needRep ? needRep + " reputation still to find." : "Reputation is high enough. The title is the missing piece."}</p>
+      <p class="muted">+10 for each Premier League title, +3 when a season ends, +1 for each legendary teammate you collect. Every 10 rep adds 2% to ordinary contracts.</p>
+    </div>`;
+  }
+  const chances = adjustedPool(state.pity);
+  const rows = LEGEND_TEAMS.map(t => {
+    const signed = state.legend.signed.includes(t.headline) || !!state.owned[t.headline];
+    const ch = chances.find(c => c.key === t.headline);
+    const gold = state.owned[t.headline] && state.owned[t.headline].gold;
+    return `<button type="button" class="pcard" data-act="legend-team" data-team="${t.id}">
+      <div class="top"><span class="tag">Weight ${t.weight}</span><b>${t.formation}</b></div>
+      <div class="nm">${esc(nameOf(t.name_key))}</div>
+      <p class="muted" style="margin:4px 0">XI ${legendRating(t).toFixed(1)} · ${signed ? "signed" : (ch ? formatPct(ch.pct) + " of the pool" : "in the pool")} ${gold ? "· gold" : ""}</p>
+    </button>`;
+  }).join("");
+  let run = "";
+  if (state.legend.run && !state.legend.run.revealed) {
+    const left = state.legend.run.endsAt - Date.now();
+    run = `<div class="card"><h2>Overnight</h2>
+      <p style="font-size:28px;font-weight:800;margin:6px 0" data-legend-clock>${left <= 0 ? "Ready" : formatRemain(left)}</p>
+      <p class="muted">In the full game this waits until morning. Here it is an 8 hour timer. Your XI was rated when you started.</p>
+      <button type="button" data-act="legend-skip">Dev: skip to morning</button></div>`;
+  }
+  const allSigned = remainingMythics().length === 0;
+  const pityPct = Math.min(100, state.pity);
+  return `<div class="card"><h2>Legend League</h2>
+    <p class="muted">Your XI ${xiRating().toFixed(1)}. A win draws one legend from whoever is left. The contract lands 90% of the time. A miss says he is not interested, adds 40 pity, and brings a teammate from that side.</p>
+    <p><b>${state.tokens}</b> Challenge Token${state.tokens === 1 ? "" : "s"} · pity ${state.pity}${state.pity >= 100 ? " · next win is a certain signing" : ""}</p>
+    <div class="meter" aria-label="Pity"><span style="width:${pityPct}%"></span></div>
+    ${allSigned ? `<p class="warn">All six have signed. A win now rolls a gold version at 1 in ${GOLD_ODDS.toLocaleString("en-GB")}.</p>` : ""}
+    <button type="button" data-act="legend-start" ${state.tokens < 1 || state.legend.run ? "disabled" : ""}>Start overnight challenge</button>
+  </div>${run}<div class="grid">${rows}</div>`;
+}
+function viewHtml() {
+  if (ui.tab === "squad") return viewSquad();
+  if (ui.tab === "transfers") return viewTransfers();
+  if (ui.tab === "collection") return viewCollection();
+  if (ui.tab === "legends") return viewLegends();
+  return viewMatch();
+}
+function modalHtml() {
+  const m = state.modal;
+  if (!m) return "";
+  if (m.kind === "morning" && state.legend.last) {
+    const last = state.legend.last;
+    const prize = last.prize;
+    let detail = "";
+    if (prize.kind === "sign") detail = `<p><b>${esc(nameOf(prize.legendKey))}</b> signs.${prize.guaranteed ? " Pity made it certain." : ""}</p>`;
+    else if (prize.kind === "miss") {
+      detail = `<p class="exact" id="legend-result">He's just not interested</p><p>Pity is now ${state.pity}. ${prize.mateKey ? esc(nameOf(prize.mateKey)) + " joins from that side." : "Nobody new was left on that side."}</p>`;
+    } else if (prize.kind === "second") detail = `<p>Second. A teammate chest opens and pity climbs by 15. ${prize.mateKey ? esc(nameOf(prize.mateKey)) + " joins." : "The chest had nobody new."} Pity is ${state.pity}.</p>`;
+    else if (prize.kind === "gold") detail = `<p>A gold ${esc(nameOf(prize.legendKey))}.</p>`;
+    else if (prize.kind === "gold-miss") detail = `<p>No gold legend walked in. The odds were 1 in ${GOLD_ODDS.toLocaleString("en-GB")}.</p>`;
+    else if (prize.kind === "gold-all") detail = `<p>Every legend is already gold. A quiet morning.</p>`;
+    else detail = `<p>You finish ${ordinal(prize.place)}. The club banks the appearance money.</p>`;
+    const table = last.table.map((r, i) => `<tr class="${r.id === "user" ? "us" : ""}"><td>${i + 1}</td><td class="club">${esc(r.name)}</td><td>${r.pts}</td><td>${r.gd > 0 ? "+" : ""}${r.gd}</td></tr>`).join("");
+    return `<div class="modal-back"><div class="modal" role="dialog" aria-modal="true">
+      <p class="kicker" style="color:#8a6508">Morning</p>
+      <h2 style="font-size:26px">Here is the overnight table.</h2>
+      ${detail}
+      <p class="muted">Purse ${money(prize.cash)}.</p>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th class="club">Side</th><th>Pts</th><th>GD</th></tr></thead><tbody>${table}</tbody></table></div>
+      <button type="button" data-act="modal-go">To the club</button>
+    </div></div>`;
+  }
+  const lgName = league().name;
+  let title = "Season over";
+  let body = "";
+  let big = false;
+  let button = "Next season";
+  if (m.kind === "champion") {
+    big = true; title = "You've done it!"; button = "Up we go";
+    body = `<p>${esc(NAME_BY_KEY.club_josh)} are champions of the ${esc(lgName)}. The league is won, so you go up.</p>`;
+  } else if (m.kind === "title") {
+    big = true; title = "You've done it!"; button = "On we go";
+    body = `<p>${esc(NAME_BY_KEY.club_josh)} are champions of the Premier League.</p>`;
+    if (m.justUnlocked) body += `<p>Legend League is open. Your first Challenge Token is on the Legends tab.</p>`;
+    else if (!state.legend.unlocked) body += `<p>Legend League stays shut until you reach 25 reputation. You are on ${state.rep}.</p>`;
+    else body += `<p>Another title. Reputation climbs, and a Challenge Token is banked.</p>`;
+  } else if (m.kind === "runners") {
+    title = "Going up"; button = "Up we go";
+    body = `<p>Runners-up in the ${esc(lgName)}. Second is enough. You are promoted.</p>`;
+  } else if (m.kind === "playoff-win") {
+    title = "Play-off winners"; button = "Up we go";
+    body = `<p>The final is won, ${state.koLast.us}-${state.koLast.them}. You are going up.</p>`;
+  } else if (m.kind === "playoff-out") {
+    title = m.round === "final" ? "Final lost" : "Semi-final lost"; button = "Another season";
+    body = `<p>Out of the play-offs, ${state.koLast.us}-${state.koLast.them} against ${esc(sideName(state.koLast.oppId))}. The squad stays in the ${esc(lgName)}.</p>`;
+  } else if (m.kind === "playoff-intro") {
+    const ko = state.season.ko;
+    title = "Play-offs"; button = "Kick off";
+    const other = ko.other;
+    body = `<p>You finish ${ordinal(m.pos)}. One-leg semi-final against ${esc(sideName(ko.opp))}.</p>
+      <p class="muted">The other semi: ${esc(sideName(other.homeId))} ${other.hs}-${other.as} ${esc(sideName(other.awayId))}${other.et ? " (after extra time)" : ""}. ${esc(sideName(other.winner))} are waiting.</p>`;
+  } else {
+    title = m.runners ? "Runners-up" : "Season over";
+    body = m.runners
+      ? `<p>Second in the Premier League. Only the title opens Legend League. You finish the year on ${state.rep} reputation.</p>`
+      : `<p>You finish ${ordinal(m.pos)} in the ${esc(lgName)}. Another year in this division. Reputation is ${state.rep}.</p>`;
+  }
+  const bits = big ? confettiHtml() : "";
+  return `<div class="modal-back"><div class="modal${big ? " big" : ""}" role="dialog" aria-modal="true">${bits}
+    <h2 id="celebration">${title}</h2>${body}
+    <button type="button" data-act="modal-go">${button}</button>
+  </div></div>`;
+}
+function confettiHtml() {
+  const colours = ["#f2c14b", "#ff5a5f", "#2f80ed", "#1f8a4c", "#fff", "#7a3ff0"];
+  let s = '<div class="confetti" aria-hidden="true">';
+  for (let i = 0; i < 18; i++) {
+    s += `<i style="left:${(i * 53) % 100}%;background:${colours[i % colours.length]};animation-delay:${(i % 7) * 0.12}s"></i>`;
+  }
+  return s + "</div>";
+}
+function sheetHtml() {
+  if (!ui.sheet) return "";
+  if (ui.sheet.type === "reset") {
+    return `<div class="backdrop" data-act="close-sheet"><div class="sheet" data-act="stop">
+      <h2>Wipe this save?</h2>
+      <p>Josh United goes back to a raw League Two squad. This cannot be undone.</p>
+      <div class="chips"><button type="button" class="danger" data-act="do-reset">Reset save</button>
+      <button type="button" class="secondary" data-act="close-sheet">Keep playing</button></div>
+    </div></div>`;
+  }
+  if (ui.sheet.type === "help") {
+    return `<div class="backdrop" data-act="close-sheet"><div class="sheet" data-act="stop">
+      <h2>How this club works</h2>
+      <p>Matches play themselves. Pause when you want to tinker. A side about 5 ratings worse than the opponent still wins about a quarter of the time.</p>
+      <p>After every 8 to 10 matches the squad sits in the treatment room for 30 to 60 seconds. 10x shortens matches and that wait.</p>
+      <p>Chests can drop a common (about a 60% catch). Throw contracts at rarer players. A miss comes back with the words "He's just not interested".</p>
+      <p>Win the league or finish 2nd and you go up. 3rd to 6th is a one-leg semi-final and final. Win the Premier League and reach 25 reputation to open Legend League.</p>
+      <button type="button" data-act="close-sheet">Back to the club</button>
+    </div></div>`;
+  }
+  if (ui.sheet.type === "pick") {
+    const index = ui.sheet.index;
+    const need = FORMATION[index].pos;
+    const options = Object.keys(state.owned).filter(k => playerByKey(k) && playerByKey(k).pos === need);
+    options.sort((a, b) => effectiveOf(b) - effectiveOf(a));
+    const list = options.map(k => {
+      const where = state.xi.indexOf(k);
+      const bits = ratingBits(k);
+      return `<button type="button" class="pcard" data-act="pick" data-id="${esc(k)}">
+        <div class="top"><b>${esc(nameOf(k))}</b><span class="rt">${bits.eff}</span></div>
+        <span class="muted">${bits.note}${where === index ? " · in this spot" : where >= 0 ? " · in the XI" : ""}</span>
+      </button>`;
+    }).join("");
+    return `<div class="backdrop" data-act="close-sheet"><div class="sheet" data-act="stop">
+      <h2>Pick a ${need === "GK" ? "goalkeeper" : need === "DEF" ? "defender" : need === "MID" ? "midfielder" : "forward"}</h2>
+      <div class="list">${list || "<p>Nobody else in this position yet.</p>"}</div>
+    </div></div>`;
+  }
+  if (ui.sheet.type === "team") {
+    const team = teamById(ui.sheet.team);
+    const labels = team.formation === "4-4-2"
+      ? ["GK","RB","CB","CB","LB","RM","CM","CM","LM","ST","ST"]
+      : team.formation === "4-3-3"
+        ? ["GK","RB","CB","CB","LB","DM","CM","CM","RW","LW","ST"]
+        : ["GK","RB","CB","CB","LB","DM","DM","RM","AM","LM","ST"];
+    const rows = team.xi.map((k, i) => {
+      const p = playerByKey(k);
+      return `<div class="row"><span>${labels[i]} · ${esc(nameOf(k))}</span><b style="color:${RARITY[p.rarity].color}">${p.base}</b></div>`;
+    }).join("");
+    return `<div class="backdrop" data-act="close-sheet"><div class="sheet" data-act="stop">
+      <h2>${esc(nameOf(team.name_key))}</h2>
+      <p class="muted">${team.formation} · average ${legendRating(team).toFixed(1)}. They stay as opponents even after a signing. Youth wonderkid: the slot is empty.</p>
+      <div class="list">${rows}</div>
+    </div></div>`;
+  }
+  return "";
+}
+function render() {
+  const root = document.getElementById("app");
+  if (!root) return;
+  root.innerHTML = headerHtml() + `<main>${viewHtml()}</main>` + tabsHtml() + sheetHtml() + modalHtml();
+  const tick = document.getElementById("ticker");
+  if (tick) tick.scrollTop = tick.scrollHeight;
+}
+function paintClocks() {
+  document.querySelectorAll("[data-live-clock]").forEach(el => {
+    if (state.restUntil) el.textContent = formatRemain(state.restUntil - Date.now());
+  });
+  document.querySelectorAll("[data-legend-clock]").forEach(el => {
+    if (!state.legend.run) return;
+    const left = state.legend.run.endsAt - Date.now();
+    el.textContent = left <= 0 ? "Ready" : formatRemain(left);
+  });
+  if (state.legend.run && !state.legend.run.revealed && Date.now() >= state.legend.run.endsAt && !state.modal) {
+    openReveal();
+  }
+}
+
+function onClick(e) {
+  const el = e.target.closest("[data-act]");
+  if (!el) return;
+  const act = el.dataset.act;
+  if (act === "stop") return;
+  if (act === "tab") { ui.tab = el.dataset.tab; state.tab = ui.tab; save(); render(); return; }
+  if (act === "pause") { togglePause(); return; }
+  if (act === "speed") { setSpeed(Number(el.dataset.speed)); return; }
+  if (act === "ask-reset") { ui.sheet = { type: "reset" }; render(); return; }
+  if (act === "do-reset") { doReset(); return; }
+  if (act === "help") { ui.sheet = { type: "help" }; render(); return; }
+  if (act === "close-sheet") { ui.sheet = null; render(); return; }
+  if (act === "modal-go") { onModalGo(); return; }
+  if (act === "slot") { ui.sheet = { type: "pick", index: Number(el.dataset.i) }; render(); return; }
+  if (act === "pick") { setSlot(ui.sheet.index, el.dataset.id); return; }
+  if (act === "best") { bestXI(); save(); render(); return; }
+  if (act === "contract") { throwContract(el.dataset.id); return; }
+  if (act === "boost") { buyBoost(el.dataset.kind); return; }
+  if (act === "refresh") { doRefresh(); return; }
+  if (act === "filter") { ui.filter = el.dataset.filter; render(); return; }
+  if (act === "legend-start") { startLegend(); return; }
+  if (act === "legend-skip") { skipMorning(); return; }
+  if (act === "legend-team") { ui.sheet = { type: "team", team: el.dataset.team }; render(); return; }
+  if (act === "dev-finish") { devFinishSeason(); return; }
+  if (act === "dev-place") { devPlace(Number(el.dataset.place)); return; }
+  if (act === "skip-rest") {
+    state.restUntil = Date.now() - 1;
+    finishRest();
+  }
+}
+
+function boot() {
+  load();
+  render();
+  setInterval(paintClocks, 250);
+  if (state.legend.run && Date.now() >= state.legend.run.endsAt) openReveal();
+  else if (state.restUntil > Date.now() && state.season && state.season.phase === "league") armRest();
+  else if (state.pendingChest) {
+    chain = "chest";
+    render();
+    wait(1200, () => {
+      state.pendingChest = null;
+      chain = "idle";
+      save();
+      render();
+      if (!state.paused && !state.modal) afterMatchFlow();
+    });
+  } else if (!state.paused && !state.modal) queueNext();
+}
+
+document.addEventListener("click", onClick);
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && ui.sheet) { ui.sheet = null; render(); }
+});
+
+window.__FC = {
+  get state() { return state; },
+  NAME_BY_KEY,
+  ROSTER,
+  xiRating,
+  sampleWinRate,
+  setSpeed,
+  devFinishSeason,
+  devPlace,
+  setOverride(n) { debugOverride = n; },
+  clearOverride() { debugOverride = null; },
+  contractChance,
+  catchChance,
+  buildEvents,
+  openReveal,
+  startLegend,
+  skipMorning,
+  startSeason,
+  prepareLeague,
+  remainingMythics,
+  adjustedPool,
+  drawMythic,
+  playerByKey
+};
+
+try { boot(); }
+catch (err) {
+  console.error(err);
+  const root = document.getElementById("app");
+  if (root) root.textContent = "Kick-off failed: " + err.message;
+}
+</script>
+</body>
+</html>
