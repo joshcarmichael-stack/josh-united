@@ -8,17 +8,17 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 60 L4 44 V6 h56 v38z' fill='%23f2c14b'/%3E%3Ctext x='32' y='34' text-anchor='middle' font-family='sans-serif' font-size='16' font-weight='700' fill='%233a2502'%3EJU%3C/text%3E%3C/svg%3E">
 <style>
   :root {
-    --ink: #142033;
-    --muted: #5c6b7a;
-    --cream: #f4f1e6;
-    --card: #fffdf8;
-    --line: #e4dece;
-    --green: #146c3a;
-    --green-d: #0e4a28;
+    --ink: #e8eaf4;
+    --muted: #a3abc2;
+    --cream: #12141c;
+    --card: #1c2030;
+    --line: #32384c;
+    --green: #3ddc84;
+    --green-d: #149654;
     --gold: #f2c14b;
     --gold-ink: #3a2502;
-    --navy: #102033;
-    --bad: #9f2d2d;
+    --navy: #10131c;
+    --bad: #ff6b6b;
     --font: "Avenir Next", "Segoe UI", "Trebuchet MS", sans-serif;
     --mono: ui-monospace, "Cascadia Mono", "Courier New", monospace;
   }
@@ -27,9 +27,7 @@
   body {
     font-family: var(--font);
     color: var(--ink);
-    background:
-      radial-gradient(900px 280px at 50% 0%, #c7ecff, transparent 70%),
-      linear-gradient(#8fd0ff, #d9f3ff 200px, #3e9a52 200px, #1d6b38);
+    background: #0e1018;
     min-height: 100dvh;
   }
   button, input { font: inherit; }
@@ -45,7 +43,7 @@
     min-height: 44px;
   }
   button:disabled { opacity: .45; cursor: not-allowed; }
-  button.secondary { background: #e7e1d4; color: var(--ink); }
+  button.secondary { background: #2a3148; color: var(--ink); }
   button.ghost { background: transparent; color: inherit; min-height: 36px; padding: 6px 10px; }
   button.danger { background: var(--bad); }
   button.small { min-height: 36px; padding: 6px 10px; font-size: 13px; }
@@ -56,16 +54,22 @@
     min-height: 100dvh;
     background: var(--cream);
     box-shadow: 0 0 0 1px rgba(0,0,0,.05), 0 18px 50px rgba(0,0,0,.18);
-    padding-bottom: calc(78px + env(safe-area-inset-bottom));
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
   }
   header.top {
-    background: linear-gradient(180deg, #123524, #1b5c38);
+    background: #161822;
     color: #f6f3ea;
-    padding: 12px 12px 14px;
+    padding: 8px 10px;
     position: sticky;
     top: 0;
     z-index: 15;
+    border-bottom: 1px solid #2a3144;
   }
+  .topbar { display: flex; gap: 6px; align-items: center; }
+  .topbar .stat { font-size: 12px; font-weight: 800; background: #242838; border-radius: 999px; padding: 4px 8px; white-space: nowrap; }
+  .topbar { overflow-x: auto; }
+  .iconbtn { min-height: 36px; min-width: 36px; padding: 4px 8px; border-radius: 12px; background: #242838; color: #f6f3ea; font-size: 14px; }
+  .iconbtn.on { background: var(--gold); color: var(--gold-ink); }
   .idrow { display: flex; gap: 10px; align-items: center; }
   .crest {
     width: 42px; height: 48px; flex: none;
@@ -151,7 +155,7 @@
   th, td { padding: 6px 4px; text-align: right; white-space: nowrap; }
   th { color: var(--muted); font-size: 11px; font-weight: 700; }
   td.club, th.club { text-align: left; white-space: normal; }
-  tr.us td { background: #e5f6ea; font-weight: 700; }
+  tr.us td { background: #1e3d2c; font-weight: 700; color: #d8ffe6; }
   .gdpos { color: #1f8a4c; }
   .gdneg { color: #b42318; }
   .table-wrap { overflow-x: auto; }
@@ -168,7 +172,7 @@
     border-radius: 12px;
     min-height: 62px;
     padding: 4px;
-    color: var(--ink);
+    color: #142033;
     text-align: center;
     position: relative;
   }
@@ -191,7 +195,7 @@
     .stickers { grid-template-columns: repeat(3, 1fr); }
   }
   .pcard {
-    background: white; border-radius: 14px; padding: 10px;
+    background: var(--card); border-radius: 14px; padding: 10px;
     border: 2px solid var(--line); text-align: left; color: inherit; width: 100%;
   }
   .pcard .top { display: flex; justify-content: space-between; gap: 6px; align-items: baseline; }
@@ -204,7 +208,7 @@
   .uncaught { opacity: .55; filter: grayscale(.35); }
   .stickers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .sticker {
-    background: white; border-radius: 12px; min-height: 92px; padding: 8px;
+    background: var(--card); border-radius: 12px; min-height: 92px; padding: 8px;
     border: 2px solid var(--line); font-size: 12px;
   }
   .sticker b { display: block; font-size: 12px; line-height: 1.25; }
@@ -226,7 +230,26 @@
     background: transparent; color: var(--muted); border-radius: 12px;
     padding: 6px 2px; font-size: 11px; min-height: 46px; line-height: 1.15;
   }
-  .tabs button.on { background: var(--green); color: white; }
+  .tabs button.on { background: #2a3148; color: white; }
+  .dock {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: min(520px, 100%);
+    display: flex; gap: 2px; align-items: stretch;
+    background: #161822; border-top: 1px solid #2a3144;
+    padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+    z-index: 20;
+  }
+  .dock button {
+    flex: 1; background: transparent; color: #a3abc2; border-radius: 12px;
+    min-height: 52px; padding: 4px 2px; font-size: 9px; line-height: 1.15;
+    display: grid; place-items: center; gap: 2px;
+  }
+  .dock button.on { background: #2a3148; color: white; }
+  .dock .play {
+    flex: 1.35; background: #e23b3b; color: white; font-size: 13px; font-weight: 900;
+    letter-spacing: .04em; border-radius: 14px;
+  }
+  .dock .play.on { background: #ff4d4d; }
   .backdrop, .modal-back {
     position: fixed; inset: 0; z-index: 40;
     background: rgba(10, 20, 16, .62);
@@ -243,7 +266,8 @@
     overflow: auto;
     position: relative;
   }
-  .modal { text-align: center; border-radius: 22px; }
+  .modal { text-align: center; border-radius: 22px; background: #fffdf8; color: #142033; }
+  .sheet { color: var(--ink); }
   .modal.big { background: radial-gradient(circle at 50% 0%, #ffe7a3, #fffdf8 58%); }
   .modal h2 { font-size: 32px; line-height: 1.05; margin: 0 0 8px; letter-spacing: -.4px; }
   .list { display: grid; gap: 8px; }
@@ -255,14 +279,144 @@
   @keyframes fall { to { transform: translateY(70vh) rotate(180deg); } }
   details { font-size: 13px; }
   summary { cursor: pointer; font-weight: 700; }
-  .warn { background: #fff4d6; border-radius: 12px; padding: 8px 10px; font-size: 13px; }
+  .warn { background: #3a3218; color: #ffe7a3; border-radius: 12px; padding: 8px 10px; font-size: 13px; }
+  .modal .muted { color: #5c6b7a; }
   .meter { height: 10px; background: #efe8d6; border-radius: 99px; overflow: hidden; }
   .meter span { display: block; height: 100%; background: linear-gradient(90deg, #e0a31a, #f2c14b); }
   @media (max-width: 380px) {
     .hide-sm { display: none; }
   }
+  .match-wrap { display: grid; gap: 12px; }
+  .board { position: relative; }
+  .board.venue-home { box-shadow: inset 0 0 0 2px #1f8a4c; }
+  .board.venue-away { box-shadow: inset 0 0 0 2px #7ea2ff; }
+  .ha-pill {
+    display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 99px;
+    font-size: 10px; letter-spacing: .04em; background: rgba(255,255,255,.16);
+  }
+  .venue-home .ha-pill { background: #1f8a4c; }
+  .venue-away .ha-pill { background: #2a4d9a; }
+  .strip {
+    position: absolute; left: 12px; right: 12px; top: 46%; height: 36px; border-radius: 10px;
+    background: rgba(0,0,0,.18); overflow: hidden;
+  }
+  .strip .net {
+    position: absolute; top: 3px; width: 10px; height: 20px; border: 2px solid rgba(255,255,255,.8);
+  }
+  .strip .net.l { left: 4px; border-right: 0; }
+  .strip .net.r { right: 4px; border-left: 0; }
+  .ball {
+    position: absolute; top: 8px; left: 50%; width: 16px; height: 16px; margin-left: -8px;
+    border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, #d0d0d0 55%, #9a9a9a);
+    box-shadow: 0 1px 2px rgba(0,0,0,.45);
+    transition: left .45s ease;
+  }
+  .burst {
+    position: absolute; left: 50%; top: 42px; transform: translateX(-50%);
+    font-weight: 900; letter-spacing: .08em; font-size: 22px; pointer-events: none;
+  }
+  .burst.us { color: #b6ffcf; text-shadow: 0 0 12px #1f8a4c; animation: burst .7s ease; }
+  .burst.them { color: #ffb4b4; animation: burst .45s ease; }
+  .board.shake { animation: shake .4s linear; }
+  .printer .pop { animation: popin .35s ease both; }
+  .score .n.tick { animation: tick .35s ease; display: inline-block; }
+  .ft-pop { text-align: center; color: #ffe08a; font-weight: 800; margin: 6px 0 0; animation: popin .4s ease; }
+  .route-head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .route-scroller { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 4px 0 8px; }
+  .route { display: flex; gap: 3px; align-items: flex-end; min-width: max-content; }
+  .dot {
+    width: 22px; min-height: 30px; border-radius: 6px; font-size: 9px; font-weight: 800;
+    display: grid; place-items: center; line-height: 1;
+  }
+  .dot.home { background: #e5f6ea; color: #0e4a28; }
+  .dot.away { background: #e4ebfb; color: #1d3f86; }
+  .dot.W { box-shadow: inset 0 -4px 0 #1f8a4c; }
+  .dot.D { box-shadow: inset 0 -4px 0 #c2880c; }
+  .dot.L { box-shadow: inset 0 -4px 0 #b42318; }
+  .dot.now { outline: 2px solid #f2c14b; animation: pulse 1.1s ease-in-out infinite; }
+  .rest-pip { width: 7px; height: 7px; border-radius: 50%; background: #7a3ff0; align-self: center; }
+  .party details { background: var(--card); border-radius: 18px; padding: 8px 10px 10px; }
+  .party summary { font-weight: 800; cursor: pointer; }
+  .prow-xi { display: grid; gap: 6px; margin-top: 8px; }
+  .xi-row { display: grid; grid-template-columns: 28px 1fr auto; gap: 6px; align-items: center; font-size: 12px; }
+  .xi-row .pos { font-size: 9px; font-weight: 800; color: var(--muted); }
+  .xi-row .nm { font-weight: 800; }
+  .xp { height: 5px; background: #efe8d6; border-radius: 99px; overflow: hidden; margin-top: 3px; }
+  .xp i { display: block; height: 100%; background: #1f8a4c; width: 0; transition: width .6s ease; }
+  .lvl { color: #146c3a; font-weight: 800; animation: popin .45s ease; }
+  .cap-badge { font-size: 9px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: #8a6508; }
+  .new-dot { font-size: 9px; font-weight: 800; background: #f2c14b; color: #3a2502; border-radius: 99px; padding: 1px 5px; }
+  .chest-card { text-align: center; animation: popin .35s ease; }
+  .chest-card .nm { font-size: 22px; font-weight: 800; margin: 4px 0; }
+  .sil {
+    min-height: 84px; border-radius: 12px; background: #e7e4da; color: #8b93a0;
+    display: grid; place-items: center; font-weight: 800; letter-spacing: .08em;
+  }
+  .sil::before {
+    content: ""; width: 28px; height: 28px; border-radius: 50%; background: #c9c4b6; display: block; margin: 0 auto 6px;
+  }
+  .sil.gold-sil { background: #f4e7bf; color: #8a6508; }
+  .sil.gold-sil::before { background: #e0b84a; }
+  .goldcard { position: relative; overflow: hidden; background: linear-gradient(#fff, #fff6d4); }
+  .goldcard::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.7) 48%, transparent 62%);
+    animation: sheen 2.4s linear infinite;
+  }
+  .div-block { margin-top: 4px; }
+  .div-block h3 { margin: 12px 0 6px; font-size: 15px; }
+  @keyframes popin { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+  @keyframes tick { 40% { transform: scale(1.22); color: #f2c14b; } }
+  @keyframes shake { 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
+  @keyframes burst { 0% { opacity: 0; transform: translateX(-50%) scale(.6); } 30% { opacity: 1; transform: translateX(-50%) scale(1.08); } 100% { opacity: 0; transform: translateX(-50%) scale(1); } }
+  @keyframes pulse { 50% { transform: translateY(-2px); } }
+  @keyframes sheen { from { transform: translateX(-60%); } to { transform: translateX(60%); } }
+  .spd-fast .pop, .spd-fast .tick, .spd-fast .burst, .spd-fast .board.shake, .spd-fast .ft-pop, .spd-fast .lvl, .spd-fast .chest-card { animation-duration: .08s; }
+  .spd-fast .ball, .spd-fast .xp i { transition-duration: .06s; }
+  .spd-fast .dot.now, .spd-fast .goldcard::after { animation: none; }
+  .stage {
+    display: grid; grid-template-columns: 58px 1fr;
+    height: calc(100dvh - 226px); min-height: 420px; max-height: 680px;
+    border-radius: 18px; overflow: hidden; background: #163824; position: relative;
+  }
+  .party-col { display: flex; flex-direction: column; gap: 3px; padding: 4px; background: rgba(8,16,12,.45); overflow: auto; }
+  .mini {
+    border: 2px solid transparent; border-radius: 10px; background: #1c2436; color: white;
+    padding: 2px 2px 3px; text-align: center; min-height: 0;
+  }
+  .mini.star { border-color: #f2c14b; box-shadow: 0 0 0 1px #f2c14b; }
+  .mini .av { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; margin: 0 auto; font-size: 10px; font-weight: 800; }
+  .mini .lv { font-size: 10px; font-weight: 800; display: block; }
+  .mini .xp { height: 5px; margin: 2px 3px 0; background: #12141c; }
+  .mini .xp i { background: #3ddc84; }
+  .scene { position: relative; min-height: 100%; background:
+    radial-gradient(circle at 50% 42%, transparent 36px, rgba(255,255,255,.45) 37px, transparent 39px),
+    linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,.55) 49.5% 50.5%, transparent 50.5%),
+    repeating-linear-gradient(#1f8a45, #1f8a45 22px, #187a3d 22px 44px);
+  }
+  .scene-top { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; color: white; }
+  .scene-score { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+  .speech {
+    position: absolute; left: 8px; right: 8px; bottom: 8px; z-index: 2;
+    background: #f7f4ea; color: #142033; border-radius: 14px; padding: 8px 10px;
+    max-height: 42%; overflow: auto; box-shadow: 0 8px 18px rgba(0,0,0,.28); font-size: 13px;
+  }
+  .speech .us { color: #0e7a3a; font-weight: 800; }
+  .speech .them { color: #b42318; font-weight: 800; }
+  .speech .ft { color: #8a6508; font-weight: 800; }
+  .goal-card {
+    display: grid; grid-template-columns: 42px 1fr auto; gap: 8px; align-items: center;
+    background: var(--card); border-radius: 16px; padding: 10px 12px;
+  }
+  .goal-ico { width: 42px; height: 42px; border-radius: 12px; background: #243044; display: grid; place-items: center; font-size: 22px; }
+  .route-row { display: flex; align-items: center; gap: 8px; }
+  .route-label, .route-count { font-size: 12px; font-weight: 800; white-space: nowrap; }
+  .dot .emo { font-size: 13px; line-height: 1; }
+  .signings { display: flex; gap: 6px; overflow-x: auto; }
+  .signings .pill { background: #242838; white-space: nowrap; }
   @media (prefers-reduced-motion: reduce) {
-    .blink, .confetti i { animation: none; }
+    .blink, .confetti i, .pop, .tick, .burst, .board.shake, .ft-pop, .lvl, .chest-card, .dot.now, .goldcard::after { animation: none !important; }
+    .ball, .xp i { transition: none !important; }
   }
 </style>
 </head>
@@ -276,96 +430,97 @@
    Leave the keys alone. Players, clubs and legend sides all use them. */
 const NAME_BY_KEY = {
   club_josh: "Josh United",
-  club_northgate: "Northgate City",
-  club_redwater: "Redwater",
-  club_kingsport: "Kingsport Athletic",
-  club_dunwick: "Dunwick Town",
-  club_westmere: "Westmere United",
-  club_portselwyn: "Port Selwyn",
-  club_highmarsh: "Highmarsh",
-  club_thornfield: "Thornfield Rovers",
-  club_elmstead: "Elmstead City",
-  club_whiteharbour: "Whiteharbour Athletic",
-  club_moorland: "Moorland Rangers",
-  club_brackenford: "Brackenford",
-  club_southfen: "Southfen United",
-  club_rivermeet: "Rivermeet",
-  club_blackstrand: "Blackstrand",
-  club_oakhaven: "Oakhaven",
-  club_calderbrook: "Calderbrook Town",
-  club_queenswell: "Queenswell",
-  club_hartsbridge: "Hartsbridge United",
-  club_millcross: "Millcross",
-  club_yardley: "Yardley Athletic",
-  club_penrose: "Penrose United",
-  club_starkbridge: "Starkbridge",
-  club_lowfield: "Lowfield Town",
-  club_grandport: "Grandport",
-  club_coppice: "Coppice End",
-  club_fairhaven: "Fairhaven",
-  club_netherton: "Netherton",
-  club_saltmere: "Saltmere City",
-  club_brookmere: "Brookmere",
-  club_alden: "Alden Park",
-  club_doveton: "Doveton Rovers",
-  club_langmere: "Langmere United",
-  club_pitford: "Pitford",
-  club_rosewharf: "Rosewharf Town",
-  club_kestlebury: "Kestlebury",
-  club_foxhollow: "Foxhollow",
-  club_windle: "Windlethorpe",
-  club_marlowe: "Marlowe Athletic",
-  club_ambergate: "Ambergate",
-  club_redcliff: "Redcliff Borough",
-  club_holtvale: "Holt Vale",
-  club_penceford: "Penceford",
-  club_ashwick: "Ashwick Rangers",
-  club_belton: "Belton United",
-  club_cinder: "Cinderwell",
-  club_drayton: "Drayton Park",
-  club_eastwick: "Eastwick Town",
-  club_fernley: "Fernley",
-  club_greys: "Greys End",
-  club_hadley: "Hadley Comrades",
-  club_iven: "Ivenmouth",
-  club_kemble: "Kemble Road",
-  club_linacre: "Linacre",
-  club_marden: "Marden Hill",
-  club_newby: "Newby Athletic",
-  club_osbert: "Osberton",
-  club_pellam: "Pellam Town",
-  club_quarry: "Quarry Bank",
-  club_rosslyn: "Rosslyn Green",
-  club_saxon: "Saxonby",
-  club_thornby: "Thornby",
-  club_upton: "Upton Spire",
-  club_verney: "Verney Heath",
-  club_wendon: "Wendon Albion",
-  club_yarrow: "Yarrow Athletic",
-  club_chapel: "Chapel Gate",
-  club_abbey: "Abbeymead",
-  club_barley: "Barleyford",
-  club_cotter: "Cotterstock",
-  club_dean: "Deanwater",
-  club_elms: "Elmsley Town",
-  club_farrow: "Farrow United",
-  club_goss: "Gossington",
-  club_hewer: "Hewer Bridge",
-  club_ingram: "Ingram Athletic",
-  club_jessop: "Jessop Town",
-  club_keel: "Keelmouth",
-  club_lark: "Larkhill Rovers",
-  club_marston: "Marston Gate",
-  club_norbury: "Norbury Vale",
-  club_oxley: "Oxley Green",
-  club_prentice: "Prentice Park",
-  club_rudby: "Rudby",
-  club_silcox: "Silcox Town",
-  club_tansley: "Tansley Athletic",
-  club_umber: "Umberley",
-  club_wicks: "Wicksford",
-  club_yew: "Yewtree",
-  club_briar: "Briar Lane",
+  club_northgate: "Sunderland",
+  club_redwater: "Leeds United",
+  club_kingsport: "Wolverhampton Wanderers",
+  club_dunwick: "Everton",
+  club_westmere: "Crystal Palace",
+  club_portselwyn: "AFC Bournemouth",
+  club_highmarsh: "Brentford",
+  club_thornfield: "Fulham",
+  club_elmstead: "West Ham United",
+  club_whiteharbour: "Nottingham Forest",
+  club_moorland: "Brighton & Hove Albion",
+  club_brackenford: "Aston Villa",
+  club_southfen: "Newcastle United",
+  club_rivermeet: "Tottenham Hotspur",
+  club_blackstrand: "Manchester United",
+  club_oakhaven: "Chelsea",
+  club_calderbrook: "Liverpool",
+  club_queenswell: "Arsenal",
+  club_hartsbridge: "Manchester City",
+  club_burnley: "Burnley",
+  club_millcross: "Sheffield Wednesday",
+  club_yardley: "Leicester City",
+  club_penrose: "Blackburn Rovers",
+  club_starkbridge: "West Bromwich Albion",
+  club_lowfield: "Charlton Athletic",
+  club_grandport: "Portsmouth",
+  club_coppice: "Stoke City",
+  club_fairhaven: "Watford",
+  club_netherton: "Queens Park Rangers",
+  club_saltmere: "Preston North End",
+  club_brookmere: "Sheffield United",
+  club_alden: "Bristol City",
+  club_doveton: "Swansea City",
+  club_langmere: "Birmingham City",
+  club_pitford: "Norwich City",
+  club_rosewharf: "Derby County",
+  club_kestlebury: "Wrexham",
+  club_foxhollow: "Hull City",
+  club_windle: "Middlesbrough",
+  club_marlowe: "Southampton",
+  club_ambergate: "Millwall",
+  club_redcliff: "Ipswich Town",
+  club_holtvale: "Coventry City",
+  club_penceford: "Oxford United",
+  club_ashwick: "Stevenage",
+  club_belton: "Northampton Town",
+  club_cinder: "Exeter City",
+  club_drayton: "Port Vale",
+  club_eastwick: "Mansfield Town",
+  club_fernley: "Doncaster Rovers",
+  club_greys: "Blackpool",
+  club_hadley: "Leyton Orient",
+  club_iven: "Bradford City",
+  club_kemble: "AFC Wimbledon",
+  club_linacre: "Rotherham United",
+  club_marden: "Peterborough United",
+  club_newby: "Lincoln City",
+  club_osbert: "Wycombe Wanderers",
+  club_pellam: "Barnsley",
+  club_quarry: "Wigan Athletic",
+  club_rosslyn: "Reading",
+  club_saxon: "Huddersfield Town",
+  club_thornby: "Stockport County",
+  club_upton: "Bolton Wanderers",
+  club_verney: "Plymouth Argyle",
+  club_wendon: "Cardiff City",
+  club_yarrow: "Luton Town",
+  club_chapel: "Burton Albion",
+  club_abbey: "Accrington Stanley",
+  club_barley: "Barrow",
+  club_cotter: "Cheltenham Town",
+  club_dean: "Crawley Town",
+  club_elms: "Newport County",
+  club_farrow: "Barnet",
+  club_goss: "Bromley",
+  club_hewer: "Fleetwood Town",
+  club_ingram: "Colchester United",
+  club_jessop: "Crewe Alexandra",
+  club_keel: "Gillingham",
+  club_lark: "Bristol Rovers",
+  club_marston: "Cambridge United",
+  club_norbury: "Grimsby Town",
+  club_oxley: "Tranmere Rovers",
+  club_prentice: "Shrewsbury Town",
+  club_rudby: "Oldham Athletic",
+  club_silcox: "Salford City",
+  club_tansley: "Swindon Town",
+  club_umber: "Chesterfield",
+  club_wicks: "Walsall",
+  club_yew: "Notts County",
+  club_briar: "Milton Keynes Dons",
   team_shearer: "Team Shearer",
   team_henry: "Team Henry",
   team_gerrard: "Team Gerrard",
@@ -549,6 +704,102 @@ const NAME_BY_KEY = {
   fe_tevez: "Carlos Tevez"
 };
 
+const FICTIONAL_BY_KEY = {
+  club_josh: "Josh United",
+  club_northgate: "Northgate City",
+  club_redwater: "Redwater",
+  club_kingsport: "Kingsport Athletic",
+  club_dunwick: "Dunwick Town",
+  club_westmere: "Westmere United",
+  club_portselwyn: "Port Selwyn",
+  club_highmarsh: "Highmarsh",
+  club_thornfield: "Thornfield Rovers",
+  club_elmstead: "Elmstead City",
+  club_whiteharbour: "Whiteharbour Athletic",
+  club_moorland: "Moorland Rangers",
+  club_brackenford: "Brackenford",
+  club_southfen: "Southfen United",
+  club_rivermeet: "Rivermeet",
+  club_blackstrand: "Blackstrand",
+  club_oakhaven: "Oakhaven",
+  club_calderbrook: "Calderbrook Town",
+  club_queenswell: "Queenswell",
+  club_hartsbridge: "Hartsbridge United",
+  club_millcross: "Millcross",
+  club_yardley: "Yardley Athletic",
+  club_penrose: "Penrose United",
+  club_starkbridge: "Starkbridge",
+  club_lowfield: "Lowfield Town",
+  club_grandport: "Grandport",
+  club_coppice: "Coppice End",
+  club_fairhaven: "Fairhaven",
+  club_netherton: "Netherton",
+  club_saltmere: "Saltmere City",
+  club_brookmere: "Brookmere",
+  club_alden: "Alden Park",
+  club_doveton: "Doveton Rovers",
+  club_langmere: "Langmere United",
+  club_pitford: "Pitford",
+  club_rosewharf: "Rosewharf Town",
+  club_kestlebury: "Kestlebury",
+  club_foxhollow: "Foxhollow",
+  club_windle: "Windlethorpe",
+  club_marlowe: "Marlowe Athletic",
+  club_ambergate: "Ambergate",
+  club_redcliff: "Redcliff Borough",
+  club_holtvale: "Holt Vale",
+  club_penceford: "Penceford",
+  club_ashwick: "Ashwick Rangers",
+  club_belton: "Belton United",
+  club_cinder: "Cinderwell",
+  club_drayton: "Drayton Park",
+  club_eastwick: "Eastwick Town",
+  club_fernley: "Fernley",
+  club_greys: "Greys End",
+  club_hadley: "Hadley Comrades",
+  club_iven: "Ivenmouth",
+  club_kemble: "Kemble Road",
+  club_linacre: "Linacre",
+  club_marden: "Marden Hill",
+  club_newby: "Newby Athletic",
+  club_osbert: "Osberton",
+  club_pellam: "Pellam Town",
+  club_quarry: "Quarry Bank",
+  club_rosslyn: "Rosslyn Green",
+  club_saxon: "Saxonby",
+  club_thornby: "Thornby",
+  club_upton: "Upton Spire",
+  club_verney: "Verney Heath",
+  club_wendon: "Wendon Albion",
+  club_yarrow: "Yarrow Athletic",
+  club_chapel: "Chapel Gate",
+  club_abbey: "Abbeymead",
+  club_barley: "Barleyford",
+  club_cotter: "Cotterstock",
+  club_dean: "Deanwater",
+  club_elms: "Elmsley Town",
+  club_farrow: "Farrow United",
+  club_goss: "Gossington",
+  club_hewer: "Hewer Bridge",
+  club_ingram: "Ingram Athletic",
+  club_jessop: "Jessop Town",
+  club_keel: "Keelmouth",
+  club_lark: "Larkhill Rovers",
+  club_marston: "Marston Gate",
+  club_norbury: "Norbury Vale",
+  club_oxley: "Oxley Green",
+  club_prentice: "Prentice Park",
+  club_rudby: "Rudby",
+  club_silcox: "Silcox Town",
+  club_tansley: "Tansley Athletic",
+  club_umber: "Umberley",
+  club_wicks: "Wicksford",
+  club_yew: "Yewtree",
+  club_briar: "Briar Lane",
+  club_burnley: "Hearthside",
+};
+
+/* To restore fictional clubs, copy FICTIONAL_BY_KEY onto the same keys in NAME_BY_KEY. */
 const LEAGUES = [
   { id: "l2", name: "League Two", teams: 24, games: 46, cap: 58, minR: 35, maxR: 55 },
   { id: "l1", name: "League One", teams: 24, games: 46, cap: 68, minR: 45, maxR: 65 },
@@ -556,12 +807,55 @@ const LEAGUES = [
   { id: "pl", name: "Premier League", teams: 20, games: 38, cap: 99, minR: 65, maxR: 90 }
 ];
 
-const CLUB_POOLS = [
-  [["club_abbey","ABY"],["club_barley","BLY"],["club_cotter","CTS"],["club_dean","DNW"],["club_elms","ELS"],["club_farrow","FRW"],["club_goss","GSS"],["club_hewer","HWB"],["club_ingram","IGA"],["club_jessop","JSP"],["club_keel","KLM"],["club_lark","LRK"],["club_marston","MST"],["club_norbury","NBV"],["club_oxley","OXL"],["club_prentice","PRC"],["club_rudby","RDB"],["club_silcox","SCX"],["club_tansley","TNS"],["club_umber","UMB"],["club_wicks","WKF"],["club_yew","YWT"],["club_briar","BRL"]],
-  [["club_ashwick","AWK"],["club_belton","BLT"],["club_cinder","CDW"],["club_drayton","DRY"],["club_eastwick","EWK"],["club_fernley","FNY"],["club_greys","GRY"],["club_hadley","HDL"],["club_iven","IVM"],["club_kemble","KMB"],["club_linacre","LNC"],["club_marden","MDH"],["club_newby","NBY"],["club_osbert","OSB"],["club_pellam","PLM"],["club_quarry","QRB"],["club_rosslyn","RLG"],["club_saxon","SXB"],["club_thornby","TNB"],["club_upton","UPN"],["club_verney","VNH"],["club_wendon","WDN"],["club_yarrow","YWA"],["club_chapel","CPG"]],
-  [["club_millcross","MLC"],["club_yardley","YRD"],["club_penrose","PNR"],["club_starkbridge","STB"],["club_lowfield","LWF"],["club_grandport","GRP"],["club_coppice","CPE"],["club_fairhaven","FRH"],["club_netherton","NTH"],["club_saltmere","SLT"],["club_brookmere","BRK"],["club_alden","ALD"],["club_doveton","DVT"],["club_langmere","LGM"],["club_pitford","PTF"],["club_rosewharf","RSW"],["club_kestlebury","KST"],["club_foxhollow","FXH"],["club_windle","WDL"],["club_marlowe","MRL"],["club_ambergate","AMB"],["club_redcliff","RDC"],["club_holtvale","HLV"],["club_penceford","PNF"]],
-  [["club_northgate","NGT"],["club_redwater","RDW"],["club_kingsport","KSP"],["club_dunwick","DNK"],["club_westmere","WSM"],["club_portselwyn","PSL"],["club_highmarsh","HGM"],["club_thornfield","THF"],["club_elmstead","ELM"],["club_whiteharbour","WHB"],["club_moorland","MLD"],["club_brackenford","BFD"],["club_southfen","SFN"],["club_rivermeet","RVM"],["club_blackstrand","BKS"],["club_oakhaven","OKH"],["club_calderbrook","CBK"],["club_queenswell","QNW"],["club_hartsbridge","HTB"]]
-].map(pool => pool.map(([id, short]) => ({ id, short })));
+const CLUBS = [
+  {id:"club_abbey",short:"ACC",division:0,play:true,power:1},{id:"club_barley",short:"BRW",division:0,play:true,power:2},
+  {id:"club_cotter",short:"CHL",division:0,play:true,power:3},{id:"club_dean",short:"CRW",division:0,play:true,power:4},
+  {id:"club_elms",short:"NWP",division:0,play:true,power:5},{id:"club_farrow",short:"BRN",division:0,play:true,power:6},
+  {id:"club_goss",short:"BRO",division:0,play:true,power:7},{id:"club_hewer",short:"FLE",division:0,play:true,power:8},
+  {id:"club_ingram",short:"COL",division:0,play:true,power:9},{id:"club_jessop",short:"CRE",division:0,play:true,power:10},
+  {id:"club_keel",short:"GIL",division:0,play:true,power:11},{id:"club_lark",short:"BRR",division:0,play:true,power:12},
+  {id:"club_marston",short:"CAM",division:0,play:true,power:13},{id:"club_norbury",short:"GRI",division:0,play:true,power:14},
+  {id:"club_oxley",short:"TRA",division:0,play:true,power:15},{id:"club_prentice",short:"SHR",division:0,play:true,power:16},
+  {id:"club_rudby",short:"OLD",division:0,play:true,power:17},{id:"club_silcox",short:"SAL",division:0,play:true,power:18},
+  {id:"club_tansley",short:"SWI",division:0,play:true,power:19},{id:"club_umber",short:"CHS",division:0,play:true,power:20},
+  {id:"club_wicks",short:"WAL",division:0,play:true,power:21},{id:"club_yew",short:"NTC",division:0,play:true,power:22},
+  {id:"club_briar",short:"MKD",division:0,play:true,power:23},
+  {id:"club_ashwick",short:"STV",division:1,play:true,power:1},{id:"club_belton",short:"NHT",division:1,play:true,power:2},
+  {id:"club_cinder",short:"EXE",division:1,play:true,power:3},{id:"club_drayton",short:"PTV",division:1,play:true,power:4},
+  {id:"club_eastwick",short:"MFT",division:1,play:true,power:5},{id:"club_fernley",short:"DON",division:1,play:true,power:6},
+  {id:"club_greys",short:"BLP",division:1,play:true,power:7},{id:"club_hadley",short:"LOR",division:1,play:true,power:8},
+  {id:"club_iven",short:"BRA",division:1,play:true,power:9},{id:"club_kemble",short:"WIM",division:1,play:true,power:10},
+  {id:"club_linacre",short:"ROT",division:1,play:true,power:11},{id:"club_marden",short:"PET",division:1,play:true,power:12},
+  {id:"club_newby",short:"LIN",division:1,play:true,power:13},{id:"club_osbert",short:"WYC",division:1,play:true,power:14},
+  {id:"club_pellam",short:"BAR",division:1,play:true,power:15},{id:"club_quarry",short:"WIG",division:1,play:true,power:16},
+  {id:"club_rosslyn",short:"RDG",division:1,play:true,power:17},{id:"club_saxon",short:"HUD",division:1,play:true,power:18},
+  {id:"club_thornby",short:"STC",division:1,play:true,power:19},{id:"club_upton",short:"BOL",division:1,play:true,power:20},
+  {id:"club_verney",short:"PLY",division:1,play:true,power:21},{id:"club_wendon",short:"CAR",division:1,play:true,power:22},
+  {id:"club_yarrow",short:"LUT",division:1,play:true,power:23},{id:"club_chapel",short:"BRT",division:1,play:false,power:8},
+  {id:"club_millcross",short:"SHW",division:2,play:true,power:1},{id:"club_yardley",short:"LEI",division:2,play:true,power:2},
+  {id:"club_penrose",short:"BLB",division:2,play:true,power:3},{id:"club_starkbridge",short:"WBA",division:2,play:true,power:4},
+  {id:"club_lowfield",short:"CHA",division:2,play:true,power:5},{id:"club_grandport",short:"POR",division:2,play:true,power:6},
+  {id:"club_coppice",short:"STK",division:2,play:true,power:7},{id:"club_fairhaven",short:"WAT",division:2,play:true,power:8},
+  {id:"club_netherton",short:"QPR",division:2,play:true,power:9},{id:"club_saltmere",short:"PNE",division:2,play:true,power:10},
+  {id:"club_brookmere",short:"SHU",division:2,play:true,power:11},{id:"club_alden",short:"BRC",division:2,play:true,power:12},
+  {id:"club_doveton",short:"SWA",division:2,play:true,power:13},{id:"club_langmere",short:"BIR",division:2,play:true,power:14},
+  {id:"club_pitford",short:"NWC",division:2,play:true,power:15},{id:"club_rosewharf",short:"DER",division:2,play:true,power:16},
+  {id:"club_kestlebury",short:"WRX",division:2,play:true,power:17},{id:"club_foxhollow",short:"HUL",division:2,play:true,power:18},
+  {id:"club_windle",short:"MID",division:2,play:true,power:19},{id:"club_marlowe",short:"SOU",division:2,play:true,power:20},
+  {id:"club_ambergate",short:"MIL",division:2,play:true,power:21},{id:"club_redcliff",short:"IPS",division:2,play:true,power:22},
+  {id:"club_holtvale",short:"COV",division:2,play:true,power:23},{id:"club_penceford",short:"OXU",division:2,play:false,power:10},
+  {id:"club_northgate",short:"SUN",division:3,play:true,power:1},{id:"club_redwater",short:"LEE",division:3,play:true,power:2},
+  {id:"club_kingsport",short:"WOL",division:3,play:true,power:3},{id:"club_dunwick",short:"EVE",division:3,play:true,power:4},
+  {id:"club_westmere",short:"CRY",division:3,play:true,power:5},{id:"club_portselwyn",short:"BOU",division:3,play:true,power:6},
+  {id:"club_highmarsh",short:"BRE",division:3,play:true,power:7},{id:"club_thornfield",short:"FUL",division:3,play:true,power:8},
+  {id:"club_elmstead",short:"WHU",division:3,play:true,power:9},{id:"club_whiteharbour",short:"NFO",division:3,play:true,power:10},
+  {id:"club_moorland",short:"BHA",division:3,play:true,power:11},{id:"club_brackenford",short:"AVL",division:3,play:true,power:12},
+  {id:"club_southfen",short:"NEW",division:3,play:true,power:13},{id:"club_rivermeet",short:"TOT",division:3,play:true,power:14},
+  {id:"club_blackstrand",short:"MUN",division:3,play:true,power:15},{id:"club_oakhaven",short:"CHE",division:3,play:true,power:16},
+  {id:"club_calderbrook",short:"LIV",division:3,play:true,power:17},{id:"club_queenswell",short:"ARS",division:3,play:true,power:18},
+  {id:"club_hartsbridge",short:"MCI",division:3,play:true,power:19},{id:"club_burnley",short:"BUR",division:3,play:false,power:3}
+];
+const CLUB_POOLS = [0,1,2,3].map(d => CLUBS.filter(c => c.division === d && c.play).sort((a,b) => a.power - b.power));
 
 const RARITY = {
   common: { label: "Common", contract: 60, dup: 70, color: "#5c6b7a" },
@@ -690,6 +984,23 @@ const LEGEND_HOURS = 8;
 
 const BY_KEY = {};
 ROSTER.forEach(p => { BY_KEY[p.name_key] = p; });
+function assignPlayerClubs() {
+  START_XI.forEach(k => { const p = BY_KEY[k]; p.club = "club_josh"; p.division = 0; });
+  const commons = ROSTER.filter(p => p.rarity === "common" && p.club !== "club_josh").sort((a, b) => b.base - a.base);
+  const uncommons = ROSTER.filter(p => p.rarity === "uncommon").sort((a, b) => b.base - a.base);
+  const rares = ROSTER.filter(p => p.rarity === "rare").slice();
+  const prems = ROSTER.filter(p => p.rarity === "prem").sort((a, b) => b.base - a.base);
+  const legends = ROSTER.filter(p => p.rarity === "legend").sort((a, b) => b.base - a.base);
+  const clubs = d => CLUBS.filter(c => c.division === d).sort((a, b) => a.power - b.power).map(c => c.id);
+  function deal(list, ids, division) {
+    list.forEach((p, i) => { p.club = ids[i % ids.length]; p.division = division; });
+  }
+  deal(commons.slice(12), clubs(0), 0);
+  deal(commons.slice(0, 12).concat(uncommons.slice(8)), clubs(1), 1);
+  deal(uncommons.slice(0, 8).concat(rares), clubs(2), 2);
+  deal(prems.concat(legends), clubs(3), 3);
+}
+assignPlayerClubs();
 
 let state;
 let ui = { tab: "match", sheet: null, filter: "all", result: null, lock: false, note: "" };
@@ -733,7 +1044,7 @@ function shortOf(id) {
   if (id === "user") return "JUT";
   const c = state && state.season && state.season.clubs.find(x => x.id === id);
   if (c) return c.short;
-  const pool = CLUB_POOLS.flat().find(x => x.id === id);
+  const pool = CLUBS.find(x => x.id === id);
   if (pool) return pool.short;
   const lg = LEGEND_TEAMS.find(t => t.id === id);
   return lg ? lg.short : "FC";
@@ -761,7 +1072,7 @@ function assertData() {
   });
   const shorts = new Set();
   CLUB_POOLS.forEach((pool, i) => {
-    const expect = [23, 24, 24, 19][i];
+    const expect = [23, 23, 23, 19][i];
     if (pool.length !== expect) throw new Error("Pool size " + i);
     pool.forEach(c => {
       if (!NAME_BY_KEY[c.id]) throw new Error("Missing club " + c.id);
@@ -838,9 +1149,10 @@ function ownPlayer(p, gold) {
       state.stats.golds += 1;
       return { dup: true, gold: true, upgraded: true };
     }
-    grantXp(key, (RARITY[p.rarity].dup || 60) * (gold ? 2 : 1));
+    const xp = (RARITY[p.rarity].dup || 60) * (gold ? 2 : 1);
+    grantXp(key, xp);
     if (gold) state.stats.golds += 1;
-    return { dup: true, gold: !!gold, upgraded: false };
+    return { dup: true, gold: !!gold, upgraded: false, xp };
   }
   state.owned[key] = { rating: p.base, xp: 0, gold: !!gold };
   if (gold) state.stats.golds += 1;
@@ -851,7 +1163,9 @@ function ownPlayer(p, gold) {
     state.rep += 1;
   }
   checkUnlock();
-  return { dup: false, gold: !!gold };
+  if (!state.fresh) state.fresh = [];
+  if (state.fresh.indexOf(key) < 0) state.fresh.push(key);
+  return { dup: false, gold: !!gold, xp: 0 };
 }
 function repBonus() { return 2 * Math.floor(state.rep / 10); }
 function contractChance(rarity) {
@@ -1053,21 +1367,28 @@ function rollChest() {
   if (Math.random() > 0.46) return null;
   const caught = Math.random() < catchChance() / 100;
   const commons = ROSTER.filter(p => p.rarity === "common");
-  const unowned = commons.filter(p => !state.owned[p.name_key]);
-  let pool = commons;
+  const near = commons.filter(p => p.division === state.league || p.division === state.league - 1);
+  const source = near.length && Math.random() < 0.8 ? near : commons;
+  const unowned = source.filter(p => !state.owned[p.name_key]);
+  let pool = source;
   if (unowned.length && Math.random() < 0.72) pool = unowned;
   const p = pool[Math.floor(Math.random() * pool.length)];
   const gold = caught && Math.random() < 1 / GOLD_ODDS;
+  let got = null;
   if (caught) {
-    ownPlayer(p, gold);
+    got = ownPlayer(p, gold);
     state.stats.catches += 1;
     pushFeed((gold ? "Gold catch: " : "Caught ") + nameOf(p.name_key) + ".");
+    if (!state.signings) state.signings = [];
+    const last = state.lastMatch;
+    state.signings.unshift({ key: p.name_key, gold: !!gold, dup: !!got.dup, oppId: last ? last.oppId : null, us: last ? last.us : null, them: last ? last.them : null });
+    if (state.signings.length > 5) state.signings.length = 5;
   } else {
     const id = state.xi[Math.floor(Math.random() * state.xi.length)];
     grantXp(id, 18);
     pushFeed("A chest snapped shut. A bit of know-how for " + nameOf(id) + ".");
   }
-  return { caught, gold, name_key: p.name_key };
+  return { caught, gold, name_key: p.name_key, dup: got ? !!got.dup : false, xp: got ? (got.xp || 0) : 0 };
 }
 function rollBoard() {
   const weights = BOARD_WEIGHTS[state.league];
@@ -1098,12 +1419,13 @@ function rollBoard() {
   state.board = picked;
 }
 function makeClubs() {
-  const pool = CLUB_POOLS[state.league].map(c => ({ id: c.id, short: c.short }));
+  const pool = CLUB_POOLS[state.league].map(c => ({ id: c.id, short: c.short, power: c.power }));
+  pool.sort((a, b) => a.power - b.power);
   const lg = league();
   const n = pool.length;
   pool.forEach((c, i) => {
     const t = n === 1 ? 0.5 : i / (n - 1);
-    const jitter = (Math.random() - 0.5) * (lg.maxR - lg.minR) * 0.06;
+    const jitter = (Math.random() - 0.5) * (lg.maxR - lg.minR) * 0.08;
     let rating = Math.round(lg.minR + t * (lg.maxR - lg.minR) + jitter);
     c.rating = Math.max(lg.minR, Math.min(lg.maxR, rating));
   });
@@ -1128,6 +1450,7 @@ function startSeason() {
   state.boosts.scout = false;
   state.pendingChest = null;
   state.lastMatch = null;
+  state.restStops = [];
   rollBoard();
   const expect = (league().teams - 1) * 2;
   if (rounds.length !== expect) throw new Error("Fixture count " + rounds.length);
@@ -1232,12 +1555,37 @@ function paintLive() {
   const them = document.getElementById("themScore");
   const tick = document.getElementById("ticker");
   if (!us || !them || !tick || ui.tab !== "match") { render(); return; }
-  us.textContent = String(live.us);
-  them.textContent = String(live.them);
-  tick.innerHTML = live.events.slice(0, live.i).map(ev =>
-    `<div class="${esc(ev.side || "")}">${esc(ev.text)}</div>`
+  if (us.textContent !== String(live.us)) { us.textContent = String(live.us); us.classList.remove("tick"); void us.offsetWidth; us.classList.add("tick"); }
+  if (them.textContent !== String(live.them)) { them.textContent = String(live.them); them.classList.remove("tick"); void them.offsetWidth; them.classList.add("tick"); }
+  const shown = live.events.slice(0, live.i);
+  tick.innerHTML = shown.map((ev, idx) =>
+    `<div class="${esc(ev.side || "")}${idx === shown.length - 1 ? " pop" : ""}">${esc(ev.text)}</div>`
   ).join("") + '<span class="blink"></span>';
   tick.scrollTop = tick.scrollHeight;
+  const ev = shown[shown.length - 1];
+  const ball = document.getElementById("ball");
+  const burst = document.getElementById("burst");
+  const board = document.getElementById("board");
+  if (ball) {
+    if (!ev || ev.side === "") ball.style.left = "50%";
+    else if (ev.goal === "us" || ev.side === "us") ball.style.left = ev.goal === "us" ? "88%" : "70%";
+    else ball.style.left = ev.goal === "them" ? "12%" : "30%";
+  }
+  if (burst) {
+    if (ev && ev.goal) {
+      burst.hidden = false;
+      burst.className = "burst " + (ev.goal === "us" ? "us" : "them");
+      burst.textContent = ev.goal === "us" ? "GOAL!" : "GOAL";
+    } else burst.hidden = true;
+  }
+  if (board) board.classList.toggle("shake", !!(ev && ev.goal === "them"));
+  if (ev && ev.goal) {
+    const pos = ev.goal === "us" ? "FWD" : "GK";
+    const opts = state.xi.filter(k => playerByKey(k).pos === pos);
+    live.starN = (live.starN || 0) + 1;
+    live.star = (opts.length ? opts[live.starN % opts.length] : state.xi[0]);
+    document.querySelectorAll(".mini").forEach(el => el.classList.toggle("star", el.dataset.key === live.star));
+  }
 }
 function finishLive() {
   if (!live) return;
@@ -1259,7 +1607,10 @@ function finishLive() {
     state.matchesSinceRest += 1;
   }
   const result = resultWord(us, them);
+  const beforeXI = state.xi.map(k => state.owned[k].rating);
   grantMatchXp(result);
+  ui.partyAnim = {};
+  state.xi.forEach((k, i) => { ui.partyAnim[k] = state.owned[k].rating - beforeXI[i]; });
   const purse = matchPurse(result);
   state.cash += purse;
   if (!knockout) pushForm(result);
@@ -1276,21 +1627,26 @@ function finishLive() {
   save();
   render();
   wait(1500, () => {
-    if (state.pendingChest) {
-      chain = "chest";
-      render();
-      wait(1700, () => {
-        state.pendingChest = null;
-        chain = "idle";
-        save();
-        render();
-        afterMatchFlow();
-      });
-    } else {
-      chain = "idle";
-      afterMatchFlow();
-    }
+    if (state.pendingChest) armChest();
+    else { chain = "idle"; afterMatchFlow(); }
   });
+}
+let chestToken = 0;
+function dismissChest() {
+  if (chain !== "chest") return;
+  chestToken += 1;
+  clearClock();
+  state.pendingChest = null;
+  chain = "idle";
+  save();
+  render();
+  afterMatchFlow();
+}
+function armChest() {
+  chain = "chest";
+  const token = ++chestToken;
+  render();
+  wait(5000, () => { if (token === chestToken) dismissChest(); });
 }
 function afterMatchFlow() {
   if (state.paused || state.modal) return;
@@ -1317,6 +1673,8 @@ function queueNext() {
   }
 }
 function beginRest() {
+  state.restStops = state.restStops || [];
+  if (state.season && state.restStops.indexOf(state.season.nextRound) < 0) state.restStops.push(state.season.nextRound);
   state.boosts.scout = false;
   const gameMs = 30000 + Math.random() * 30000;
   state.restUntil = Date.now() + gameMs / state.speed;
@@ -1824,7 +2182,10 @@ function freshState() {
     season: null,
     modal: null,
     legend: { unlocked: false, signed: [], run: null, last: null },
-    stats: { catches: 0, golds: 0, contracts: 0, throws: 0 }
+    stats: { catches: 0, golds: 0, contracts: 0, throws: 0 },
+    fresh: [],
+    signings: [],
+    restStops: []
   };
 }
 function save() {
@@ -1846,6 +2207,9 @@ function sanitise() {
   state.feed = state.feed || [];
   state.form = state.form || [];
   state.stats = state.stats || { catches: 0, golds: 0, contracts: 0, throws: 0 };
+  state.fresh = state.fresh || [];
+  state.signings = state.signings || [];
+  state.restStops = state.restStops || [];
   if (!state.season) startSeason();
 }
 function load() {
@@ -1902,33 +2266,23 @@ function nextFixture() {
 
 function headerHtml() {
   const playedGames = state.season && state.season.table.user ? (state.season.table.user.w + state.season.table.user.d + state.season.table.user.l) : 0;
-  const pos = playedGames > 0 ? ordinal(userPos()) : (live ? "Match " + ((state.season.nextRound || 0) + 1) : "Pre-season");
-  return `<header class="top">
-    <div class="idrow">
+  const pos = playedGames > 0 ? ordinal(userPos()) : "Pre";
+  return `<header class="top"><div class="topbar">
       <div class="crest" aria-hidden="true">JU</div>
-      <div style="flex:1">
-        <h1>Josh United</h1>
-        <p class="sub">${esc(league().name)} · Season ${state.seasonNum}</p>
-      </div>
-      <button type="button" class="ghost" data-act="pause" style="color:#f6f3ea">${state.paused ? "Resume" : "Pause"}</button>
-    </div>
-    <div class="pills">
-      <span class="pill hot">${esc(pos)}</span>
-      <span class="pill">${money(state.cash)}</span>
-      <span class="pill">Rep ${state.rep}</span>
-      <span class="pill">XI ${xiRating().toFixed(1)}</span>
-      <span class="seg" role="group" aria-label="Speed">
-        <button type="button" data-act="speed" data-speed="1" class="${state.speed === 1 ? "on" : ""}">1x</button>
-        <button type="button" data-act="speed" data-speed="10" class="${state.speed === 10 ? "on" : ""}">10x</button>
-      </span>
-      <button type="button" class="ghost small" data-act="ask-reset" style="color:#f6f3ea">Reset</button>
-      <button type="button" class="ghost small" data-act="help" style="color:#f6f3ea">Help</button>
-    </div>
-  </header>`;
+      <span class="stat">${money(state.cash)}</span>
+      <span class="stat">Rep ${state.rep}</span>
+      <span class="stat">${esc(pos)}</span>
+      <span style="flex:1"></span>
+      <button type="button" class="iconbtn${state.speed === 1 ? " on" : ""}" data-act="speed" data-speed="1" aria-label="1x">1x</button>
+      <button type="button" class="iconbtn${state.speed === 10 ? " on" : ""}" data-act="speed" data-speed="10" aria-label="10x">10x</button>
+      <button type="button" class="iconbtn" data-act="pause" aria-label="${state.paused ? "Resume" : "Pause"}">${state.paused ? "▶" : "II"}</button>
+      <button type="button" class="iconbtn" data-act="help" aria-label="Help">?</button>
+      <button type="button" class="iconbtn" data-act="ask-reset" aria-label="Reset">↺</button>
+    </div></header>`;
 }
 function tabsHtml() {
-  const tabs = [["match","Match"],["squad","Squad"],["transfers","Transfers"],["collection","Collection"],["legends","Legends"]];
-  return `<nav class="tabs">${tabs.map(([id, label]) =>
+  const tabs = [["squad","Squad"],["transfers","Deals"],["collection","Dex"],["gold","Gold"],["legends","Myths"],["boosts","Boosts"]];
+  return `<nav class="dock">${`<button type="button" class="play${ui.tab === "match" ? " on" : ""}" data-act="play">PLAY</button>` + tabs.map(([id, label]) =>
     `<button type="button" data-act="tab" data-tab="${id}" class="${ui.tab === id ? "on" : ""}">${label}</button>`
   ).join("")}</nav>`;
 }
@@ -1936,91 +2290,168 @@ function formHtml() {
   if (!state.form.length) return "";
   return `<div class="form" aria-label="Last five">${state.form.map(f => `<i class="${f}">${f}</i>`).join("")}</div>`;
 }
-function printerHtml(lines, blinking) {
-  const body = (lines || []).map(ev => `<div class="${esc(ev.side || "")}">${esc(ev.text)}</div>`).join("");
-  return `<div class="printer" id="ticker" aria-live="polite">${body}${blinking ? '<span class="blink"></span>' : ""}</div>`;
+function initials(key) {
+  const parts = nameOf(key).split(" ").filter(Boolean);
+  const a = (parts[0] || "?").slice(0, 1);
+  const b = (parts.length > 1 ? parts[parts.length - 1] : parts[0]).slice(0, 1);
+  return (a + b).toUpperCase();
 }
-function scoreBlock(leftName, leftShort, rightName, rightShort, us, them, kicker, home) {
-  return `<section class="board">
-    <div class="kicker">${esc(kicker)}</div>
-    <div class="score">
-      <div class="side-l"><div class="n" id="usScore">${us}</div><div class="who">${esc(leftShort)} · ${esc(leftName)}</div></div>
-      <div class="dash" aria-hidden="true">-</div>
-      <div class="side-r"><div class="n" id="themScore">${them}</div><div class="who">${esc(rightShort)} · ${esc(rightName)}</div></div>
+function isCapped(key) {
+  const p = playerByKey(key);
+  const o = state.owned[key];
+  if (!p || !o) return false;
+  const ceil = p.ceiling + (o.gold ? 1 : 0);
+  const grown = o.rating + (o.gold ? 2 : 0);
+  return o.rating >= ceil || grown >= league().cap;
+}
+function xpFrac(key) {
+  const o = state.owned[key];
+  const p = playerByKey(key);
+  if (!o || !p) return 0;
+  const ceil = p.ceiling + (o.gold ? 1 : 0);
+  if (o.rating >= ceil) return 1;
+  return Math.max(0, Math.min(1, o.xp / xpToNext(o.rating)));
+}
+function isFresh(key) {
+  return (ui.showingFresh || []).indexOf(key) >= 0 || (state.fresh || []).indexOf(key) >= 0;
+}
+function userFixtures() {
+  if (!state.season) return [];
+  return state.season.rounds.map((round, i) => {
+    const m = round.matches.find(x => x.home === "user" || x.away === "user");
+    const home = m.home === "user";
+    const opp = home ? m.away : m.home;
+    let result = "";
+    if (m.played && m.hs != null) {
+      const us = home ? m.hs : m.as;
+      const them = home ? m.as : m.hs;
+      result = us > them ? "W" : us < them ? "L" : "D";
+    }
+    return { i, home, opp, result, played: !!m.played };
+  });
+}
+function routeHtml() {
+  const fx = userFixtures();
+  if (!fx.length) return "";
+  const cur = Math.min(state.season.nextRound || 0, fx.length - 1);
+  const now = fx[state.season.nextRound] || fx[fx.length - 1];
+  const total = fx.length;
+  const n = state.season.nextRound >= total ? total : (state.season.nextRound + (live && !live.knockout ? 1 : 0));
+  const shown = Math.min(total, Math.max(1, live && !live.knockout ? state.season.nextRound + 1 : (state.season.nextRound || 0) + (state.season.closed ? 0 : 1)));
+  const labelN = state.season.closed ? total : Math.min(total, (state.season.nextRound || 0) + 1);
+  const stops = new Set(state.restStops || []);
+  if (state.season.phase === "league" && !state.season.closed) {
+    const ahead = Math.max(0, state.restTarget - state.matchesSinceRest);
+    stops.add((state.season.nextRound || 0) + (ahead === 0 ? 0 : ahead));
+  }
+  const nodes = fx.map(f => {
+    const emo = f.home ? "🏠" : "🚌";
+    const rest = stops.has(f.i) ? `<span class="rest-pip" title="Treatment"></span>` : "";
+    const bracket = f.i === (state.season.nextRound || 0) && !state.season.closed;
+    return `${rest}<span class="dot ${f.home ? "home" : "away"} ${f.result} ${bracket ? "now" : ""}" id="${bracket ? "routeNow" : ""}" title="${esc(sideName(f.opp))}">${bracket ? "[" : ""}${emo}${bracket ? "]" : ""}</span>`;
+  }).join("");
+  const oppBit = now ? `${esc(sideName(now.opp))} (${now.home ? "H" : "A"})` : "";
+  return `<div class="route-row">
+    <div class="route-label">${esc(league().name)}<div class="muted">${esc(oppBit)}</div></div>
+    <div class="route-scroller"><div class="route">${nodes}</div></div>
+    <div class="route-count">Matchday ${labelN}/${total}</div>
+  </div>`;
+}
+function partyHtml(star) {
+  return state.xi.map((key, idx) => {
+    const p = playerByKey(key);
+    const bits = ratingBits(key);
+    const gain = ui.partyAnim && ui.partyAnim[key];
+    const fresh = isFresh(key);
+    return `<div class="mini${star === key ? " star" : ""}" data-key="${esc(key)}" title="${esc(nameOf(key))}">
+      <span class="av" style="background:${RARITY[p.rarity].color}">${initials(key)}</span>
+      <span class="lv">Lv.${bits.eff == null ? p.base : bits.eff}</span>
+      <span class="xp"><i style="width:${Math.round(xpFrac(key) * 100)}%"></i></span>
+      ${isCapped(key) ? '<span class="cap-badge">Capped</span>' : ""}
+      ${gain > 0 ? `<span class="lvl">+${gain}</span>` : ""}
+      ${fresh ? '<span class="new-dot">NEW</span>' : ""}
     </div>`;
+  }).join("");
+}
+function speechHtml(lines, blinking) {
+  const body = (lines || []).slice(-4).map((ev, idx, arr) =>
+    `<div class="${esc(ev.side || "")}${idx === arr.length - 1 ? " pop" : ""}">${esc(ev.text)}</div>`
+  ).join("");
+  return `<div class="speech" id="ticker" aria-live="polite">${body || "The whistle is close."}${blinking ? '<span class="blink"></span>' : ""}</div>`;
+}
+function chestSpeech(c) {
+  if (!c) return "";
+  if (!c.caught) {
+    return `<button type="button" class="speech chest-card" data-act="dismiss-chest" id="ticker"><b>He slipped off.</b><div class="muted">Tap to carry on.</div></button>`;
+  }
+  const p = playerByKey(c.name_key);
+  const bits = ratingBits(c.name_key);
+  const tag = c.gold ? "GOLD" : (c.dup ? "duplicate, +XP to " + nameOf(c.name_key) : "NEW");
+  return `<button type="button" class="speech chest-card${c.gold ? " goldcard" : ""}" data-act="dismiss-chest" id="ticker" style="border:3px solid ${RARITY[p.rarity].color}">
+    <div class="${c.dup ? "" : "new-dot"}">${esc(tag)}</div>
+    <div class="nm">${esc(nameOf(c.name_key))}</div>
+    <div>${esc(p.pos)} · ${esc(RARITY[p.rarity].label)}${p.club ? " · " + esc(nameOf(p.club)) : ""}</div>
+    <div>Lv.${bits.eff} · ceiling ${bits.ceil}</div>
+  </button>`;
+}
+function sceneState() {
+  if (state.restUntil > Date.now() && chain === "rest") {
+    return { home: true, kicker: "Treatment room", us: "", them: "", opp: "Boots off", lines: [{ text: "Back in " + formatRemain(state.restUntil - Date.now()) + ".", side: "" }], live: false, star: null };
+  }
+  if (live) {
+    return { home: live.home, kicker: live.knockout ? (state.season.phase === "final" ? "Play-off final" : "Play-off semi") : (live.home ? "Home" : "Away"), us: live.us, them: live.them, opp: live.oppName, lines: live.events.slice(0, live.i), live: true, star: live.star || null };
+  }
+  if (state.lastMatch) {
+    const m = state.lastMatch;
+    const win = m.us > m.them;
+    return { home: m.home, kicker: "Full time", us: m.us, them: m.them, opp: sideName(m.oppId), lines: m.lines, live: false, star: null, win };
+  }
+  const fx = nextFixture();
+  if (!fx) return { home: true, kicker: "Pre-season", us: 0, them: 0, opp: "Josh United", lines: [], live: false, star: null };
+  const home = fx.home === "user";
+  const opp = home ? fx.away : fx.home;
+  return { home, kicker: home ? "Home" : "Away", us: 0, them: 0, opp: sideName(opp), lines: [{ text: "The whistle is close.", side: "" }], live: false, star: null };
 }
 function viewMatch() {
-  let top = "";
-  if (state.restUntil > Date.now() && chain === "rest") {
-    top = `<section class="board">
-      <div class="kicker">Treatment room</div>
-      <p style="font-size:28px;font-weight:800;margin:8px 0 4px" data-live-clock>${formatRemain(state.restUntil - Date.now())}</p>
-      <p class="odds">Boots off. The squad starts again when this hits zero. At 10x the wait is much shorter.</p>
-      <button type="button" class="small secondary" data-act="skip-rest" style="margin-top:8px">Dev: skip treatment</button>
-    </section>`;
-  } else if (live) {
-    const odds = oddsFor(live.sim.my, live.sim.op, live.home);
-    top = scoreBlock(NAME_BY_KEY.club_josh, "JUT", live.oppName, shortOf(live.oppId), live.us, live.them,
-      live.knockout ? (state.season.phase === "final" ? "Play-off final" : "Play-off semi-final") : (live.home ? "Home" : "Away"), live.home);
-    top += `<p class="odds">Win ${Math.round(odds.win * 100)}% · Draw ${Math.round(odds.draw * 100)}% · XI ${live.sim.my.toFixed(1)} against ${live.sim.op}</p>`;
-    top += printerHtml(live.events.slice(0, live.i), true);
-    top += `</section>`;
-  } else if (state.lastMatch) {
-    const m = state.lastMatch;
-    top = scoreBlock(NAME_BY_KEY.club_josh, "JUT", sideName(m.oppId), shortOf(m.oppId), m.us, m.them, "Last match", m.home);
-    top += printerHtml(m.lines, false) + `</section>`;
-  } else {
-    const fx = nextFixture();
-    if (fx) {
-      const home = fx.home === "user";
-      const opp = home ? fx.away : fx.home;
-      const odds = oddsFor(xiRating(), ratingOf(opp), home);
-      top = scoreBlock(NAME_BY_KEY.club_josh, "JUT", sideName(opp), shortOf(opp), 0, 0, home ? "Next, at home" : "Next, away", home);
-      top += `<p class="odds">Win ${Math.round(odds.win * 100)}% · Draw ${Math.round(odds.draw * 100)}%. A raw side will nick some and lose plenty.</p>`;
-      top += printerHtml([{ text: "The whistle is close.", side: "" }], false) + `</section>`;
-    }
-  }
-  let chest = "";
-  if (state.pendingChest && chain === "chest") {
-    const c = state.pendingChest;
-    if (c.caught && c.gold) chest = `<div class="banner gold">GOLD. ${esc(nameOf(c.name_key))} walks out of the chest. 1 in ${GOLD_ODDS.toLocaleString("en-GB")}.</div>`;
-    else if (c.caught) chest = `<div class="banner">Got him. ${esc(nameOf(c.name_key))} joins from a route chest.</div>`;
-    else chest = `<div class="banner bad">The player slips off. The squad still picks up a little know-how.</div>`;
-  }
-  const boosts = [];
-  if (state.boosts.scout) boosts.push("Scout's Eye: chest catch " + catchChance() + "%");
-  if (state.boosts.offer) boosts.push("Improved Offer armed");
-  const boostLine = boosts.length ? `<p class="muted">${esc(boosts.join(" · "))}</p>` : "";
-  const until = state.restTarget - state.matchesSinceRest;
-  const restLine = state.season.phase === "league"
-    ? `<p class="muted">${until <= 0 ? "Treatment room after this match." : "Treatment room in " + until + " match" + (until === 1 ? "" : "es") + "."}</p>`
-    : `<p class="muted">Play-offs. One leg, then the season is settled.</p>`;
+  const s = sceneState();
+  const chesting = state.pendingChest && chain === "chest";
+  const speech = chesting ? chestSpeech(state.pendingChest) : (chain === "rest" ? `<div class="speech" id="ticker">Treatment room. Back in <b data-live-clock>${formatRemain(state.restUntil - Date.now())}</b>.</div>` : speechHtml(s.lines, !!s.live));
+  const ft = !s.live && s.win && chain === "gap" ? `<div class="ft-pop">Full time. You win.</div>` : "";
+  const signings = (state.signings || []).length ? `<div class="signings">${state.signings.map(g => `<span class="pill">${g.gold ? "Gold " : ""}${esc(nameOf(g.key))}${g.oppId ? " · " + esc(sideName(g.oppId)) : ""}</span>`).join("")}</div>` : "";
+  const target = state.league === 3 ? "The title" : "Promotion";
+  const goal = `<div class="goal-card"><div class="goal-ico">🏆</div><div><b>${esc(league().name)}</b><div class="muted">Season ${state.seasonNum}</div></div><div style="text-align:right"><b>Target: ${target}</b><div class="muted">Cap ${league().cap}</div></div></div>`;
   const rows = tableRows();
   const me = rows.findIndex(r => r.id === "user");
-  const anyPlayed = rows.some(r => r.p > 0);
-  let show = rows.slice(0, 8);
-  if (me >= 8) show = rows.slice(0, 6).concat([rows[me]]);
-  const table = !anyPlayed
-    ? `<div class="card"><h2>Table</h2><p class="muted">The rest of the round is settled when our match ends, and the table updates together.</p></div>`
-    : `<div class="card"><h2>Table</h2><div class="table-wrap"><table>
-    <thead><tr><th>#</th><th class="club">Club</th><th>P</th><th class="hide-sm">W</th><th class="hide-sm">D</th><th class="hide-sm">L</th><th>GD</th><th>Pts</th></tr></thead>
-    <tbody>${show.map((r, i) => {
+  let show = rows.slice(0, 6);
+  if (me >= 6) show = rows.slice(0, 4).concat([rows[me]]);
+  const table = `<details class="card"><summary>Table</summary><div class="table-wrap"><table>
+    <thead><tr><th>#</th><th class="club">Club</th><th>P</th><th>GD</th><th>Pts</th></tr></thead>
+    <tbody>${show.map(r => {
       const place = rows.indexOf(r) + 1;
-      const gdClass = r.gd > 0 ? "gdpos" : r.gd < 0 ? "gdneg" : "";
-      return `<tr class="${r.id === "user" ? "us" : ""}"><td>${place}</td><td class="club">${esc(sideName(r.id))}</td><td>${r.p}</td><td class="hide-sm">${r.w}</td><td class="hide-sm">${r.d}</td><td class="hide-sm">${r.l}</td><td class="${gdClass}">${r.gd > 0 ? "+" : ""}${r.gd}</td><td>${r.pts}</td></tr>`;
-    }).join("")}</tbody></table></div>${formHtml()}</div>`;
-  const feed = state.feed.length ? `<div class="card"><h2>Club notes</h2>${state.feed.slice(0, 6).map(f => `<p class="muted" style="margin:4px 0">${esc(f)}</p>`).join("")}</div>` : "";
+      return `<tr class="${r.id === "user" ? "us" : ""}"><td>${place}</td><td class="club">${esc(sideName(r.id))}</td><td>${r.p}</td><td>${r.gd > 0 ? "+" : ""}${r.gd}</td><td>${r.pts}</td></tr>`;
+    }).join("")}</tbody></table></div>${formHtml()}</details>`;
   const dev = `<details class="card"><summary>Testing tools</summary>
-    <p class="muted">These use the real table and the real match engine. 10x also shortens matches and treatment.</p>
     <div class="chips" style="margin-top:8px">
       <button type="button" class="small secondary" data-act="dev-finish">Dev: finish season</button>
       <button type="button" class="small secondary" data-act="dev-place" data-place="1">Dev: finish 1st</button>
       <button type="button" class="small secondary" data-act="dev-place" data-place="4">Dev: finish 4th</button>
+      ${chain === "rest" ? '<button type="button" class="small secondary" data-act="skip-rest">Dev: skip treatment</button>' : ""}
     </div></details>`;
   const note = ui.note ? `<div class="warn">${esc(ui.note)}</div>` : "";
-  const tip = state.seasonNum === 1 && state.seasonsFinished === 0
-    ? `<p class="muted">Route chests can drop a common after a match. Rarer players want a contract. League cap here is ${league().cap}.</p>` : "";
-  return `${note}${top}${chest}${boostLine}${restLine}${tip}${table}${feed}${dev}<p class="muted">A private prototype for Josh.</p>`;
+  return `${note}${routeHtml()}
+    <section class="stage ${s.home ? "venue-home" : "venue-away"}${s.win && chain === "gap" ? " ft-win" : ""}" id="board">
+      <div class="party-col">${partyHtml(s.star)}</div>
+      <div class="scene">
+        <div class="scene-top"><span class="kicker">${esc(s.kicker)} <span class="ha-pill">${s.home ? "H" : "A"}</span></span>
+          <span class="scene-score"><b id="usScore">${s.us}</b> - <b id="themScore">${s.them}</b></span></div>
+        <div class="strip" id="strip"><span class="net l"></span><span class="ball" id="ball"></span><span class="net r"></span></div>
+        <div style="padding:8px 10px;color:#fff;font-weight:800">${esc(s.opp)}</div>
+        <div class="burst" id="burst" hidden></div>
+        ${ft}
+        ${speech}
+      </div>
+    </section>
+    ${goal}${signings}${table}${dev}`;
 }
 function ratingBits(key) {
   const p = playerByKey(key);
@@ -2044,7 +2475,7 @@ function viewSquad() {
       const bits = ratingBits(key);
       const o = state.owned[key];
       return `<button type="button" class="slot${o && o.gold ? " gold" : ""}" data-act="slot" data-i="${i}">
-        <div class="pos">${slot.label}</div>
+        <div class="pos">${slot.label}${isFresh(key) ? ' <span class="new-dot">NEW</span>' : ""}</div>
         <div class="rt" style="color:${RARITY[playerByKey(key).rarity].color}">${bits.eff}</div>
         <div class="nm">${esc(nameOf(key))}</div>
       </button>`;
@@ -2081,7 +2512,7 @@ function viewTransfers() {
     return `<article class="pcard" style="border-color:${RARITY[p.rarity].color}">
       <div class="top"><span class="tag" style="color:${RARITY[p.rarity].color}">${esc(RARITY[p.rarity].label)}</span><span class="rt">${p.base}</span></div>
       <div class="nm">${esc(nameOf(key))}</div>
-      <p class="muted" style="margin:4px 0">${p.pos} · ceiling ${p.ceiling}${owned ? " · already ours" : ""}</p>
+      <p class="muted" style="margin:4px 0">${p.pos}${p.club ? " · " + esc(nameOf(p.club)) : ""} · ceiling ${p.ceiling}${owned ? " · already ours" : ""}</p>
       <button type="button" class="small" data-act="contract" data-id="${esc(key)}" ${owned || state.cash < cost || ui.lock ? "disabled" : ""}>Throw contract · ${money(cost)} · ${formatPct(chance)}</button>
     </article>`;
   }).join("");
@@ -2097,29 +2528,65 @@ function viewTransfers() {
     <div class="grid">${cards || '<p class="muted">The market is bare.</p>'}</div>
     <button type="button" class="secondary" data-act="refresh" ${state.cash < refreshCost() ? "disabled" : ""}>New list · ${money(refreshCost())}</button>`;
 }
-function viewCollection() {
-  const filters = [["all","All"],["common","Common"],["uncommon","Uncommon"],["rare","Rare"],["prem","Prem"],["legend","Legend"],["teammate","Teammates"],["mythic","Mythic"],["gold","Gold"]];
-  const list = ROSTER.filter(p => {
-    if (ui.filter === "all") return true;
-    if (ui.filter === "gold") return state.owned[p.name_key] && state.owned[p.name_key].gold;
-    return p.rarity === ui.filter;
+function dexCard(p, goldMode) {
+  const o = state.owned[p.name_key];
+  const isGold = !!(o && o.gold);
+  if (goldMode) {
+    if (!isGold) return `<article class="sil gold-sil">${esc(p.pos)}</article>`;
+    const bits = ratingBits(p.name_key);
+    return `<article class="sticker goldcard" style="border-color:#e0b84a"><span class="goldtag">GOLD</span><b>${esc(nameOf(p.name_key))}</b><span class="muted">${p.pos} · Lv.${bits.eff}</span></article>`;
+  }
+  if (!o) return `<article class="sil">${esc(p.pos)}</article>`;
+  const bits = ratingBits(p.name_key);
+  const fresh = isFresh(p.name_key);
+  return `<article class="sticker${isGold ? " goldcard" : ""}" style="border-color:${RARITY[p.rarity].color}">
+    <span class="tag" style="color:${RARITY[p.rarity].color}">${esc(RARITY[p.rarity].label)}</span>
+    ${fresh ? '<span class="new-dot">NEW</span>' : ""}
+    <b>${esc(nameOf(p.name_key))}</b>
+    <span class="muted">${p.pos} · ${bits.note}</span>
+  </article>`;
+}
+function viewCollection(goldMode) {
+  const divisions = [["League Two", 0], ["League One", 1], ["Championship", 2], ["Premier League", 3]];
+  let html = `<div class="card"><h2>${goldMode ? "Gold dex" : "Dex"}</h2>
+    <p class="muted">${goldMode ? "Gold versions only. The odds are 1 in " + GOLD_ODDS.toLocaleString("en-GB") + "." : "Caught players show their name. The rest are still silhouettes."}</p>
+    <div class="chips">
+      <button type="button" class="chip${!goldMode ? " on" : ""}" data-act="tab" data-tab="collection">Dex</button>
+      <button type="button" class="chip${goldMode ? " on" : ""}" data-act="tab" data-tab="gold">Gold dex</button>
+    </div></div>`;
+  divisions.forEach(([label, d]) => {
+    const clubs = CLUBS.filter(c => c.division === d).sort((a, b) => nameOf(a.id).localeCompare(nameOf(b.id)));
+    if (d === 0) clubs.unshift({ id: "club_josh" });
+    let divCaught = 0, divTotal = 0;
+    const blocks = clubs.map(c => {
+      const players = ROSTER.filter(p => p.club === c.id);
+      if (!players.length) return "";
+      const got = players.filter(p => goldMode ? (state.owned[p.name_key] && state.owned[p.name_key].gold) : state.owned[p.name_key]).length;
+      divCaught += got; divTotal += players.length;
+      return `<h4 style="margin:8px 0 4px">${esc(nameOf(c.id))} <span class="muted">${got}/${players.length}</span></h4><div class="stickers">${players.map(p => dexCard(p, goldMode)).join("")}</div>`;
+    }).join("");
+    html += `<section class="div-block"><h3>${label} <span class="muted">${divCaught}/${divTotal}</span></h3>${blocks}</section>`;
   });
-  const caught = Object.keys(state.owned).length;
-  const cards = list.map(p => {
-    const o = state.owned[p.name_key];
-    const bits = o ? ratingBits(p.name_key) : null;
-    return `<article class="sticker${o ? "" : " uncaught"}${o && o.gold ? " gold" : ""}" style="border-color:${RARITY[p.rarity].color}">
-      <span class="tag" style="color:${RARITY[p.rarity].color}">${esc(RARITY[p.rarity].label)}</span>
-      <b>${esc(nameOf(p.name_key))}</b>
-      <span class="muted">${p.pos}${o ? " · " + bits.note : " · not caught"}</span>
-      ${o && o.gold ? '<div class="goldtag">Gold</div>' : ""}
-    </article>`;
-  }).join("");
-  return `<div class="card"><h2>Album ${caught}/${ROSTER.length}</h2>
-    <p class="muted">Gold version: 1 in ${GOLD_ODDS.toLocaleString("en-GB")}. Duplicates become XP. ${state.stats.golds ? state.stats.golds + " gold find" + (state.stats.golds === 1 ? "" : "s") + "." : "No gold version in the album yet."}</p>
-    <div class="chips">${filters.map(([id, label]) => `<button type="button" class="chip${ui.filter === id ? " on" : ""}" data-act="filter" data-filter="${id}">${label}</button>`).join("")}</div>
+  html += `<section class="div-block"><h3>Legends</h3>`;
+  LEGEND_TEAMS.forEach(t => {
+    const players = t.xi.map(playerByKey);
+    const got = players.filter(p => goldMode ? (state.owned[p.name_key] && state.owned[p.name_key].gold) : state.owned[p.name_key]).length;
+    html += `<h4 style="margin:8px 0 4px">${esc(nameOf(t.name_key))} <span class="muted">${got}/${players.length}</span></h4><div class="stickers">${players.map(p => dexCard(p, goldMode)).join("")}</div>`;
+  });
+  html += `</section>`;
+  return html;
+}
+function viewBoosts() {
+  const scoutCost = boostCost("scout");
+  const offerCost = boostCost("offer");
+  return `<div class="card"><h2>Boosts</h2>
+    <p class="muted">Scout's Eye adds 10 points to the chest catch rate until the next treatment, capped at 80%. Improved Offer adds 15 points to the next contract, capped at 99%.</p>
+    <div class="chips">
+      <button type="button" data-act="boost" data-kind="scout" ${state.boosts.scout || state.cash < scoutCost ? "disabled" : ""}>Scout's Eye · ${money(scoutCost)}</button>
+      <button type="button" data-act="boost" data-kind="offer" ${state.boosts.offer || state.cash < offerCost ? "disabled" : ""}>Improved Offer · ${money(offerCost)}</button>
     </div>
-    <div class="stickers">${cards || '<p class="muted">Nothing in this filter yet.</p>'}</div>`;
+    <p class="muted">${state.boosts.scout ? "Scout's Eye is on. " : ""}${state.boosts.offer ? "Improved Offer is armed. " : ""}Contract bonus from reputation: +${repBonus()}%.</p>
+  </div>`;
 }
 function viewLegends() {
   if (!state.legend.unlocked) {
@@ -2162,8 +2629,10 @@ function viewLegends() {
 function viewHtml() {
   if (ui.tab === "squad") return viewSquad();
   if (ui.tab === "transfers") return viewTransfers();
-  if (ui.tab === "collection") return viewCollection();
+  if (ui.tab === "collection") return viewCollection(false);
+  if (ui.tab === "gold") return viewCollection(true);
   if (ui.tab === "legends") return viewLegends();
+  if (ui.tab === "boosts") return viewBoosts();
   return viewMatch();
 }
 function modalHtml() {
@@ -2226,7 +2695,7 @@ function modalHtml() {
       ? `<p>Second in the Premier League. Only the title opens Legend League. You finish the year on ${state.rep} reputation.</p>`
       : `<p>You finish ${ordinal(m.pos)} in the ${esc(lgName)}. Another year in this division. Reputation is ${state.rep}.</p>`;
   }
-  const bits = big ? confettiHtml() : "";
+  const bits = (big || m.kind === "runners" || m.kind === "playoff-win") ? confettiHtml() + '<div style="font-size:40px">🏆</div>' : "";
   return `<div class="modal-back"><div class="modal${big ? " big" : ""}" role="dialog" aria-modal="true">${bits}
     <h2 id="celebration">${title}</h2>${body}
     <button type="button" data-act="modal-go">${button}</button>
@@ -2300,9 +2769,12 @@ function sheetHtml() {
 function render() {
   const root = document.getElementById("app");
   if (!root) return;
+  document.documentElement.classList.toggle("spd-fast", !!(state && state.speed >= 10));
   root.innerHTML = headerHtml() + `<main>${viewHtml()}</main>` + tabsHtml() + sheetHtml() + modalHtml();
   const tick = document.getElementById("ticker");
   if (tick) tick.scrollTop = tick.scrollHeight;
+  const now = document.getElementById("routeNow");
+  if (now && now.scrollIntoView) now.scrollIntoView({ inline: "center", block: "nearest" });
 }
 function paintClocks() {
   document.querySelectorAll("[data-live-clock]").forEach(el => {
@@ -2323,7 +2795,22 @@ function onClick(e) {
   if (!el) return;
   const act = el.dataset.act;
   if (act === "stop") return;
-  if (act === "tab") { ui.tab = el.dataset.tab; state.tab = ui.tab; save(); render(); return; }
+  if (act === "tab") {
+    const tab = el.dataset.tab;
+    if (tab === "squad" || tab === "collection" || tab === "gold") {
+      ui.showingFresh = (state.fresh || []).slice();
+      state.fresh = [];
+    }
+    ui.tab = tab; state.tab = tab; save(); render(); return;
+  }
+  if (act === "play") {
+    ui.tab = "match"; state.tab = "match";
+    if (state.paused) { togglePause(); return; }
+    save(); render();
+    if (chain === "idle" && !state.modal) queueNext();
+    return;
+  }
+  if (act === "dismiss-chest") { dismissChest(); return; }
   if (act === "pause") { togglePause(); return; }
   if (act === "speed") { setSpeed(Number(el.dataset.speed)); return; }
   if (act === "ask-reset") { ui.sheet = { type: "reset" }; render(); return; }
@@ -2355,17 +2842,8 @@ function boot() {
   setInterval(paintClocks, 250);
   if (state.legend.run && Date.now() >= state.legend.run.endsAt) openReveal();
   else if (state.restUntil > Date.now() && state.season && state.season.phase === "league") armRest();
-  else if (state.pendingChest) {
-    chain = "chest";
-    render();
-    wait(1200, () => {
-      state.pendingChest = null;
-      chain = "idle";
-      save();
-      render();
-      if (!state.paused && !state.modal) afterMatchFlow();
-    });
-  } else if (!state.paused && !state.modal) queueNext();
+  else if (state.pendingChest) armChest();
+  else if (!state.paused && !state.modal) queueNext();
 }
 
 document.addEventListener("click", onClick);
