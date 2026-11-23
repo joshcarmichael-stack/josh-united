@@ -378,20 +378,16 @@
   .xi-row .nm { font-weight: 800; }
   .xp { height: 5px; background: #efe8d6; border-radius: 99px; overflow: hidden; margin-top: 3px; }
   .xp i { display: block; height: 100%; background: #1f8a4c; width: 0; transition: width .6s ease; }
-  .lvl { color: #146c3a; font-weight: 800; animation: popin .45s ease; }
+  .lvl { color: #b6ffcf; font-weight: 800; animation: popin .45s ease; font-size: 9px; }
   .cap-badge { font-size: 9px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: #8a6508; }
   .new-dot { font-size: 9px; font-weight: 800; background: #f2c14b; color: #3a2502; border-radius: 99px; padding: 1px 5px; }
   .chest-card { text-align: center; animation: popin .35s ease; }
   .chest-card .nm { font-size: 22px; font-weight: 800; margin: 4px 0; }
   .sil {
-    min-height: 84px; border-radius: 12px; background: #e7e4da; color: #8b93a0;
-    display: grid; place-items: center; font-weight: 800; letter-spacing: .08em;
+    min-height: 96px; border-radius: 12px; background: #2a3144; color: #8b93a0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    font-weight: 800; letter-spacing: .08em; padding: 8px;
   }
-  .sil::before {
-    content: ""; width: 28px; height: 28px; border-radius: 50%; background: #c9c4b6; display: block; margin: 0 auto 6px;
-  }
-  .sil.gold-sil { background: #f4e7bf; color: #8a6508; }
-  .sil.gold-sil::before { background: #e0b84a; }
   .goldcard { position: relative; overflow: hidden; background: linear-gradient(#fff, #fff6d4); }
   .goldcard::after {
     content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -413,23 +409,33 @@
   .spd-fast .dot.now, .spd-fast .goldcard::after { animation: none; }
   .spd-fast .route.slide, .spd-fast .dot.arrive { animation-duration: .12s; }
   .stage {
-    display: grid; grid-template-columns: 54px minmax(0, 1fr);
+    display: grid; grid-template-columns: 64px minmax(0, 1fr);
     flex: 1 1 auto;
-    min-height: 0;
+    min-height: 220px;
     width: 100%;
     max-width: 100%;
     border-radius: 18px; overflow: hidden; background: #163824; position: relative;
   }
-  .party-col { display: flex; flex-direction: column; gap: 3px; padding: 4px; background: rgba(8,16,12,.45); overflow: auto; }
+  .party-col {
+    display: flex; flex-direction: column; gap: 4px; padding: 4px;
+    background: rgba(8,16,12,.45); overflow-x: hidden; overflow-y: auto;
+    min-height: 0; -webkit-overflow-scrolling: touch;
+  }
   .mini {
+    flex: 0 0 auto;
+    box-sizing: border-box;
     border: 2px solid transparent; border-radius: 10px; background: #1c2436; color: white;
-    padding: 2px 2px 3px; text-align: center; min-height: 0;
+    padding: 3px 3px 4px; text-align: center; min-height: 46px;
+    display: flex; flex-direction: column; justify-content: center; gap: 3px;
+    overflow: visible;
   }
   .mini.star { border-color: #f2c14b; box-shadow: 0 0 0 1px #f2c14b; }
-  .mini .av { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; margin: 0 auto; font-size: 10px; font-weight: 800; }
-  .mini .lv { font-size: 10px; font-weight: 800; display: block; }
-  .mini .xp { height: 5px; margin: 2px 3px 0; background: #12141c; }
-  .mini .xp i { background: #3ddc84; }
+  .mini-top { display: flex; align-items: center; justify-content: center; gap: 2px; min-height: 22px; }
+  .mini .lv { font-size: 9px; font-weight: 800; line-height: 1.1; white-space: nowrap; letter-spacing: -0.03em; }
+  .mini .xp { display: block; height: 5px; width: 100%; margin: 0; background: #5c677c; flex: 0 0 5px; border-radius: 99px; overflow: hidden; }
+  .mini .xp i { background: #3ddc84; display: block; height: 4px; }
+  .sprite { display: block; flex: none; }
+  .slot .sprite, .sticker .sprite { margin: 0 auto 4px; }
   .scene { position: relative; min-height: 100%; background:
     radial-gradient(circle at 50% 42%, transparent 36px, rgba(255,255,255,.45) 37px, transparent 39px),
     linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,.55) 49.5% 50.5%, transparent 50.5%),
@@ -465,9 +471,20 @@
   .route-label .muted { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .route-count { grid-area: count; font-size: 12px; font-weight: 800; white-space: nowrap; }
   .dot .emo { font-size: 16px; line-height: 1; }
-  .signings { display: flex; gap: 6px; overflow-x: auto; max-width: 100%; min-width: 0; }
-  .signings .pill { background: #242838; white-space: nowrap; }
+  .signings-wrap { flex: 0 0 auto; min-width: 0; width: 100%; }
+  .signings-wrap .muted { margin: 0 0 4px; }
+  .signings {
+    display: flex; gap: 6px; align-items: center;
+    flex: 0 0 auto;
+    width: 100%; max-width: 100%; min-width: 0;
+    min-height: 40px; height: auto;
+    overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+  .signings .pill { flex: 0 0 auto; background: #242838; white-space: nowrap; line-height: 1.3; padding: 8px 10px; }
   .match-fit { display: flex; flex-direction: column; gap: 8px; flex: 1 1 auto; min-height: 0; min-width: 0; width: 100%; }
+  details.card { flex: 0 0 auto; }
   .table-wrap, .card, .stage, .scene { max-width: 100%; min-width: 0; }
   @media (prefers-reduced-motion: reduce) {
     .blink, .confetti i, .pop, .tick, .burst, .board.shake, .ft-pop, .lvl, .chest-card, .dot.now, .goldcard::after { animation: none !important; }
@@ -2282,7 +2299,9 @@ function load() {
     if (String(err.message) !== "empty") ui.note = "The old save could not be read, so this is a new club.";
     save();
   }
+  if (state.tab === "gold") { state.tab = "collection"; ui.dexMode = "gold"; }
   ui.tab = state.tab || "match";
+  ui.dexMode = ui.dexMode || "normal";
 }
 function doReset() {
   clearClock();
@@ -2336,7 +2355,7 @@ function headerHtml() {
     </div></header>`;
 }
 function tabsHtml() {
-  const tabs = [["squad","Squad"],["transfers","Deals"],["collection","Dex"],["gold","Gold"],["legends","Myths"],["boosts","Boosts"]];
+  const tabs = [["squad","Squad"],["transfers","Deals"],["collection","Dex"],["legends","Myths"],["boosts","Boosts"]];
   return `<nav class="dock">${`<button type="button" class="play${ui.tab === "match" ? " on" : ""}" data-act="play">PLAY</button>` + tabs.map(([id, label]) =>
     `<button type="button" data-act="tab" data-tab="${id}" class="${ui.tab === id ? "on" : ""}">${label}</button>`
   ).join("")}</nav>`;
@@ -2350,6 +2369,142 @@ function initials(key) {
   const a = (parts[0] || "?").slice(0, 1);
   const b = (parts.length > 1 ? parts[parts.length - 1] : parts[0]).slice(0, 1);
   return (a + b).toUpperCase();
+}
+const KITS = {
+  club_josh: ["#0c6b3c", "#f2c14b", "plain", "#f4f6f8", "#0c6b3c"],
+  club_abbey: ["#d00000", "#ffffff", "plain", "#f4f6f8", "#d00000"],
+  club_barley: ["#1d4ed8", "#ffffff", "plain", "#f4f6f8", "#1d4ed8"],
+  club_cotter: ["#c8102e", "#ffffff", "stripes", "#f4f6f8", "#c8102e"],
+  club_dean: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_elms: ["#f5b400", "#111111", "plain", "#111111", "#f5b400"],
+  club_farrow: ["#f5b400", "#111111", "hoops", "#111111", "#f5b400"],
+  club_goss: ["#f7f7f7", "#c8102e", "plain", "#111111", "#f7f7f7"],
+  club_hewer: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_ingram: ["#1d4e89", "#ffffff", "stripes", "#f4f6f8", "#1d4e89"],
+  club_jessop: ["#d00000", "#ffffff", "plain", "#f4f6f8", "#d00000"],
+  club_keel: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_lark: ["#0057b8", "#ffffff", "halves", "#f4f6f8", "#0057b8"],
+  club_marston: ["#f5b400", "#111111", "plain", "#111111", "#f5b400"],
+  club_norbury: ["#111111", "#ffffff", "stripes", "#111111", "#111111"],
+  club_oxley: ["#f7f7f7", "#0033a0", "plain", "#0033a0", "#f7f7f7"],
+  club_prentice: ["#0033a0", "#f5b400", "plain", "#0033a0", "#0033a0"],
+  club_rudby: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_silcox: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_tansley: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_umber: ["#0057b8", "#ffffff", "plain", "#f4f6f8", "#0057b8"],
+  club_wicks: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_yew: ["#111111", "#ffffff", "stripes", "#111111", "#111111"],
+  club_briar: ["#f7f7f7", "#111111", "plain", "#111111", "#f7f7f7"],
+  club_ashwick: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_belton: ["#6c1d45", "#ffffff", "plain", "#f4f6f8", "#6c1d45"],
+  club_cinder: ["#e10600", "#ffffff", "stripes", "#f4f6f8", "#e10600"],
+  club_drayton: ["#f7f7f7", "#111111", "plain", "#111111", "#f7f7f7"],
+  club_eastwick: ["#f5b400", "#0033a0", "plain", "#0033a0", "#f5b400"],
+  club_fernley: ["#e10600", "#ffffff", "hoops", "#f4f6f8", "#e10600"],
+  club_greys: ["#ff6a00", "#ffffff", "plain", "#f4f6f8", "#ff6a00"],
+  club_hadley: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_iven: ["#6c1d45", "#f5b400", "stripes", "#6c1d45", "#f5b400"],
+  club_kemble: ["#0033a0", "#f5c518", "plain", "#0033a0", "#f5c518"],
+  club_linacre: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_marden: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_newby: ["#e10600", "#ffffff", "stripes", "#f4f6f8", "#e10600"],
+  club_osbert: ["#7ec8e3", "#0b1f4b", "halves", "#0b1f4b", "#7ec8e3"],
+  club_pellam: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_quarry: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_rosslyn: ["#0033a0", "#ffffff", "hoops", "#f4f6f8", "#0033a0"],
+  club_saxon: ["#0033a0", "#ffffff", "stripes", "#f4f6f8", "#0033a0"],
+  club_thornby: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_upton: ["#f7f7f7", "#0b1f4b", "plain", "#0b1f4b", "#f7f7f7"],
+  club_verney: ["#0b7a3b", "#ffffff", "plain", "#f4f6f8", "#0b7a3b"],
+  club_wendon: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_yarrow: ["#ff7a00", "#0b1f4b", "plain", "#0b1f4b", "#ff7a00"],
+  club_chapel: ["#f5c518", "#111111", "plain", "#111111", "#f5c518"],
+  club_millcross: ["#0057b8", "#ffffff", "stripes", "#f4f6f8", "#0057b8"],
+  club_yardley: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_penrose: ["#0033a0", "#ffffff", "halves", "#f4f6f8", "#0033a0"],
+  club_starkbridge: ["#0b1f4b", "#ffffff", "stripes", "#0b1f4b", "#ffffff"],
+  club_lowfield: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_grandport: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_coppice: ["#e10600", "#ffffff", "stripes", "#f4f6f8", "#e10600"],
+  club_fairhaven: ["#f5c518", "#111111", "plain", "#111111", "#f5c518"],
+  club_netherton: ["#0033a0", "#ffffff", "hoops", "#f4f6f8", "#0033a0"],
+  club_saltmere: ["#f7f7f7", "#0b1f4b", "plain", "#0b1f4b", "#f7f7f7"],
+  club_brookmere: ["#e10600", "#ffffff", "stripes", "#f4f6f8", "#e10600"],
+  club_alden: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_doveton: ["#f7f7f7", "#111111", "plain", "#111111", "#f7f7f7"],
+  club_langmere: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_pitford: ["#f5c518", "#0b7a3b", "plain", "#0b7a3b", "#f5c518"],
+  club_rosewharf: ["#f7f7f7", "#111111", "plain", "#111111", "#f7f7f7"],
+  club_kestlebury: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_foxhollow: ["#f5b400", "#111111", "stripes", "#111111", "#f5b400"],
+  club_windle: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_marlowe: ["#e10600", "#ffffff", "stripes", "#f4f6f8", "#e10600"],
+  club_ambergate: ["#0b1f4b", "#ffffff", "plain", "#f4f6f8", "#0b1f4b"],
+  club_redcliff: ["#0033a0", "#ffffff", "plain", "#f4f6f8", "#0033a0"],
+  club_holtvale: ["#6ec1e4", "#ffffff", "plain", "#f4f6f8", "#6ec1e4"],
+  club_penceford: ["#f5c518", "#0b1f4b", "plain", "#0b1f4b", "#f5c518"],
+  club_northgate: ["#e10600", "#ffffff", "stripes", "#111111", "#e10600"],
+  club_redwater: ["#f7f7f7", "#1d4e89", "plain", "#f7f7f7", "#f7f7f7"],
+  club_kingsport: ["#f5b400", "#111111", "plain", "#111111", "#f5b400"],
+  club_dunwick: ["#003399", "#ffffff", "plain", "#f4f6f8", "#003399"],
+  club_westmere: ["#1d4ed8", "#c8102e", "stripes", "#1d4ed8", "#c8102e"],
+  club_portselwyn: ["#d00000", "#111111", "stripes", "#111111", "#d00000"],
+  club_highmarsh: ["#e10600", "#ffffff", "stripes", "#111111", "#e10600"],
+  club_thornfield: ["#f7f7f7", "#111111", "plain", "#111111", "#f7f7f7"],
+  club_elmstead: ["#7a1530", "#1d4e89", "halves", "#f4f6f8", "#7a1530"],
+  club_whiteharbour: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_moorland: ["#0057b8", "#ffffff", "stripes", "#f4f6f8", "#0057b8"],
+  club_brackenford: ["#7a1530", "#7eb6e0", "halves", "#f4f6f8", "#7a1530"],
+  club_southfen: ["#111111", "#ffffff", "stripes", "#111111", "#111111"],
+  club_rivermeet: ["#f7f7f7", "#0b1f4b", "plain", "#0b1f4b", "#f7f7f7"],
+  club_blackstrand: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"],
+  club_oakhaven: ["#034694", "#ffffff", "plain", "#034694", "#ffffff"],
+  club_calderbrook: ["#c8102e", "#ffffff", "plain", "#c8102e", "#c8102e"],
+  club_queenswell: ["#e10600", "#ffffff", "halves", "#f4f6f8", "#e10600"],
+  club_hartsbridge: ["#6cabdd", "#ffffff", "plain", "#f4f6f8", "#6cabdd"],
+  club_burnley: ["#6c1d45", "#6ec1e4", "plain", "#6ec1e4", "#6c1d45"],
+  team_shearer: ["#111111", "#ffffff", "stripes", "#111111", "#111111"],
+  team_henry: ["#e10600", "#ffffff", "halves", "#f4f6f8", "#e10600"],
+  team_gerrard: ["#c8102e", "#ffffff", "plain", "#c8102e", "#c8102e"],
+  team_lampard: ["#034694", "#ffffff", "plain", "#034694", "#ffffff"],
+  team_terry: ["#034694", "#ffffff", "plain", "#034694", "#ffffff"],
+  team_ferdinand: ["#e10600", "#ffffff", "plain", "#f4f6f8", "#e10600"]
+};
+function mixGold(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  const m = (c, t) => Math.round(c * 0.45 + t * 0.55);
+  return "#" + [m(r, 224), m(g, 176), m(b, 48)].map(v => v.toString(16).padStart(2, "0")).join("");
+}
+function kitFor(p) {
+  if (p && p.club && KITS[p.club]) return p.club;
+  const deck = p ? deckOf(p) : null;
+  if (deck && KITS["team_" + deck]) return "team_" + deck;
+  return "club_josh";
+}
+function spriteHtml(who, opts) {
+  const o = opts || {};
+  const p = typeof who === "string" ? null : who;
+  const key = typeof who === "string" ? who : kitFor(who);
+  const raw = KITS[key] || KITS.club_josh;
+  let shirt = raw[0], trim = raw[1], pattern = raw[2], shorts = raw[3], socks = raw[4];
+  const w = o.size || 22;
+  const h = Math.round(w * 1.4);
+  if (o.silhouette) {
+    const ink = "#8b93a7";
+    return `<svg class="sprite" viewBox="0 0 16 22" width="${w}" height="${h}" aria-hidden="true"><rect x="5" y="1" width="6" height="5" rx="1" fill="${ink}"/><rect x="3" y="6" width="10" height="7" fill="${ink}"/><rect x="1" y="7" width="2" height="4" fill="${ink}"/><rect x="13" y="7" width="2" height="4" fill="${ink}"/><rect x="4" y="13" width="8" height="4" fill="${ink}"/><rect x="5" y="17" width="2" height="3" fill="${ink}"/><rect x="9" y="17" width="2" height="3" fill="${ink}"/></svg>`;
+  }
+  if (o.gold) {
+    shirt = mixGold(shirt); trim = mixGold(trim); shorts = mixGold(shorts); socks = mixGold(socks);
+  }
+  const sleeve = pattern === "halves" ? trim : shirt;
+  let marks = "";
+  if (pattern === "stripes") marks = `<rect x="5" y="6" width="2" height="7" fill="${trim}"/><rect x="9" y="6" width="2" height="7" fill="${trim}"/>`;
+  else if (pattern === "hoops") marks = `<rect x="3" y="8" width="10" height="2" fill="${trim}"/><rect x="3" y="11" width="10" height="2" fill="${trim}"/>`;
+  else if (pattern === "halves") marks = `<rect x="8" y="6" width="5" height="7" fill="${trim}"/>`;
+  else if (pattern === "sash") marks = `<polygon points="4,6 8,6 13,13 9,13" fill="${trim}"/>`;
+  const spark = o.gold ? `<polygon points="13,1 13.6,2.4 15,2.6 13.8,3.4 14.2,4.8 13,4 11.8,4.8 12.2,3.4 11,2.6 12.4,2.4" fill="#fff6c2"/>` : "";
+  return `<svg class="sprite" viewBox="0 0 16 22" width="${w}" height="${h}" aria-hidden="true"><rect x="5" y="1" width="6" height="5" rx="1" fill="#e2b48a"/><rect x="5" y="1" width="6" height="2" fill="#3a2a1a"/><rect x="3" y="6" width="10" height="7" fill="${shirt}"/>${marks}<rect x="1" y="7" width="2" height="4" fill="${sleeve}"/><rect x="13" y="7" width="2" height="4" fill="${sleeve}"/><rect x="4" y="13" width="8" height="4" fill="${shorts}"/><rect x="5" y="17" width="2" height="3" fill="${socks}"/><rect x="9" y="17" width="2" height="3" fill="${socks}"/><rect x="4" y="20" width="3" height="2" fill="#222"/><rect x="9" y="20" width="3" height="2" fill="#222"/>${spark}</svg>`;
 }
 function isCapped(key) {
   const p = playerByKey(key);
@@ -2425,8 +2580,7 @@ function partyHtml(star) {
     const gain = ui.partyAnim && ui.partyAnim[key];
     const fresh = isFresh(key);
     return `<div class="mini${star === key ? " star" : ""}" data-key="${esc(key)}" title="${esc(nameOf(key))}">
-      <span class="av" style="background:${RARITY[p.rarity].color}">${initials(key)}</span>
-      <span class="lv">Lv.${bits.eff == null ? p.base : bits.eff}</span>
+      <div class="mini-top">${spriteHtml(p, { size: 16, gold: !!(state.owned[key] && state.owned[key].gold) })}<span class="lv">Lv.${bits.eff == null ? p.base : bits.eff}</span></div>
       <span class="xp"><i style="width:${Math.round(xpFrac(key) * 100)}%"></i></span>
       ${isCapped(key) ? '<span class="cap-badge">Capped</span>' : ""}
       ${gain > 0 ? `<span class="lvl">+${gain}</span>` : ""}
@@ -2478,7 +2632,7 @@ function viewMatch() {
   const chesting = state.pendingChest && chain === "chest";
   const speech = chesting ? chestSpeech(state.pendingChest) : (chain === "rest" ? `<div class="speech" id="ticker">Treatment room. Back in <b data-live-clock>${formatRemain(state.restUntil - Date.now())}</b>.</div>` : speechHtml(s.lines, !!s.live));
   const ft = !s.live && s.win && chain === "gap" ? `<div class="ft-pop">Full time. You win.</div>` : "";
-  const signings = (state.signings || []).length ? `<div class="signings">${state.signings.map(g => `<span class="pill">${g.gold ? "Gold " : ""}${esc(nameOf(g.key))}${g.oppId ? " · " + esc(sideName(g.oppId)) : ""}</span>`).join("")}</div>` : "";
+  const signings = (state.signings || []).length ? `<div class="signings-wrap"><div class="muted">Latest signings</div><div class="signings">${state.signings.map(g => `<span class="pill">${g.gold ? "Gold " : ""}${esc(nameOf(g.key))}${g.oppId ? " · " + esc(sideName(g.oppId)) : ""}</span>`).join("")}</div></div>` : "";
   const target = state.league === 3 ? "The title" : "Promotion";
   const goal = `<div class="goal-card"><div class="goal-ico">🏆</div><div><b>${esc(league().name)}</b><div class="muted">Season ${state.seasonNum}</div></div><div style="text-align:right"><b>Target: ${target}</b><div class="muted">Cap ${league().cap}</div></div></div>`;
   const rows = tableRows();
@@ -2536,6 +2690,7 @@ function viewSquad() {
       const bits = ratingBits(key);
       const o = state.owned[key];
       return `<button type="button" class="slot${o && o.gold ? " gold" : ""}" data-act="slot" data-i="${i}">
+        ${spriteHtml(playerByKey(key), { size: 26, gold: !!(o && o.gold) })}
         <div class="pos">${slot.label}${isFresh(key) ? ' <span class="new-dot">NEW</span>' : ""}</div>
         <div class="rt" style="color:${RARITY[playerByKey(key).rarity].color}">${bits.eff}</div>
         <div class="nm">${esc(nameOf(key))}</div>
@@ -2593,14 +2748,15 @@ function dexCard(p, goldMode) {
   const o = state.owned[p.name_key];
   const isGold = !!(o && o.gold);
   if (goldMode) {
-    if (!isGold) return `<article class="sil gold-sil">${esc(p.pos)}</article>`;
+    if (!isGold) return `<article class="sil">${spriteHtml(p, { size: 32, silhouette: true })}<div>${esc(p.pos)}</div></article>`;
     const bits = ratingBits(p.name_key);
-    return `<article class="sticker goldcard" style="border-color:#e0b84a"><span class="goldtag">GOLD</span><b>${esc(nameOf(p.name_key))}</b><span class="muted">${p.pos} · Lv.${bits.eff}</span></article>`;
+    return `<article class="sticker goldcard" style="border-color:#e0b84a">${spriteHtml(p, { size: 32, gold: true })}<span class="goldtag">GOLD</span><b>${esc(nameOf(p.name_key))}</b><span class="muted">${p.pos} · Lv.${bits.eff}</span></article>`;
   }
-  if (!o) return `<article class="sil">${esc(p.pos)}</article>`;
+  if (!o) return `<article class="sil">${spriteHtml(p, { size: 32, silhouette: true })}<div>${esc(p.pos)}</div></article>`;
   const bits = ratingBits(p.name_key);
   const fresh = isFresh(p.name_key);
   return `<article class="sticker${isGold ? " goldcard" : ""}" style="border-color:${RARITY[p.rarity].color}">
+    ${spriteHtml(p, { size: 32, gold: isGold })}
     <span class="tag" style="color:${RARITY[p.rarity].color}">${esc(RARITY[p.rarity].label)}</span>
     ${fresh ? '<span class="new-dot">NEW</span>' : ""}
     <b>${esc(nameOf(p.name_key))}</b>
@@ -2609,11 +2765,11 @@ function dexCard(p, goldMode) {
 }
 function viewCollection(goldMode) {
   const divisions = [["League Two", 0], ["League One", 1], ["Championship", 2], ["Premier League", 3]];
-  let html = `<div class="card"><h2>${goldMode ? "Gold dex" : "Dex"}</h2>
-    <p class="muted">${goldMode ? "Gold versions only. The odds are 1 in " + GOLD_ODDS.toLocaleString("en-GB") + "." : "Caught players show their name. The rest are still silhouettes."}</p>
+  let html = `<div class="card"><h2>Dex</h2>
+    <p class="muted">${goldMode ? "Gold versions only. The odds are 1 in " + GOLD_ODDS.toLocaleString("en-GB") + "." : "Caught players wear their club kit. The rest are silhouettes."}</p>
     <div class="chips">
-      <button type="button" class="chip${!goldMode ? " on" : ""}" data-act="tab" data-tab="collection">Dex</button>
-      <button type="button" class="chip${goldMode ? " on" : ""}" data-act="tab" data-tab="gold">Gold dex</button>
+      <button type="button" class="chip${!goldMode ? " on" : ""}" data-act="dex-mode" data-mode="normal">Normal</button>
+      <button type="button" class="chip${goldMode ? " on" : ""}" data-act="dex-mode" data-mode="gold">Gold</button>
     </div></div>`;
   divisions.forEach(([label, d]) => {
     const clubs = CLUBS.filter(c => c.division === d).sort((a, b) => nameOf(a.id).localeCompare(nameOf(b.id)));
@@ -2690,8 +2846,7 @@ function viewLegends() {
 function viewHtml() {
   if (ui.tab === "squad") return viewSquad();
   if (ui.tab === "transfers") return viewTransfers();
-  if (ui.tab === "collection") return viewCollection(false);
-  if (ui.tab === "gold") return viewCollection(true);
+  if (ui.tab === "collection" || ui.tab === "gold") return viewCollection(ui.dexMode === "gold" || ui.tab === "gold");
   if (ui.tab === "legends") return viewLegends();
   if (ui.tab === "boosts") return viewBoosts();
   return viewMatch();
@@ -2884,6 +3039,7 @@ function onClick(e) {
   if (act === "boost") { buyBoost(el.dataset.kind); return; }
   if (act === "refresh") { doRefresh(); return; }
   if (act === "filter") { ui.filter = el.dataset.filter; render(); return; }
+  if (act === "dex-mode") { ui.dexMode = el.dataset.mode === "gold" ? "gold" : "normal"; ui.tab = "collection"; state.tab = "collection"; save(); render(); return; }
   if (act === "legend-start") { startLegend(); return; }
   if (act === "legend-skip") { skipMorning(); return; }
   if (act === "legend-team") { ui.sheet = { type: "team", team: el.dataset.team }; render(); return; }
